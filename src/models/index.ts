@@ -1,4 +1,5 @@
-// import Sequelize from 'sequelize';
+import {mysqlDbOption} from '../config';
+
 export const Sequelize = require('sequelize');
 
 // import {createTableAssay} from './assay';
@@ -9,16 +10,12 @@ export const Sequelize = require('sequelize');
 // import {createTablePatient} from './patient';
 // import {createTablePatientCase} from './patientCase';
 
-export const sequelize = new Sequelize('test', 'root', '1997123long', {
-  host: 'localhost',
-  dialect: 'mysql',
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000,
-  },
-});
+export const sequelize = new Sequelize(
+    mysqlDbOption.db,
+    mysqlDbOption.name,
+    mysqlDbOption.password, {
+      ...mysqlDbOption.options,
+    });
 
 export const connectMysql = () => {
   sequelize.authenticate().then(() => {

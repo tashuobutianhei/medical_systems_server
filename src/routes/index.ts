@@ -3,9 +3,7 @@ import Router from 'koa-router';
 const router = new Router();
 
 router.get('/', async (ctx, next) => {
-  // await ctx.render('index', {
-  //   title: 'Hello Koa 2!'
-  // })
+  ctx.body = 'koa2 /';
 });
 
 router.get('/string', async (ctx, next) => {

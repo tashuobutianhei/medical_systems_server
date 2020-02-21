@@ -43,6 +43,7 @@ var koa_router_1 = __importDefault(require("koa-router"));
 var router = new koa_router_1.default();
 router.get('/', function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
+        ctx.body = 'koa2 /';
         return [2 /*return*/];
     });
 }); });

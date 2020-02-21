@@ -4,12 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var koa_router_1 = __importDefault(require("koa-router"));
+var user_1 = require("../controllers/user");
 var router = new koa_router_1.default();
 router.prefix('/users');
 router.get('/', function (ctx, next) {
     ctx.body = 'this is a users response!';
 });
-router.get('/bar', function (ctx, next) {
-    ctx.body = 'this is a users/bar response';
-});
+router.post('/register', user_1.registerPatient);
+router.post('/login', user_1.loginPatient);
 exports.default = router;

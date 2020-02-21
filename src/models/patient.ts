@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 import {sequelize, Sequelize} from './index';
-
+import {patientInfo} from '../type/patientType';
 
 export const Patient = sequelize.define('Patient', {
   // 属性
@@ -16,7 +16,7 @@ export const Patient = sequelize.define('Patient', {
     unique: true,
   },
   password: {
-    type: Sequelize.STRING(50),
+    type: Sequelize.STRING(60),
     allowNull: false,
   },
   name: {
@@ -53,4 +53,21 @@ export const createTablePatient = function() {
     console.log('创建成功');
   });
 };
+
+export const insert = (patientInfo: patientInfo) => {
+  return Patient.create(patientInfo).then((res: { id: any; })=> {
+    console.log(res.id);
+    return true;
+  });
+};
+
+export const findOneByUsername = (username: string, attributes: string[]) => {
+  return Patient.findOne({
+    where: {username: username},
+    attributes: [...attributes],
+  }).then((info: any) => {
+    return info && info.dataValues;
+  });
+};
+
 

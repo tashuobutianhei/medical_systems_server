@@ -45,9 +45,12 @@ var koa_views_1 = __importDefault(require("koa-views"));
 var koa_json_1 = __importDefault(require("koa-json"));
 var koa_bodyparser_1 = __importDefault(require("koa-bodyparser"));
 var koa_logger_1 = __importDefault(require("koa-logger"));
+var koa2_cors_1 = __importDefault(require("koa2-cors"));
+var koa_jwt_1 = __importDefault(require("koa-jwt"));
 var index_1 = __importDefault(require("./routes/index"));
 var users_1 = __importDefault(require("./routes/users"));
 var index_2 = require("./models/index");
+var config_1 = require("./config");
 // middlewares
 app.use(koa_bodyparser_1.default({
     enableTypes: ['json', 'form', 'text'],
@@ -57,6 +60,36 @@ app.use(koa_logger_1.default());
 app.use(require('koa-static')(__dirname + '/public'));
 app.use(koa_views_1.default(__dirname + '/views', {
     extension: 'pug',
+}));
+app.use(koa2_cors_1.default({
+    origin: function (ctx) {
+        if (ctx.url === '/test') {
+            return '*';
+        }
+        return '*'; // 运行的域名
+    },
+    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+    maxAge: 5,
+    credentials: true,
+    allowMethods: ['GET', 'POST', 'DELETE', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+}));
+// 错误处理
+app.use(function (ctx, next) {
+    return next().catch(function (err) {
+        if (err.status === 401) {
+            ctx.status = 401;
+            ctx.body = 'Protected resource, use Authorization header to get access\n';
+        }
+        else {
+            throw err;
+        }
+    });
+});
+app.use(koa_jwt_1.default({
+    secret: config_1.tokenKey,
+}).unless({
+    path: [/\/users\/login/],
 }));
 // logger
 app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
@@ -76,6 +109,9 @@ app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function
 // routes
 app.use(index_1.default.routes()).use(index_1.default.allowedMethods());
 app.use(users_1.default.routes()).use(users_1.default.allowedMethods());
+// app.use(async (ctx, next) => {
+//   console.log(123)
+// })
 // error-handling
 app.on('error', function (err, ctx) {
     console.error('server error', err, ctx);

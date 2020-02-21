@@ -1,6 +1,6 @@
 // 用户信息
-type patientInfo = {
-    uid: string
+export type patientInfo = {
+    uid: string //
     username: string
     password: string
 
