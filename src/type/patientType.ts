@@ -34,7 +34,7 @@ type patientCase = {
 // 住院日常检查
 type hospitalizationInfoList = {
     date: string, // 检查日期
-    patientStatus: string, // 病人状态
+    patientStatus: string, // 病人状态 
     medicine: string, // 药物
     TreatmentRecord: string // 诊治记录
     recovery: number // 是否康复可以出院

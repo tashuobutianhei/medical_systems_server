@@ -43,17 +43,22 @@ var koa_1 = __importDefault(require("koa"));
 var app = new koa_1.default();
 var koa_views_1 = __importDefault(require("koa-views"));
 var koa_json_1 = __importDefault(require("koa-json"));
-var koa_bodyparser_1 = __importDefault(require("koa-bodyparser"));
+// import bodyparser from 'koa-bodyparser';
 var koa_logger_1 = __importDefault(require("koa-logger"));
 var koa2_cors_1 = __importDefault(require("koa2-cors"));
 var koa_jwt_1 = __importDefault(require("koa-jwt"));
+// import koaBody from 'koa-body';
 var index_1 = __importDefault(require("./routes/index"));
 var users_1 = __importDefault(require("./routes/users"));
 var index_2 = require("./models/index");
 var config_1 = require("./config");
+var koaBody = require('koa-body');
 // middlewares
-app.use(koa_bodyparser_1.default({
-    enableTypes: ['json', 'form', 'text'],
+// app.use(bodyparser({
+//   enableTypes: ['json', 'form', 'text'],
+// }));
+app.use(koaBody({
+    multipart: true,
 }));
 app.use(koa_json_1.default());
 app.use(koa_logger_1.default());
@@ -66,7 +71,7 @@ app.use(koa2_cors_1.default({
         if (ctx.url === '/test') {
             return '*';
         }
-        return '*'; // 运行的域名
+        return 'http://localhost:3001'; // 运行的域名
     },
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
     maxAge: 5,

@@ -46,7 +46,7 @@ export const registerPatient = async (ctx: any, next: any) => {
 export const loginPatient = async (ctx: any, next: any) => {
   try {
     const userInfo = ctx.request.body;
-
+    console.log(userInfo);
     if (!userInfo.username || !userInfo.password) {
       return ctx.body = {
         code: -2,

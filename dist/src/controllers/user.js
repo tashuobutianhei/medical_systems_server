@@ -97,6 +97,7 @@ exports.loginPatient = function (ctx, next) { return __awaiter(void 0, void 0, v
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 userInfo = ctx.request.body;
+                console.log(userInfo);
                 if (!userInfo.username || !userInfo.password) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,

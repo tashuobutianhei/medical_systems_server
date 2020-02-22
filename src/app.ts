@@ -3,10 +3,12 @@ const app = new Koa();
 
 import views from 'koa-views';
 import json from 'koa-json';
-import bodyparser from 'koa-bodyparser';
+// import bodyparser from 'koa-bodyparser';
 import logger from 'koa-logger';
 import cors from 'koa2-cors';
 import koajwt from 'koa-jwt';
+// import koaBody from 'koa-body';
+
 
 import index from './routes/index';
 import users from './routes/users';
@@ -15,9 +17,14 @@ import {connectMysql} from './models/index';
 
 import {tokenKey} from './config';
 
+const koaBody = require('koa-body');
+
 // middlewares
-app.use(bodyparser({
-  enableTypes: ['json', 'form', 'text'],
+// app.use(bodyparser({
+//   enableTypes: ['json', 'form', 'text'],
+// }));
+app.use(koaBody({
+  multipart: true, // 允许上传多个文件
 }));
 app.use(json());
 app.use(logger());
@@ -30,7 +37,7 @@ app.use(cors({
     if (ctx.url === '/test') {
       return '*';
     }
-    return '*'; // 运行的域名
+    return 'http://localhost:3001'; // 运行的域名
   },
   exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
   maxAge: 5,
