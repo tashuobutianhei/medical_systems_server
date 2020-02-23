@@ -97,14 +97,13 @@ exports.loginPatient = function (ctx, next) { return __awaiter(void 0, void 0, v
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 userInfo = ctx.request.body;
-                console.log(userInfo);
                 if (!userInfo.username || !userInfo.password) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
                             message: '参数有错误',
                         }];
                 }
-                return [4 /*yield*/, patient_1.findOneByUsername(userInfo.username, ['password', 'uid'])];
+                return [4 /*yield*/, patient_1.findOneByKey('username', userInfo.username, ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address'])];
             case 1:
                 info = _a.sent();
                 comparesResult = bcrypt_1.compare(userInfo.password, info.password);
@@ -113,9 +112,14 @@ exports.loginPatient = function (ctx, next) { return __awaiter(void 0, void 0, v
                         name: userInfo.username,
                         _uid: info.uid,
                     }, config_1.tokenKey, { expiresIn: '72h' });
+                    delete info.password;
+                    info.type = 1;
                     ctx.body = {
                         code: 0,
-                        data: token,
+                        data: {
+                            token: token,
+                            user: info,
+                        },
                         message: '登陆成功',
                     };
                 }
@@ -134,6 +138,60 @@ exports.loginPatient = function (ctx, next) { return __awaiter(void 0, void 0, v
                 };
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var token;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                token = ctx.header.authorization;
+                console.log(token);
+                if (!token) {
+                    return [2 /*return*/, ctx.body = {
+                            code: 401,
+                            message: '无权限',
+                        }];
+                }
+                return [4 /*yield*/, jsonwebtoken_1.default.verify(token.split(' ')[1], config_1.tokenKey, function (err, info) { return __awaiter(void 0, void 0, void 0, function () {
+                        var userInfo;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    if (!err) return [3 /*break*/, 1];
+                                    ctx.body = {
+                                        code: 1,
+                                        message: '服务错误',
+                                    };
+                                    return [3 /*break*/, 3];
+                                case 1: return [4 /*yield*/, patient_1.findOneByKey('uid', info._uid, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address'])];
+                                case 2:
+                                    userInfo = _a.sent();
+                                    if (userInfo) {
+                                        userInfo.type = 1;
+                                        ctx.body = {
+                                            code: 0,
+                                            data: {
+                                                token: token,
+                                                user: userInfo,
+                                            },
+                                        };
+                                    }
+                                    else {
+                                        ctx.body = {
+                                            code: 401,
+                                            message: '无权限',
+                                        };
+                                    }
+                                    _a.label = 3;
+                                case 3: return [2 /*return*/];
+                            }
+                        });
+                    }); })];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
         }
     });
 }); };

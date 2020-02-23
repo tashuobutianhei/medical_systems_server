@@ -61,9 +61,11 @@ export const insert = (patientInfo: patientInfo) => {
   });
 };
 
-export const findOneByUsername = (username: string, attributes: string[]) => {
+export const findOneByKey= (key: string, value: any, attributes: string[]) => {
+  const params:{[proppName:string]:any} = {};
+  params[key] = value;
   return Patient.findOne({
-    where: {username: username},
+    where: {...params},
     attributes: [...attributes],
   }).then((info: any) => {
     return info && info.dataValues;

@@ -12,4 +12,5 @@ router.get('/', function (ctx, next) {
 });
 router.post('/register', user_1.registerPatient);
 router.post('/login', user_1.loginPatient);
+router.get('/getUser', user_1.getUser);
 exports.default = router;
