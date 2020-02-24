@@ -12,10 +12,12 @@ import koajwt from 'koa-jwt';
 
 import index from './routes/index';
 import users from './routes/users';
+import department from './routes/department';
+
 
 import {connectMysql} from './models/index';
-
 import {tokenKey} from './config';
+import jwt from 'jsonwebtoken';
 
 const koaBody = require('koa-body');
 
@@ -47,7 +49,7 @@ app.use(cors({
 }));
 
 // 错误处理
-app.use((ctx, next) => {
+app.use(async (ctx, next) => {
   return next().catch((err) => {
     if (err.status === 401) {
       ctx.status = 401;
@@ -75,6 +77,7 @@ app.use(async (ctx, next) => {
 // routes
 app.use(index.routes()).use(index.allowedMethods());
 app.use(users.routes()).use(users.allowedMethods());
+app.use(department.routes()).use(department.allowedMethods());
 
 // app.use(async (ctx, next) => {
 //   console.log(123)

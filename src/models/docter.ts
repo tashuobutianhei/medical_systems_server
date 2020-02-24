@@ -1,6 +1,7 @@
 /* eslint-disable new-cap */
 import {sequelize, Sequelize} from './index';
 import {Department} from './department';
+import {docterInfo as docterInfoType} from '../type/docterType';
 
 export const Docters = sequelize.define('Docters', {
   // 属性
@@ -11,7 +12,7 @@ export const Docters = sequelize.define('Docters', {
     unique: true,
   },
   password: {
-    type: Sequelize.STRING(50),
+    type: Sequelize.STRING(60),
     allowNull: false,
   },
   name: {
@@ -66,6 +67,27 @@ export const Docters = sequelize.define('Docters', {
 export const createTableDocters = function() {
   Docters.sync({force: true}).then(() => {
     console.log('创建成功');
+  });
+};
+
+export const insert = (docterInfo: docterInfoType) => {
+  return Docters.create(docterInfo).then((res: { id: any; })=> {
+    return true;
+  }).catch((e: any) => {
+    console.log(e);
+    return false;
+  });
+};
+
+
+export const findOneByKey= (key: string, value: any, attributes: string[]) => {
+  const params:{[proppName:string]:any} = {};
+  params[key] = value;
+  return Docters.findOne({
+    where: {...params},
+    attributes: [...attributes],
+  }).then((info: any) => {
+    return info && info.dataValues;
   });
 };
 

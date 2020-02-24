@@ -1,5 +1,5 @@
 import Router from 'koa-router';
-import {registerPatient, loginPatient, getUser} from '../controllers/user';
+import {registerPatient, login, getUser} from '../controllers/user';
 
 const router = new Router();
 
@@ -11,7 +11,7 @@ router.get('/', function(ctx, next) {
 
 router.post('/register', registerPatient);
 
-router.post('/login', loginPatient);
+router.post('/login', login);
 
 router.get('/getUser', getUser);
 

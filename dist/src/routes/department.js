@@ -39,90 +39,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var koa_1 = __importDefault(require("koa"));
-var app = new koa_1.default();
-var koa_views_1 = __importDefault(require("koa-views"));
-var koa_json_1 = __importDefault(require("koa-json"));
-// import bodyparser from 'koa-bodyparser';
-var koa_logger_1 = __importDefault(require("koa-logger"));
-var koa2_cors_1 = __importDefault(require("koa2-cors"));
-var koa_jwt_1 = __importDefault(require("koa-jwt"));
-// import koaBody from 'koa-body';
-var index_1 = __importDefault(require("./routes/index"));
-var users_1 = __importDefault(require("./routes/users"));
-var department_1 = __importDefault(require("./routes/department"));
-var index_2 = require("./models/index");
-var config_1 = require("./config");
-var koaBody = require('koa-body');
-// middlewares
-// app.use(bodyparser({
-//   enableTypes: ['json', 'form', 'text'],
-// }));
-app.use(koaBody({
-    multipart: true,
-}));
-app.use(koa_json_1.default());
-app.use(koa_logger_1.default());
-app.use(require('koa-static')(__dirname + '/public'));
-app.use(koa_views_1.default(__dirname + '/views', {
-    extension: 'pug',
-}));
-app.use(koa2_cors_1.default({
-    origin: function (ctx) {
-        if (ctx.url === '/test') {
-            return '*';
-        }
-        return 'http://localhost:3001'; // 运行的域名
-    },
-    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
-    maxAge: 5,
-    credentials: true,
-    allowMethods: ['GET', 'POST', 'DELETE', 'DELETE', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
-}));
-// 错误处理
-app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        return [2 /*return*/, next().catch(function (err) {
-                if (err.status === 401) {
-                    ctx.status = 401;
-                    ctx.body = 'Protected resource, use Authorization header to get access\n';
-                }
-                else {
-                    throw err;
-                }
-            })];
-    });
-}); });
-app.use(koa_jwt_1.default({
-    secret: config_1.tokenKey,
-}).unless({
-    path: [/\/users\/login/, /\/users\/getUser/],
-}));
-// logger
-app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+var koa_router_1 = __importDefault(require("koa-router"));
+var department_1 = require("../controllers/department");
+var docter_1 = require("../controllers/docter");
+var router = new koa_router_1.default();
+router.prefix('/department');
+router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                index_2.connectMysql();
+                if (!(ctx.state.user && ctx.state.user.userType !== 0)) return [3 /*break*/, 2];
                 return [4 /*yield*/, next()];
             case 1:
                 _a.sent();
-                console.log('enter server');
-                console.log(ctx.method + " " + ctx.url);
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2: return [2 /*return*/, ctx.body = {
+                    code: 401,
+                    message: '无权限',
+                }];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
-// routes
-app.use(index_1.default.routes()).use(index_1.default.allowedMethods());
-app.use(users_1.default.routes()).use(users_1.default.allowedMethods());
-app.use(department_1.default.routes()).use(department_1.default.allowedMethods());
-// app.use(async (ctx, next) => {
-//   console.log(123)
-// })
-// error-handling
-app.on('error', function (err, ctx) {
-    console.error('server error', err, ctx);
-});
-module.exports = app;
+router.post('/', department_1.addDepartment); // 添加科室
+router.post('/docters', docter_1.addDocter); // 添加医生
+exports.default = router;

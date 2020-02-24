@@ -1,4 +1,4 @@
-type docterInfo = {
+export type docterInfo = {
     workerId: string
     password: string
     name: string

@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var bcrypt_1 = require("../utils/bcrypt");
 var patient_1 = require("../models/patient");
+var docter_1 = require("../models/docter");
 var random_string_1 = __importDefault(require("random-string"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = require("../config");
@@ -58,7 +59,8 @@ exports.registerPatient = function (ctx, next) { return __awaiter(void 0, void 0
                 userInfo.uid = random_string_1.default({ length: 12, numbers: true });
                 return [4 /*yield*/, patient_1.insert(userInfo)
                         .catch(function (e) {
-                        throw new Error(e);
+                        console.log(e);
+                        return false;
                     })];
             case 1:
                 sesult = _a.sent();
@@ -90,30 +92,46 @@ exports.registerPatient = function (ctx, next) { return __awaiter(void 0, void 0
         }
     });
 }); };
-exports.loginPatient = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var userInfo, info, comparesResult, token, e_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var userInfo, info, _a, comparesResult, id, token, e_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _b.trys.push([0, 6, , 7]);
                 userInfo = ctx.request.body;
-                if (!userInfo.username || !userInfo.password) {
+                info = void 0;
+                console.log(userInfo);
+                if (!userInfo.username || !userInfo.password || !userInfo.userType) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
                             message: '参数有错误',
                         }];
                 }
-                return [4 /*yield*/, patient_1.findOneByKey('username', userInfo.username, ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address'])];
-            case 1:
-                info = _a.sent();
+                _a = userInfo.userType;
+                switch (_a) {
+                    case '1': return [3 /*break*/, 1];
+                    case '2': return [3 /*break*/, 3];
+                }
+                return [3 /*break*/, 5];
+            case 1: return [4 /*yield*/, patient_1.findOneByKey('username', userInfo.username, ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address'])];
+            case 2:
+                info = _b.sent();
+                return [3 /*break*/, 5];
+            case 3: return [4 /*yield*/, docter_1.findOneByKey('workerId', userInfo.username, ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address'])];
+            case 4:
+                info = _b.sent();
+                _b.label = 5;
+            case 5:
                 comparesResult = bcrypt_1.compare(userInfo.password, info.password);
                 if (comparesResult) {
+                    id = info.uid || info.workerId;
                     token = jsonwebtoken_1.default.sign({
                         name: userInfo.username,
-                        _uid: info.uid,
+                        _uid: id,
+                        userType: userInfo.userType,
                     }, config_1.tokenKey, { expiresIn: '72h' });
                     delete info.password;
-                    info.type = 1;
+                    info.type = userInfo.userType;
                     ctx.body = {
                         code: 0,
                         data: {
@@ -129,15 +147,15 @@ exports.loginPatient = function (ctx, next) { return __awaiter(void 0, void 0, v
                         message: '密码错误',
                     };
                 }
-                return [3 /*break*/, 3];
-            case 2:
-                e_2 = _a.sent();
+                return [3 /*break*/, 7];
+            case 6:
+                e_2 = _b.sent();
                 ctx.body = {
                     code: -3,
                     message: '用户名不存在',
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); };
@@ -147,7 +165,6 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
         switch (_a.label) {
             case 0:
                 token = ctx.header.authorization;
-                console.log(token);
                 if (!token) {
                     return [2 /*return*/, ctx.body = {
                             code: 401,
@@ -155,21 +172,36 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                         }];
                 }
                 return [4 /*yield*/, jsonwebtoken_1.default.verify(token.split(' ')[1], config_1.tokenKey, function (err, info) { return __awaiter(void 0, void 0, void 0, function () {
-                        var userInfo;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        var userInfo, _a;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0:
                                     if (!err) return [3 /*break*/, 1];
                                     ctx.body = {
                                         code: 1,
                                         message: '服务错误',
                                     };
-                                    return [3 /*break*/, 3];
-                                case 1: return [4 /*yield*/, patient_1.findOneByKey('uid', info._uid, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address'])];
-                                case 2:
-                                    userInfo = _a.sent();
+                                    return [3 /*break*/, 7];
+                                case 1:
+                                    userInfo = void 0;
+                                    _a = info.userType;
+                                    switch (_a) {
+                                        case '1': return [3 /*break*/, 2];
+                                        case '2': return [3 /*break*/, 4];
+                                    }
+                                    return [3 /*break*/, 6];
+                                case 2: return [4 /*yield*/, patient_1.findOneByKey('uid', info._uid, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address'])];
+                                case 3:
+                                    userInfo = _b.sent();
+                                    return [3 /*break*/, 6];
+                                case 4: return [4 /*yield*/, docter_1.findOneByKey('workerId', info._uid, ['workerId', 'name', 'idcard', 'sex', 'age',
+                                        'tel', 'address', 'information', 'position', 'university', 'departmentId'])];
+                                case 5:
+                                    userInfo = _b.sent();
+                                    _b.label = 6;
+                                case 6:
                                     if (userInfo) {
-                                        userInfo.type = 1;
+                                        userInfo.type = info.userType - 0;
                                         ctx.body = {
                                             code: 0,
                                             data: {
@@ -184,8 +216,8 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                                             message: '无权限',
                                         };
                                     }
-                                    _a.label = 3;
-                                case 3: return [2 /*return*/];
+                                    _b.label = 7;
+                                case 7: return [2 /*return*/];
                             }
                         });
                     }); })];

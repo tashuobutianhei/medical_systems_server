@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,52 +35,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-/* eslint-disable new-cap */
-var index_1 = require("./index");
-exports.Department = index_1.sequelize.define('Department', {
-    // 属性
-    departmentId: {
-        type: index_1.Sequelize.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        unique: true,
-        autoIncrement: true,
-    },
-    departmentName: {
-        type: index_1.Sequelize.STRING(12),
-        allowNull: false,
-    },
-    information: {
-        type: index_1.Sequelize.STRING(100),
-        allowNull: false,
-    },
-}, {
-    // 参数
-    timestamps: false,
-    freezeTableName: true,
-});
-exports.createTableDepartment = function () {
-    exports.Department.sync({ force: true }).then(function () {
-        console.log('创建成功');
+var docter_1 = require("../models/docter");
+var random_string_1 = __importDefault(require("random-string"));
+var bcrypt_1 = require("../utils/bcrypt");
+exports.addDocter = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var docterInfo, result, e_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                docterInfo = ctx.request.body;
+                if (!(typeof docterInfo === 'object' && Object.keys(docterInfo).length > 0)) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -2,
+                            message: '参数有错误',
+                        }];
+                }
+                docterInfo.workerId = random_string_1.default({ length: 12, numbers: true });
+                docterInfo.password = bcrypt_1.encode(docterInfo.password);
+                return [4 /*yield*/, docter_1.insert(docterInfo)];
+            case 1:
+                result = _a.sent();
+                return [2 /*return*/, ctx.body = {
+                        code: result ? 0 : 1,
+                        message: result ? '添加成功' : '添加失败',
+                    }];
+            case 2:
+                e_1 = _a.sent();
+                return [2 /*return*/, ctx.body = {
+                        code: -3,
+                        message: '服务错误',
+                    }];
+            case 3: return [2 /*return*/];
+        }
     });
-};
-exports.inset = function (department) {
-    return __awaiter(this, void 0, void 0, function () {
-        var result, departmentId;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, exports.Department.findAndCountAll()];
-                case 1:
-                    result = _a.sent();
-                    departmentId = ++result.count;
-                    return [2 /*return*/, exports.Department.create(__assign(__assign({}, department), { departmentId: departmentId })).then(function (res) {
-                            return true;
-                        }).catch(function (e) {
-                            console.log(e);
-                            return false;
-                        })];
-            }
-        });
-    });
-};
+}); };

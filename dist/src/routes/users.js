@@ -11,6 +11,6 @@ router.get('/', function (ctx, next) {
     ctx.body = 'this is a users response!';
 });
 router.post('/register', user_1.registerPatient);
-router.post('/login', user_1.loginPatient);
+router.post('/login', user_1.login);
 router.get('/getUser', user_1.getUser);
 exports.default = router;

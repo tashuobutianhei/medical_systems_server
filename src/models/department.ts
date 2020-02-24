@@ -8,6 +8,7 @@ export const Department = sequelize.define('Department', {
     allowNull: false,
     primaryKey: true,
     unique: true,
+    autoIncrement: true,
   },
   departmentName: {
     type: Sequelize.STRING(12),
@@ -26,6 +27,23 @@ export const Department = sequelize.define('Department', {
 export const createTableDepartment = function() {
   Department.sync({force: true}).then(() => {
     console.log('创建成功');
+  });
+};
+
+type typeDepartment = {
+  departmentName: string
+  information: string
+}
+
+export const inset = async function(department: typeDepartment) {
+  const result = await Department.findAndCountAll();
+
+  const departmentId = ++result.count;
+  return Department.create({...department, departmentId: departmentId}).then((res: { id: any; })=> {
+    return true;
+  }).catch((e: any) => {
+    console.log(e);
+    return false;
   });
 };
 

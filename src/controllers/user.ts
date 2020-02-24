@@ -1,5 +1,8 @@
 import {encode, compare} from '../utils/bcrypt';
-import {insert as insertPatient, findOneByKey} from '../models/patient';
+import {
+  insert as insertPatient,
+  findOneByKey as findOneByKeyPatient} from '../models/patient';
+import {findOneByKey as findOneByKeyDocter} from '../models/docter';
 import randomString from 'random-string';
 import jwt from 'jsonwebtoken';
 import {tokenKey} from '../config';
@@ -17,7 +20,8 @@ export const registerPatient = async (ctx: any, next: any) => {
       // 插入
       const sesult = await insertPatient(userInfo)
           .catch((e:any) => {
-            throw new Error(e);
+            console.log(e);
+            return false;
           });
 
       if (sesult) {
@@ -43,27 +47,40 @@ export const registerPatient = async (ctx: any, next: any) => {
 };
 
 
-export const loginPatient = async (ctx: any, next: any) => {
+export const login= async (ctx: any, next: any) => {
   try {
     const userInfo = ctx.request.body;
-    if (!userInfo.username || !userInfo.password) {
+    let info: any;
+    console.log(userInfo);
+    if (!userInfo.username || !userInfo.password || !userInfo.userType) {
       return ctx.body = {
         code: -2,
         message: '参数有错误',
       };
     }
-    const info = await findOneByKey('username', userInfo.username,
-        ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address']);
+    switch (userInfo.userType) {
+      case '1':
+        info = await findOneByKeyPatient('username', userInfo.username,
+            ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address']);
+        break;
+      case '2':
+        info = await findOneByKeyDocter('workerId', userInfo.username,
+            ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address']);
+    }
+
     const comparesResult = compare(userInfo.password, info.password);
+
     if (comparesResult) {
+      const id = info.uid || info.workerId;
       // 验证成功，登陆
       const token = jwt.sign({
         name: userInfo.username,
-        _uid: info.uid,
+        _uid: id,
+        userType: userInfo.userType,
       }, tokenKey, {expiresIn: '72h'});
 
       delete info.password;
-      info.type = 1;
+      info.type = userInfo.userType;
 
       ctx.body = {
         code: 0,
@@ -90,7 +107,6 @@ export const loginPatient = async (ctx: any, next: any) => {
 export const getUser = async (ctx: any, next: any) => {
   // 身份 0 管理 1 患者 2 医生
   const token = ctx.header.authorization;
-  console.log(token)
   if (!token) {
     return ctx.body = {
       code: 401,
@@ -106,10 +122,20 @@ export const getUser = async (ctx: any, next: any) => {
             message: '服务错误',
           };
         } else {
-          const userInfo = await findOneByKey('uid', info._uid,
-              ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address']);
+          let userInfo: any;
+          switch (info.userType) {
+            case '1':
+              userInfo = await findOneByKeyPatient('uid', info._uid,
+                  ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address']);
+              break;
+            case '2':
+              userInfo = await findOneByKeyDocter('workerId', info._uid,
+                  ['workerId', 'name', 'idcard', 'sex', 'age',
+                    'tel', 'address', 'information', 'position', 'university', 'departmentId']);
+          }
+
           if (userInfo) {
-            userInfo.type = 1;
+            userInfo.type = info.userType - 0;
             ctx.body = {
               code: 0,
               data: {
