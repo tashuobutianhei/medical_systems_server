@@ -1,6 +1,7 @@
 import Router from 'koa-router';
 import {addDepartment} from '../controllers/department';
-import {addDocter} from '../controllers/docter';
+import {addDocter} from '../controllers/docter/docter';
+import {addAdmin} from '../controllers/department';
 
 
 const router = new Router();
@@ -22,6 +23,8 @@ router.use(async (ctx: any, next) => {
 router.post('/', addDepartment); // 添加科室
 
 router.post('/docters', addDocter); // 添加医生
+
+router.post('/admin', addAdmin); // 增加管理员
 
 
 export default router;

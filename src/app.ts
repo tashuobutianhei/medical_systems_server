@@ -13,11 +13,11 @@ import koajwt from 'koa-jwt';
 import index from './routes/index';
 import users from './routes/users';
 import department from './routes/department';
+import doctor from './routes/doctor';
 
 
 import {connectMysql} from './models/index';
 import {tokenKey} from './config';
-import jwt from 'jsonwebtoken';
 
 const koaBody = require('koa-body');
 
@@ -78,6 +78,7 @@ app.use(async (ctx, next) => {
 app.use(index.routes()).use(index.allowedMethods());
 app.use(users.routes()).use(users.allowedMethods());
 app.use(department.routes()).use(department.allowedMethods());
+app.use(doctor.routes()).use(doctor.allowedMethods());
 
 // app.use(async (ctx, next) => {
 //   console.log(123)

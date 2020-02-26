@@ -1,8 +1,8 @@
 /* eslint-disable new-cap */
 import {sequelize, Sequelize} from './index';
-import {patientInfo} from '../type/patientType';
 
-export const Patient = sequelize.define('Patient', {
+
+export const Admin = sequelize.define('Admin', {
   // 属性
   uid: {
     type: Sequelize.STRING(12),
@@ -19,55 +19,37 @@ export const Patient = sequelize.define('Patient', {
     type: Sequelize.STRING(60),
     allowNull: false,
   },
-  name: {
-    type: Sequelize.TEXT,
-    allowNull: false,
-  },
-  idcard: {
-    type: Sequelize.STRING(18),
-    allowNull: false,
-    unique: true,
-  },
-  sex: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-  },
-  age: {
-    type: Sequelize.INTEGER,
-  },
-  tel: {
-    type: Sequelize.STRING(11),
-    allowNull: false,
-  },
-  address: {
-    type: Sequelize.STRING(200),
-  },
 }, {
   // 参数
   timestamps: false,
   freezeTableName: true,
 });
 
-export const createTablePatient = function() {
-  Patient.sync({force: true}).then(() => {
+export const createTableAdmin= function() {
+  Admin.sync({force: true}).then(() => {
     console.log('创建成功');
   });
 };
 
-export const insert = (patientInfo: patientInfo) => {
-  return Patient.create(patientInfo).then((res: { id: any; })=> {
-    console.log(res.id);
+type adminType = {
+  uid: string,
+  username: string,
+  password: string
+}
+
+export const insert = (adminInfo: adminType) => {
+  return Admin.create(adminInfo).then((res: { id: any; })=> {
     return true;
   }).catch((e: any) => {
     console.log(e);
-    return e;
+    return false;
   });
 };
 
 export const findOneByKey= (key: string, value: any, attributes: string[]) => {
   const params:{[proppName:string]:any} = {};
   params[key] = value;
-  return Patient.findOne({
+  return Admin.findOne({
     where: {...params},
     attributes: [...attributes],
   }).then((info: any) => {
@@ -76,3 +58,8 @@ export const findOneByKey= (key: string, value: any, attributes: string[]) => {
 };
 
 
+// create Table Admin {
+//   uid varchar(12) NOT NULL UNIQUE PRIMARY KEY,
+//   username varchar(12) NOT NULL,
+//   password varchar(60) NOT NULL,
+// }

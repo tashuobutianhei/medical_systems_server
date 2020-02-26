@@ -35,8 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var department_1 = require("../models/department");
+var manager_1 = require("../models/manager");
+var random_string_1 = __importDefault(require("random-string"));
 exports.addDepartment = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var departmentInfo, result, e_1;
     return __generator(this, function (_a) {
@@ -60,6 +65,39 @@ exports.addDepartment = function (ctx, next) { return __awaiter(void 0, void 0, 
                 return [3 /*break*/, 3];
             case 2:
                 e_1 = _a.sent();
+                ctx.body = {
+                    code: -3,
+                    message: '服务错误',
+                };
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.addAdmin = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var adminInfo, result, e_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                adminInfo = ctx.request.body;
+                if (!adminInfo.username || !adminInfo.password) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -2,
+                            message: '参数有错误',
+                        }];
+                }
+                adminInfo.uid = random_string_1.default({ length: 12, numbers: true });
+                return [4 /*yield*/, manager_1.insert(adminInfo)];
+            case 1:
+                result = _a.sent();
+                ctx.body = {
+                    code: result ? 0 : 1,
+                    message: result ? '添加成功' : '添加失败',
+                };
+                return [3 /*break*/, 3];
+            case 2:
+                e_2 = _a.sent();
                 ctx.body = {
                     code: -3,
                     message: '服务错误',

@@ -29,3 +29,9 @@ type department = {
     docterWork: docterWork[]
 }
 
+export enum docterPosition {
+    'director',
+    'viceDirectors',
+    'attending',
+    'residency'
+};

@@ -2,6 +2,15 @@ import {mysqlDbOption} from '../config';
 
 export const Sequelize = require('sequelize');
 
+
+export const sequelize = new Sequelize(
+    mysqlDbOption.db,
+    mysqlDbOption.name,
+    mysqlDbOption.password, {
+      ...mysqlDbOption.options,
+    });
+
+
 // import {createTableAssay} from './assay';
 // import {createTableDepartment} from './department';
 // import {createTableDocters} from './docter';
@@ -10,12 +19,7 @@ export const Sequelize = require('sequelize');
 // import {createTablePatient} from './patient';
 // import {createTablePatientCase} from './patientCase';
 
-export const sequelize = new Sequelize(
-    mysqlDbOption.db,
-    mysqlDbOption.name,
-    mysqlDbOption.password, {
-      ...mysqlDbOption.options,
-    });
+import {createTableAdmin} from './manager';
 
 export const connectMysql = () => {
   sequelize.authenticate().then(() => {
@@ -25,7 +29,6 @@ export const connectMysql = () => {
   });
 };
 
-
 export const createTable = () => {
   // createTableHospitalizationInfoList();
   // createTableAssay();
@@ -34,4 +37,6 @@ export const createTable = () => {
   // createTableDepartment();
   // createTableDocters();
   // createTableDocterWork();
+  console.log(111);
+  createTableAdmin();
 };

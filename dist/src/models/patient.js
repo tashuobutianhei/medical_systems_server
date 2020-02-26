@@ -74,6 +74,9 @@ exports.insert = function (patientInfo) {
     return exports.Patient.create(patientInfo).then(function (res) {
         console.log(res.id);
         return true;
+    }).catch(function (e) {
+        console.log(e);
+        return e;
     });
 };
 exports.findOneByKey = function (key, value, attributes) {

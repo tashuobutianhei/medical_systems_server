@@ -3,6 +3,7 @@ import {
   insert as insertPatient,
   findOneByKey as findOneByKeyPatient} from '../models/patient';
 import {findOneByKey as findOneByKeyDocter} from '../models/docter';
+import {findOneByKey as findOneByKeyAdmin} from '../models/manager';
 import randomString from 'random-string';
 import jwt from 'jsonwebtoken';
 import {tokenKey} from '../config';
@@ -66,6 +67,11 @@ export const login= async (ctx: any, next: any) => {
       case '2':
         info = await findOneByKeyDocter('workerId', userInfo.username,
             ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address']);
+        break;
+      case '0':
+        info = await findOneByKeyAdmin('username', userInfo.username,
+            ['uid', 'password']);
+        break;
     }
 
     const comparesResult = compare(userInfo.password, info.password);
@@ -124,6 +130,10 @@ export const getUser = async (ctx: any, next: any) => {
         } else {
           let userInfo: any;
           switch (info.userType) {
+            case '0':
+              userInfo = await await findOneByKeyAdmin('username', userInfo.username,
+                  ['uid', 'username']);
+              break;
             case '1':
               userInfo = await findOneByKeyPatient('uid', info._uid,
                   ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address']);
@@ -132,6 +142,7 @@ export const getUser = async (ctx: any, next: any) => {
               userInfo = await findOneByKeyDocter('workerId', info._uid,
                   ['workerId', 'name', 'idcard', 'sex', 'age',
                     'tel', 'address', 'information', 'position', 'university', 'departmentId']);
+              break;
           }
 
           if (userInfo) {

@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var bcrypt_1 = require("../utils/bcrypt");
 var patient_1 = require("../models/patient");
 var docter_1 = require("../models/docter");
+var manager_1 = require("../models/manager");
 var random_string_1 = __importDefault(require("random-string"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = require("../config");
@@ -97,7 +98,7 @@ exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, 
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 6, , 7]);
+                _b.trys.push([0, 8, , 9]);
                 userInfo = ctx.request.body;
                 info = void 0;
                 console.log(userInfo);
@@ -111,17 +112,22 @@ exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, 
                 switch (_a) {
                     case '1': return [3 /*break*/, 1];
                     case '2': return [3 /*break*/, 3];
+                    case '0': return [3 /*break*/, 5];
                 }
-                return [3 /*break*/, 5];
+                return [3 /*break*/, 7];
             case 1: return [4 /*yield*/, patient_1.findOneByKey('username', userInfo.username, ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address'])];
             case 2:
                 info = _b.sent();
-                return [3 /*break*/, 5];
+                return [3 /*break*/, 7];
             case 3: return [4 /*yield*/, docter_1.findOneByKey('workerId', userInfo.username, ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address'])];
             case 4:
                 info = _b.sent();
-                _b.label = 5;
-            case 5:
+                return [3 /*break*/, 7];
+            case 5: return [4 /*yield*/, manager_1.findOneByKey('username', userInfo.username, ['uid', 'password'])];
+            case 6:
+                info = _b.sent();
+                return [3 /*break*/, 7];
+            case 7:
                 comparesResult = bcrypt_1.compare(userInfo.password, info.password);
                 if (comparesResult) {
                     id = info.uid || info.workerId;
@@ -147,15 +153,15 @@ exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, 
                         message: '密码错误',
                     };
                 }
-                return [3 /*break*/, 7];
-            case 6:
+                return [3 /*break*/, 9];
+            case 8:
                 e_2 = _b.sent();
                 ctx.body = {
                     code: -3,
                     message: '用户名不存在',
                 };
-                return [3 /*break*/, 7];
-            case 7: return [2 /*return*/];
+                return [3 /*break*/, 9];
+            case 9: return [2 /*return*/];
         }
     });
 }); };
@@ -181,25 +187,31 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                                         code: 1,
                                         message: '服务错误',
                                     };
-                                    return [3 /*break*/, 7];
+                                    return [3 /*break*/, 10];
                                 case 1:
                                     userInfo = void 0;
                                     _a = info.userType;
                                     switch (_a) {
-                                        case '1': return [3 /*break*/, 2];
-                                        case '2': return [3 /*break*/, 4];
+                                        case '0': return [3 /*break*/, 2];
+                                        case '1': return [3 /*break*/, 5];
+                                        case '2': return [3 /*break*/, 7];
                                     }
-                                    return [3 /*break*/, 6];
-                                case 2: return [4 /*yield*/, patient_1.findOneByKey('uid', info._uid, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address'])];
-                                case 3:
+                                    return [3 /*break*/, 9];
+                                case 2: return [4 /*yield*/, manager_1.findOneByKey('username', userInfo.username, ['uid', 'username'])];
+                                case 3: return [4 /*yield*/, _b.sent()];
+                                case 4:
                                     userInfo = _b.sent();
-                                    return [3 /*break*/, 6];
-                                case 4: return [4 /*yield*/, docter_1.findOneByKey('workerId', info._uid, ['workerId', 'name', 'idcard', 'sex', 'age',
-                                        'tel', 'address', 'information', 'position', 'university', 'departmentId'])];
-                                case 5:
-                                    userInfo = _b.sent();
-                                    _b.label = 6;
+                                    return [3 /*break*/, 9];
+                                case 5: return [4 /*yield*/, patient_1.findOneByKey('uid', info._uid, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address'])];
                                 case 6:
+                                    userInfo = _b.sent();
+                                    return [3 /*break*/, 9];
+                                case 7: return [4 /*yield*/, docter_1.findOneByKey('workerId', info._uid, ['workerId', 'name', 'idcard', 'sex', 'age',
+                                        'tel', 'address', 'information', 'position', 'university', 'departmentId'])];
+                                case 8:
+                                    userInfo = _b.sent();
+                                    return [3 /*break*/, 9];
+                                case 9:
                                     if (userInfo) {
                                         userInfo.type = info.userType - 0;
                                         ctx.body = {
@@ -216,8 +228,8 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                                             message: '无权限',
                                         };
                                     }
-                                    _b.label = 7;
-                                case 7: return [2 /*return*/];
+                                    _b.label = 10;
+                                case 10: return [2 /*return*/];
                             }
                         });
                     }); })];

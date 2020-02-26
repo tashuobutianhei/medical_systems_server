@@ -51,6 +51,7 @@ var koa_jwt_1 = __importDefault(require("koa-jwt"));
 var index_1 = __importDefault(require("./routes/index"));
 var users_1 = __importDefault(require("./routes/users"));
 var department_1 = __importDefault(require("./routes/department"));
+var doctor_1 = __importDefault(require("./routes/doctor"));
 var index_2 = require("./models/index");
 var config_1 = require("./config");
 var koaBody = require('koa-body');
@@ -118,6 +119,7 @@ app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function
 app.use(index_1.default.routes()).use(index_1.default.allowedMethods());
 app.use(users_1.default.routes()).use(users_1.default.allowedMethods());
 app.use(department_1.default.routes()).use(department_1.default.allowedMethods());
+app.use(doctor_1.default.routes()).use(doctor_1.default.allowedMethods());
 // app.use(async (ctx, next) => {
 //   console.log(123)
 // })

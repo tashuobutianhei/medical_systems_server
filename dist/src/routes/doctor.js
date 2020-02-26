@@ -39,55 +39,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var koa_1 = __importDefault(require("koa"));
-var app = new koa_1.default();
-// const views = require('koa-views')
-// const json = require('koa-json')
-// const onerror = require('koa-onerror')
-// const bodyparser = require('koa-bodyparser')
-// const logger = require('koa-logger')
-var koa_views_1 = __importDefault(require("koa-views"));
-var koa_json_1 = __importDefault(require("koa-json"));
-var koa_bodyparser_1 = __importDefault(require("koa-bodyparser"));
-var koa_logger_1 = __importDefault(require("koa-logger"));
-// const index = require('./routes/index')
-// const users = require('./routes/users')
-var index_1 = __importDefault(require("./routes/index"));
-var users_1 = __importDefault(require("./routes/users"));
-// middlewares
-app.use(koa_bodyparser_1.default({
-    enableTypes: ['json', 'form', 'text']
-}));
-app.use(koa_json_1.default());
-app.use(koa_logger_1.default());
-app.use(require('koa-static')(__dirname + '/public'));
-app.use(koa_views_1.default(__dirname + '/views', {
-    extension: 'pug'
-}));
-// logger
-app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var start;
+var koa_router_1 = __importDefault(require("koa-router"));
+var schedule_1 = require("../controllers/docter/schedule");
+var router = new koa_router_1.default();
+router.prefix('/doctor');
+router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                start = new Date();
-                return [4 /*yield*/, next()
-                    // const ms = new Date() - start
-                ];
+                if (!(ctx.state.user && ctx.state.user.userType !== 2)) return [3 /*break*/, 2];
+                return [4 /*yield*/, next()];
             case 1:
                 _a.sent();
-                // const ms = new Date() - start
-                console.log(112);
-                console.log(ctx.method + " " + ctx.url);
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2: return [2 /*return*/, ctx.body = {
+                    code: 401,
+                    message: '无权限',
+                }];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
-// routes
-app.use(index_1.default.routes()).use(index_1.default.allowedMethods());
-app.use(users_1.default.routes()).use(users_1.default.allowedMethods());
-// error-handling
-app.on('error', function (err, ctx) {
-    console.error('server error', err, ctx);
-});
-module.exports = app;
+router.get('/createWork', schedule_1.createWorkList);
+exports.default = router;

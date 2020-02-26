@@ -20,52 +20,35 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable new-cap */
 var index_1 = require("./index");
-var department_1 = require("./department");
-exports.DocterWork = index_1.sequelize.define('DocterWork', {
+exports.Admin = index_1.sequelize.define('Admin', {
     // 属性
-    wokrId: {
+    uid: {
         type: index_1.Sequelize.STRING(12),
         allowNull: false,
         primaryKey: true,
         unique: true,
     },
-    departmentId: {
-        type: index_1.Sequelize.INTEGER,
-        references: {
-            model: department_1.Department,
-            key: 'departmentId',
-        },
+    username: {
+        type: index_1.Sequelize.STRING(12),
         allowNull: false,
+        unique: true,
     },
-    data: {
-        type: index_1.Sequelize.DATE,
+    password: {
+        type: index_1.Sequelize.STRING(60),
         allowNull: false,
-    },
-    shifts: {
-        type: index_1.Sequelize.INTEGER,
-        allowNull: false,
-    },
-    docters: {
-        type: index_1.Sequelize.STRING(240),
-        allowNull: true,
-    },
-    editrt: {
-        type: index_1.Sequelize.STRING(30),
-        allowNull: true,
     },
 }, {
     // 参数
     timestamps: false,
     freezeTableName: true,
 });
-exports.createTableDocterWork = function () {
-    exports.DocterWork.sync({ force: true }).then(function () {
+exports.createTableAdmin = function () {
+    exports.Admin.sync({ force: true }).then(function () {
         console.log('创建成功');
     });
 };
-exports.insert = function (docterWorkInfo) {
-    return exports.DocterWork.create(docterWorkInfo).then(function (res) {
-        console.log(res.id);
+exports.insert = function (adminInfo) {
+    return exports.Admin.create(adminInfo).then(function (res) {
         return true;
     }).catch(function (e) {
         console.log(e);
@@ -75,10 +58,15 @@ exports.insert = function (docterWorkInfo) {
 exports.findOneByKey = function (key, value, attributes) {
     var params = {};
     params[key] = value;
-    return exports.DocterWork.findOne({
+    return exports.Admin.findOne({
         where: __assign({}, params),
         attributes: __spreadArrays(attributes),
     }).then(function (info) {
         return info && info.dataValues;
     });
 };
+// create Table Admin {
+//   uid varchar(12) NOT NULL UNIQUE PRIMARY KEY,
+//   username varchar(12) NOT NULL,
+//   password varchar(60) NOT NULL,
+// }

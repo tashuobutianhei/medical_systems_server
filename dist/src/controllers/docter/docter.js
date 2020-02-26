@@ -39,27 +39,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var koa_router_1 = __importDefault(require("koa-router"));
-var router = new koa_router_1.default();
-router.get('/', function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+var docter_1 = require("../../models/docter");
+var random_string_1 = __importDefault(require("random-string"));
+var bcrypt_1 = require("../../utils/bcrypt");
+exports.addDocter = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var docterInfo, result, e_1;
     return __generator(this, function (_a) {
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                docterInfo = ctx.request.body;
+                if (!(typeof docterInfo === 'object' && Object.keys(docterInfo).length > 0)) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -2,
+                            message: '参数有错误',
+                        }];
+                }
+                docterInfo.workerId = random_string_1.default({ length: 12, numbers: true });
+                docterInfo.password = bcrypt_1.encode(docterInfo.password);
+                return [4 /*yield*/, docter_1.insert(docterInfo)];
+            case 1:
+                result = _a.sent();
+                return [2 /*return*/, ctx.body = {
+                        code: result ? 0 : 1,
+                        message: result ? '添加成功' : '添加失败',
+                    }];
+            case 2:
+                e_1 = _a.sent();
+                return [2 /*return*/, ctx.body = {
+                        code: -3,
+                        message: '服务错误',
+                    }];
+            case 3: return [2 /*return*/];
+        }
     });
-}); });
-router.get('/string', function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        console.log(123);
-        ctx.body = 'koa2 string';
-        return [2 /*return*/];
-    });
-}); });
-router.get('/json', function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        ctx.body = {
-            title: 'koa2 json'
-        };
-        return [2 /*return*/];
-    });
-}); });
-// module.exports = router
-exports.default = router;
+}); };

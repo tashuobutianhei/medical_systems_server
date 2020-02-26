@@ -13,6 +13,7 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var config_1 = require("../config");
 exports.Sequelize = require('sequelize');
+exports.sequelize = new exports.Sequelize(config_1.mysqlDbOption.db, config_1.mysqlDbOption.name, config_1.mysqlDbOption.password, __assign({}, config_1.mysqlDbOption.options));
 // import {createTableAssay} from './assay';
 // import {createTableDepartment} from './department';
 // import {createTableDocters} from './docter';
@@ -20,7 +21,7 @@ exports.Sequelize = require('sequelize');
 // import {createTableHospitalizationInfoList} from './hospitalizationInfoList';
 // import {createTablePatient} from './patient';
 // import {createTablePatientCase} from './patientCase';
-exports.sequelize = new exports.Sequelize(config_1.mysqlDbOption.db, config_1.mysqlDbOption.name, config_1.mysqlDbOption.password, __assign({}, config_1.mysqlDbOption.options));
+var manager_1 = require("./manager");
 exports.connectMysql = function () {
     exports.sequelize.authenticate().then(function () {
         console.log('Connection has been established successfully.');
@@ -36,4 +37,6 @@ exports.createTable = function () {
     // createTableDepartment();
     // createTableDocters();
     // createTableDocterWork();
+    console.log(111);
+    manager_1.createTableAdmin();
 };

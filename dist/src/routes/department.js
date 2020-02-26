@@ -41,7 +41,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var koa_router_1 = __importDefault(require("koa-router"));
 var department_1 = require("../controllers/department");
-var docter_1 = require("../controllers/docter");
+var docter_1 = require("../controllers/docter/docter");
+var department_2 = require("../controllers/department");
 var router = new koa_router_1.default();
 router.prefix('/department');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
@@ -63,4 +64,5 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
 }); });
 router.post('/', department_1.addDepartment); // 添加科室
 router.post('/docters', docter_1.addDocter); // 添加医生
+router.post('/admin', department_2.addAdmin); // 增加管理员
 exports.default = router;

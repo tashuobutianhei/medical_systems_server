@@ -1,6 +1,6 @@
-import {insert} from '../models/docter';
+import {insert} from '../../models/docter';
 import randomString from 'random-string';
-import {encode} from '../utils/bcrypt';
+import {encode} from '../../utils/bcrypt';
 
 export const addDocter= async (ctx: any, next: any) => {
   try {
