@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -50,69 +39,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var docter_1 = require("../../models/docter");
-var random_string_1 = __importDefault(require("random-string"));
-var bcrypt_1 = require("../../utils/bcrypt");
-exports.addDocter = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var docterInfo, result, e_1;
+var koa_router_1 = __importDefault(require("koa-router"));
+var schedule_1 = require("../controllers/docter/schedule");
+var router = new koa_router_1.default();
+router.prefix('/schedule');
+router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                docterInfo = ctx.request.body;
-                if (!(typeof docterInfo === 'object' && Object.keys(docterInfo).length > 0)) {
-                    return [2 /*return*/, ctx.body = {
-                            code: -2,
-                            message: '参数有错误',
-                        }];
-                }
-                docterInfo.workerId = random_string_1.default({ length: 12, numbers: true });
-                docterInfo.password = bcrypt_1.encode(docterInfo.password);
-                return [4 /*yield*/, docter_1.insert(docterInfo)];
+                if (!(ctx.state.user && ctx.state.user.userType !== 2)) return [3 /*break*/, 2];
+                return [4 /*yield*/, next()];
             case 1:
-                result = _a.sent();
-                return [2 /*return*/, ctx.body = {
-                        code: result ? 0 : 1,
-                        message: result ? '添加成功' : '添加失败',
-                    }];
-            case 2:
-                e_1 = _a.sent();
-                return [2 /*return*/, ctx.body = {
-                        code: -3,
-                        message: '服务错误',
-                    }];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.getDoctors = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, doctors, e_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                if (Object.keys(ctx.query).length === 0) {
-                    return [2 /*return*/, ctx.body = {
-                            code: -2,
-                            message: '参数有错误',
-                        }];
-                }
-                params = ctx.query;
-                return [4 /*yield*/, docter_1.findAllByKey(__assign({}, params))];
-            case 1:
-                doctors = _a.sent();
-                ctx.body = {
-                    code: doctors.length ? 0 : -1,
-                    data: doctors,
-                };
+                _a.sent();
                 return [3 /*break*/, 3];
-            case 2:
-                e_2 = _a.sent();
-                return [2 /*return*/, ctx.body = {
-                        code: -3,
-                        message: '服务错误',
-                    }];
+            case 2: return [2 /*return*/, ctx.body = {
+                    code: 401,
+                    message: '无权限',
+                }];
             case 3: return [2 /*return*/];
         }
     });
-}); };
+}); });
+router.get('/createWork', schedule_1.createWorkList); // 增
+router.post('/', schedule_1.addSchedule); // 改
+router.get('/', schedule_1.getSchedule); // 查
+router.delete('/', schedule_1.deleteSchedule); // 删
+exports.default = router;

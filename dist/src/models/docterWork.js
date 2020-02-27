@@ -49,7 +49,7 @@ exports.DocterWork = index_1.sequelize.define('DocterWork', {
         type: index_1.Sequelize.STRING(240),
         allowNull: true,
     },
-    editrt: {
+    editer: {
         type: index_1.Sequelize.STRING(30),
         allowNull: true,
     },
@@ -80,5 +80,20 @@ exports.findOneByKey = function (key, value, attributes) {
         attributes: __spreadArrays(attributes),
     }).then(function (info) {
         return info && info.dataValues;
+    });
+};
+exports.findAllByKey = function (params) {
+    return exports.DocterWork.findAll({
+        where: __assign({}, params),
+    }).then(function (info) {
+        return info && info.map(function (item) {
+            return item.dataValues;
+        });
+    });
+};
+exports.update = function (updateParams, selectParams) {
+    console.log(selectParams);
+    return exports.DocterWork.update(updateParams, {
+        where: __assign({}, selectParams),
     });
 };

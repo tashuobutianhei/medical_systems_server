@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var koa_router_1 = __importDefault(require("koa-router"));
-var schedule_1 = require("../controllers/docter/schedule");
+var docter_1 = require("../controllers/docter/docter");
 var router = new koa_router_1.default();
 router.prefix('/doctor');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
@@ -60,5 +60,5 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
         }
     });
 }); });
-router.get('/createWork', schedule_1.createWorkList);
+router.get('/', docter_1.getDoctors);
 exports.default = router;

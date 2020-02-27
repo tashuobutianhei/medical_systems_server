@@ -31,7 +31,7 @@ export const DocterWork = sequelize.define('DocterWork', {
     type: Sequelize.STRING(240),
     allowNull: true,
   },
-  editrt: {
+  editer: {
     type: Sequelize.STRING(30),
     allowNull: true,
   },
@@ -65,5 +65,25 @@ export const findOneByKey= (key: string, value: any, attributes: string[]) => {
     attributes: [...attributes],
   }).then((info: any) => {
     return info && info.dataValues;
+  });
+};
+
+
+export const findAllByKey= (params: any) => {
+  return DocterWork.findAll({
+    where: {...params},
+  }).then((info: any) => {
+    return info && info.map((item: { dataValues: any; })=> {
+      return item.dataValues;
+    });
+  });
+};
+
+export const update = (updateParams: any, selectParams: any) =>{
+  console.log(selectParams);
+  return DocterWork.update(updateParams, {
+    where: {
+      ...selectParams,
+    },
   });
 };

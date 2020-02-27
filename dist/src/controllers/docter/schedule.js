@@ -57,7 +57,7 @@ var transFormwokrId = function (date, departmentId, shifts) {
 exports.createWorkList = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var departmentId;
     return __generator(this, function (_a) {
-        if (!ctx.query) {
+        if (Object.keys(ctx.query).length === 0) {
             return [2 /*return*/, ctx.body = {
                     code: -2,
                     message: '参数有错误',
@@ -71,7 +71,6 @@ exports.createWorkList = function (ctx, next) { return __awaiter(void 0, void 0,
                     case 0: return [4 /*yield*/, docterWork_1.findOneByKey('data', date + "T00:00:00.000Z", ['wokrId'])];
                     case 1:
                         DocterWork = _a.sent();
-                        console.log(DocterWork);
                         if (DocterWork) {
                         }
                         else {
@@ -104,5 +103,131 @@ exports.createWorkList = function (ctx, next) { return __awaiter(void 0, void 0,
             message: 'success',
         };
         return [2 /*return*/];
+    });
+}); };
+exports.deleteSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var params, findResult, midArray, res, e_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                if (Object.keys(ctx.request.body).length < 0) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -2,
+                            message: '参数有错误',
+                        }];
+                }
+                params = ctx.request.body;
+                return [4 /*yield*/, docterWork_1.findOneByKey('wokrId', params.wokrId, ['wokrId', 'docters'])];
+            case 1:
+                findResult = _a.sent();
+                if (!findResult) {
+                    throw new Error('查找失败');
+                }
+                if (findResult.docters === null) {
+                    throw new Error('无法删除');
+                }
+                midArray = findResult.docters.split(',');
+                midArray.splice(midArray.indexOf(params.workerId), 1);
+                res = docterWork_1.update({
+                    docters: midArray.length > 0 ? midArray.join(',') : null,
+                }, {
+                    wokrId: params.wokrId,
+                });
+                ctx.body = {
+                    code: res ? 0 : -1,
+                    data: res ? '更新成功' : '更新失败',
+                };
+                return [3 /*break*/, 3];
+            case 2:
+                e_1 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    message: '服务错误',
+                    data: e_1,
+                };
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.addSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var params, findResult, newDocters, res, e_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                if (Object.keys(ctx.request.body).length < 0) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -2,
+                            message: '参数有错误',
+                        }];
+                }
+                params = ctx.request.body;
+                return [4 /*yield*/, docterWork_1.findOneByKey('wokrId', params.wokrId, ['wokrId', 'docters'])];
+            case 1:
+                findResult = _a.sent();
+                if (!findResult) {
+                    throw new Error('查找失败');
+                }
+                newDocters = findResult.docters === null || findResult.docters === '' ?
+                    params.workerId : findResult.workerId + ("," + params.workerId);
+                res = docterWork_1.update({
+                    docters: Array.from(new Set(newDocters.split(','))),
+                }, {
+                    wokrId: params.wokrId,
+                });
+                ctx.body = {
+                    code: res ? 0 : -1,
+                    data: res ? '更新成功' : '更新失败',
+                };
+                return [3 /*break*/, 3];
+            case 2:
+                e_2 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    message: '服务错误',
+                    data: e_2,
+                };
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var departmentId, date, schdelue, e_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                if (Object.keys(ctx.query).length === 0) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -2,
+                            message: '参数有错误',
+                        }];
+                }
+                departmentId = ctx.query.departmentId;
+                date = moment_1.default(ctx.query.date).format('YYYY-MM-DD');
+                return [4 /*yield*/, docterWork_1.findAllByKey({
+                        departmentId: departmentId,
+                        data: date + "T00:00:00.000Z",
+                    })];
+            case 1:
+                schdelue = _a.sent();
+                ctx.body = {
+                    code: schdelue.length ? 0 : -1,
+                    data: schdelue,
+                };
+                return [3 /*break*/, 3];
+            case 2:
+                e_3 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    message: '服务错误',
+                    data: e_3,
+                };
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
     });
 }); };

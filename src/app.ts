@@ -14,6 +14,7 @@ import index from './routes/index';
 import users from './routes/users';
 import department from './routes/department';
 import doctor from './routes/doctor';
+import schedule from './routes/schedule';
 
 
 import {connectMysql} from './models/index';
@@ -27,6 +28,7 @@ const koaBody = require('koa-body');
 // }));
 app.use(koaBody({
   multipart: true, // 允许上传多个文件
+  strict: false,
 }));
 app.use(json());
 app.use(logger());
@@ -79,6 +81,8 @@ app.use(index.routes()).use(index.allowedMethods());
 app.use(users.routes()).use(users.allowedMethods());
 app.use(department.routes()).use(department.allowedMethods());
 app.use(doctor.routes()).use(doctor.allowedMethods());
+app.use(schedule.routes()).use(schedule.allowedMethods());
+
 
 // app.use(async (ctx, next) => {
 //   console.log(123)

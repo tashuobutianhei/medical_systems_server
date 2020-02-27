@@ -91,3 +91,13 @@ export const findOneByKey= (key: string, value: any, attributes: string[]) => {
   });
 };
 
+
+export const findAllByKey= (params: any) => {
+  return Docters.findAll({
+    where: {...params},
+  }).then((info: any) => {
+    return info && info.map((item: { dataValues: any; })=> {
+      return item.dataValues;
+    });
+  });
+};

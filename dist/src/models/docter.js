@@ -104,3 +104,12 @@ exports.findOneByKey = function (key, value, attributes) {
         return info && info.dataValues;
     });
 };
+exports.findAllByKey = function (params) {
+    return exports.Docters.findAll({
+        where: __assign({}, params),
+    }).then(function (info) {
+        return info && info.map(function (item) {
+            return item.dataValues;
+        });
+    });
+};

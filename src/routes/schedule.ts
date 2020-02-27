@@ -1,9 +1,14 @@
 import Router from 'koa-router';
-import {getDoctors} from '../controllers/docter/docter';
+import {
+  createWorkList,
+  addSchedule,
+  getSchedule,
+  deleteSchedule,
+} from '../controllers/docter/schedule';
 
 const router = new Router();
 
-router.prefix('/doctor');
+router.prefix('/schedule');
 
 router.use(async (ctx: any, next) => {
   // department接口对管理员开放
@@ -16,6 +21,13 @@ router.use(async (ctx: any, next) => {
     };
   }
 });
-router.get('/', getDoctors);
+
+router.get('/createWork', createWorkList); // 增
+
+router.post('/', addSchedule); // 改
+
+router.get('/', getSchedule); // 查
+
+router.delete('/', deleteSchedule); // 删
 
 export default router;

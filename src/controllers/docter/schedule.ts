@@ -1,4 +1,9 @@
-import {insert as inserWork, findOneByKey} from '../../models/docterWork';
+import {
+  insert as inserWork,
+  findOneByKey,
+  findAllByKey,
+  update,
+} from '../../models/docterWork';
 import moment from 'moment';
 
 
@@ -18,7 +23,7 @@ const transFormwokrId = (date: string, departmentId: string, shifts: number) => 
 };
 
 export const createWorkList = async (ctx: any, next: any) => {
-  if (!ctx.query) {
+  if (Object.keys(ctx.query).length === 0) {
     return ctx.body = {
       code: -2,
       message: '参数有错误',
@@ -28,7 +33,6 @@ export const createWorkList = async (ctx: any, next: any) => {
 
   getScheduleDateList().forEach(async (date) => {
     const DocterWork = await findOneByKey('data', `${date}T00:00:00.000Z`, ['wokrId']);
-    console.log(DocterWork);
     if (DocterWork) {
 
     } else {
@@ -53,4 +57,103 @@ export const createWorkList = async (ctx: any, next: any) => {
     code: 1,
     message: 'success',
   };
+};
+
+export const deleteSchedule = async (ctx: any) => {
+  try {
+    if (Object.keys(ctx.request.body).length < 0) {
+      return ctx.body = {
+        code: -2,
+        message: '参数有错误',
+      };
+    }
+    const params = ctx.request.body;
+    const findResult = await findOneByKey('wokrId', params.wokrId, ['wokrId', 'docters']);
+    if (!findResult) {
+      throw new Error('查找失败');
+    }
+    if (findResult.docters === null) {
+      throw new Error('无法删除');
+    }
+    const midArray = findResult.docters.split(',');
+    midArray.splice(midArray.indexOf(params.workerId), 1);
+
+    const res = update({
+      docters: midArray.length > 0 ? midArray.join(',') : null,
+    }, {
+      wokrId: params.wokrId,
+    });
+    ctx.body = {
+      code: res ? 0 : -1,
+      data: res ? '更新成功' : '更新失败',
+    };
+  } catch (e) {
+    ctx.body = {
+      code: -1,
+      message: '服务错误',
+      data: e,
+    };
+  }
+};
+
+export const addSchedule = async (ctx: any) => {
+  try {
+    if (Object.keys(ctx.request.body).length < 0) {
+      return ctx.body = {
+        code: -2,
+        message: '参数有错误',
+      };
+    }
+    const params = ctx.request.body;
+    const findResult = await findOneByKey('wokrId', params.wokrId, ['wokrId', 'docters']);
+    if (!findResult) {
+      throw new Error('查找失败');
+    }
+    // 拼接
+    const newDocters = findResult.docters === null || findResult.docters === '' ?
+     params.workerId : findResult.workerId + `,${params.workerId}`;
+    const res = update({
+      docters: Array.from(new Set(newDocters.split(','))),
+    }, {
+      wokrId: params.wokrId,
+    });
+    ctx.body = {
+      code: res ? 0 : -1,
+      data: res ? '更新成功' : '更新失败',
+    };
+  } catch (e) {
+    ctx.body = {
+      code: -1,
+      message: '服务错误',
+      data: e,
+    };
+  }
+};
+
+
+export const getSchedule = async (ctx: any) => {
+  try {
+    if (Object.keys(ctx.query).length === 0) {
+      return ctx.body = {
+        code: -2,
+        message: '参数有错误',
+      };
+    }
+    const departmentId = ctx.query.departmentId;
+    const date = moment(ctx.query.date).format('YYYY-MM-DD');
+    const schdelue = await findAllByKey({
+      departmentId,
+      data: `${date}T00:00:00.000Z`,
+    });
+    ctx.body = {
+      code: schdelue.length ? 0 : -1,
+      data: schdelue,
+    };
+  } catch (e) {
+    ctx.body = {
+      code: -1,
+      message: '服务错误',
+      data: e,
+    };
+  }
 };
