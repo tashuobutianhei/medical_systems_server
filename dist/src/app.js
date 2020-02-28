@@ -100,7 +100,7 @@ app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function
 app.use(koa_jwt_1.default({
     secret: config_1.tokenKey,
 }).unless({
-    path: [/\/users\/login/, /\/users\/getUser/],
+    path: [/\/users\/login/, /\/users\/getUser/, /\/department/],
 }));
 // logger
 app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {

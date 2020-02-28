@@ -1,16 +1,22 @@
 import Router from 'koa-router';
 import {addDepartment} from '../controllers/department';
 import {addDocter} from '../controllers/docter/docter';
-import {addAdmin} from '../controllers/department';
+import {addAdmin, getDepartment} from '../controllers/department';
 
 
 const router = new Router();
 
 router.prefix('/department');
 
+
 router.use(async (ctx: any, next) => {
   // department接口对管理员开放
-  if (ctx.state.user && ctx.state.user.userType !== 0) {
+  let auth = false;
+  if (ctx.request.url === '/department' && ctx.request.method === 'GET') {
+    auth = true;
+  }
+
+  if (auth || (ctx.state.user && ctx.state.user.userType !== -1)) {
     await next();
   } else {
     return ctx.body = {
@@ -19,6 +25,8 @@ router.use(async (ctx: any, next) => {
     };
   }
 });
+
+router.get('/', getDepartment); // 添加科室
 
 router.post('/', addDepartment); // 添加科室
 

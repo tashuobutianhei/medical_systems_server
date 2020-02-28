@@ -80,6 +80,7 @@ export const deleteSchedule = async (ctx: any) => {
 
     const res = update({
       docters: midArray.length > 0 ? midArray.join(',') : null,
+      editer: ctx.state.user._uid,
     }, {
       wokrId: params.wokrId,
     });
@@ -111,9 +112,10 @@ export const addSchedule = async (ctx: any) => {
     }
     // 拼接
     const newDocters = findResult.docters === null || findResult.docters === '' ?
-     params.workerId : findResult.workerId + `,${params.workerId}`;
+     params.workerId : findResult.docters + `,${params.workerId}`;
     const res = update({
-      docters: Array.from(new Set(newDocters.split(','))),
+      docters: Array.from(new Set(newDocters.split(','))).join(','),
+      editer: ctx.state.user._uid,
     }, {
       wokrId: params.wokrId,
     });

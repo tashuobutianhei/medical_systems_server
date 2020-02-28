@@ -12,7 +12,7 @@ router.prefix('/schedule');
 
 router.use(async (ctx: any, next) => {
   // department接口对管理员开放
-  if (ctx.state.user && ctx.state.user.userType !== 2) {
+  if (ctx.state.user && ctx.state.user.userType == 2) {
     await next();
   } else {
     return ctx.body = {

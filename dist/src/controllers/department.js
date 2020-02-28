@@ -107,3 +107,28 @@ exports.addAdmin = function (ctx, next) { return __awaiter(void 0, void 0, void 
         }
     });
 }); };
+exports.getDepartment = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var department, e_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, department_1.findAllByKey({})];
+            case 1:
+                department = _a.sent();
+                ctx.body = {
+                    code: department.length ? 0 : -1,
+                    data: department,
+                };
+                return [3 /*break*/, 3];
+            case 2:
+                e_3 = _a.sent();
+                ctx.body = {
+                    code: -3,
+                    message: '服务错误',
+                };
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };

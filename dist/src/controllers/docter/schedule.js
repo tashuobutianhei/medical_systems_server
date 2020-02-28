@@ -131,6 +131,7 @@ exports.deleteSchedule = function (ctx) { return __awaiter(void 0, void 0, void 
                 midArray.splice(midArray.indexOf(params.workerId), 1);
                 res = docterWork_1.update({
                     docters: midArray.length > 0 ? midArray.join(',') : null,
+                    editer: ctx.state.user._uid,
                 }, {
                     wokrId: params.wokrId,
                 });
@@ -171,9 +172,10 @@ exports.addSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, 
                     throw new Error('查找失败');
                 }
                 newDocters = findResult.docters === null || findResult.docters === '' ?
-                    params.workerId : findResult.workerId + ("," + params.workerId);
+                    params.workerId : findResult.docters + ("," + params.workerId);
                 res = docterWork_1.update({
-                    docters: Array.from(new Set(newDocters.split(','))),
+                    docters: Array.from(new Set(newDocters.split(','))).join(','),
+                    editer: ctx.state.user._uid,
                 }, {
                     wokrId: params.wokrId,
                 });

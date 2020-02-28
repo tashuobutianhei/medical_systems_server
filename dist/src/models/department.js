@@ -95,3 +95,12 @@ exports.inset = function (department) {
         });
     });
 };
+exports.findAllByKey = function (params) {
+    return exports.Department.findAll({
+        where: __assign({}, params),
+    }).then(function (info) {
+        return info && info.map(function (item) {
+            return item.dataValues;
+        });
+    });
+};

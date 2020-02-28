@@ -65,7 +65,7 @@ app.use(async (ctx, next) => {
 app.use(koajwt({
   secret: tokenKey,
 }).unless({
-  path: [/\/users\/login/, /\/users\/getUser/],
+  path: [/\/users\/login/, /\/users\/getUser/, /\/department/],
 }));
 
 // logger

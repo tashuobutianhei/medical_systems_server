@@ -1,4 +1,4 @@
-import {inset} from '../models/department';
+import {inset, findAllByKey} from '../models/department';
 import {insert} from '../models/manager';
 import randomString from 'random-string';
 
@@ -43,6 +43,22 @@ export const addAdmin= async (ctx: any, next: any) => {
     ctx.body = {
       code: result ? 0 : 1,
       message: result ? '添加成功' : '添加失败',
+    };
+  } catch (e) {
+    ctx.body = {
+      code: -3,
+      message: '服务错误',
+    };
+  }
+};
+
+
+export const getDepartment = async (ctx: any) => {
+  try {
+    const department = await findAllByKey({});
+    ctx.body = {
+      code: department.length ? 0 : -1,
+      data: department,
     };
   } catch (e) {
     ctx.body = {

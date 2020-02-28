@@ -47,3 +47,13 @@ export const inset = async function(department: typeDepartment) {
   });
 };
 
+
+export const findAllByKey= (params: any) => {
+  return Department.findAll({
+    where: {...params},
+  }).then((info: any) => {
+    return info && info.map((item: { dataValues: any; })=> {
+      return item.dataValues;
+    });
+  });
+};
