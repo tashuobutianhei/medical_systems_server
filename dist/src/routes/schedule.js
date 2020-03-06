@@ -44,10 +44,15 @@ var schedule_1 = require("../controllers/docter/schedule");
 var router = new koa_router_1.default();
 router.prefix('/schedule');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var auth;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!(ctx.state.user && ctx.state.user.userType == 2)) return [3 /*break*/, 2];
+                auth = false;
+                if (ctx.request.url === '/' && ctx.request.method === 'GET') {
+                    auth = true;
+                }
+                if (!(auth || ctx.state.user && ctx.state.user.userType == 2)) return [3 /*break*/, 2];
                 return [4 /*yield*/, next()];
             case 1:
                 _a.sent();
@@ -63,5 +68,6 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
 router.get('/createWork', schedule_1.createWorkList); // 增
 router.post('/', schedule_1.addSchedule); // 改
 router.get('/', schedule_1.getSchedule); // 查
+router.get('/getScheduleOfPeriod', schedule_1.getScheduleOfPeriod); // 查
 router.delete('/', schedule_1.deleteSchedule); // 删
 exports.default = router;

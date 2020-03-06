@@ -18,8 +18,8 @@ export const sequelize = new Sequelize(
 // import {createTableHospitalizationInfoList} from './hospitalizationInfoList';
 // import {createTablePatient} from './patient';
 // import {createTablePatientCase} from './patientCase';
-
-import {createTableAdmin} from './manager';
+import {createTableOrder} from './order';
+// import {createTableAdmin} from './manager';
 
 export const connectMysql = () => {
   sequelize.authenticate().then(() => {
@@ -38,5 +38,5 @@ export const createTable = () => {
   // createTableDocters();
   // createTableDocterWork();
   console.log(111);
-  createTableAdmin();
+  createTableOrder();
 };

@@ -1,3 +1,5 @@
+import {patientCase} from './patientType';
+
 export type docterInfo = {
     workerId: string
     password: string
@@ -17,7 +19,13 @@ export type docterInfo = {
 type docterWork = {
     data: string // 日期
     shifts: number // 0:早班 1:下午班 2:急诊
-    docters: docterInfo[]
+    docters: docterInfo[],
+}
+
+type order = {
+    id: string, // id
+    wokrId: string, // 排班计划
+    patientCase: patientCase
 }
 
 // 科室信息

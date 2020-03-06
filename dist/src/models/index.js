@@ -21,7 +21,8 @@ exports.sequelize = new exports.Sequelize(config_1.mysqlDbOption.db, config_1.my
 // import {createTableHospitalizationInfoList} from './hospitalizationInfoList';
 // import {createTablePatient} from './patient';
 // import {createTablePatientCase} from './patientCase';
-var manager_1 = require("./manager");
+var order_1 = require("./order");
+// import {createTableAdmin} from './manager';
 exports.connectMysql = function () {
     exports.sequelize.authenticate().then(function () {
         console.log('Connection has been established successfully.');
@@ -38,5 +39,5 @@ exports.createTable = function () {
     // createTableDocters();
     // createTableDocterWork();
     console.log(111);
-    manager_1.createTableAdmin();
+    order_1.createTableOrder();
 };

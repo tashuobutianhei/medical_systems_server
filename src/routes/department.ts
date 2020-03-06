@@ -26,7 +26,7 @@ router.use(async (ctx: any, next) => {
   }
 });
 
-router.get('/', getDepartment); // 添加科室
+router.get('/', getDepartment); // 获取所有科室
 
 router.post('/', addDepartment); // 添加科室
 

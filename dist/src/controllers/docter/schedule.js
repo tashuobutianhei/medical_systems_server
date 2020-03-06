@@ -196,6 +196,7 @@ exports.addSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, 
         }
     });
 }); };
+// 查询某天的排班
 exports.getSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
     var departmentId, date, schdelue, e_3;
     return __generator(this, function (_a) {
@@ -227,6 +228,60 @@ exports.getSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, 
                     code: -1,
                     message: '服务错误',
                     data: e_3,
+                };
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+// 查询排班周期中的排班
+exports.getScheduleOfPeriod = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var departmentId_1, listPromise, schdelueLists, e_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                if (Object.keys(ctx.query).length === 0) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -2,
+                            message: '参数有错误',
+                        }];
+                }
+                departmentId_1 = ctx.query.departmentId;
+                listPromise = getScheduleDateList().map(function (date) { return __awaiter(void 0, void 0, void 0, function () {
+                    var schdelue;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, docterWork_1.findAllByKey({
+                                    departmentId: departmentId_1,
+                                    data: date + "T00:00:00.000Z",
+                                })];
+                            case 1:
+                                schdelue = _a.sent();
+                                if (schdelue) {
+                                    return [2 /*return*/, schdelue];
+                                }
+                                else {
+                                    throw new Error('');
+                                }
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, Promise.all(listPromise)];
+            case 1:
+                schdelueLists = _a.sent();
+                ctx.body = {
+                    code: 0,
+                    data: schdelueLists,
+                };
+                return [3 /*break*/, 3];
+            case 2:
+                e_4 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    message: '服务错误',
+                    data: e_4,
                 };
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];

@@ -133,6 +133,7 @@ export const addSchedule = async (ctx: any) => {
 };
 
 
+// 查询某天的排班
 export const getSchedule = async (ctx: any) => {
   try {
     if (Object.keys(ctx.query).length === 0) {
@@ -150,6 +151,42 @@ export const getSchedule = async (ctx: any) => {
     ctx.body = {
       code: schdelue.length ? 0 : -1,
       data: schdelue,
+    };
+  } catch (e) {
+    ctx.body = {
+      code: -1,
+      message: '服务错误',
+      data: e,
+    };
+  }
+};
+
+// 查询排班周期中的排班
+export const getScheduleOfPeriod = async (ctx: any) => {
+  try {
+    if (Object.keys(ctx.query).length === 0) {
+      return ctx.body = {
+        code: -2,
+        message: '参数有错误',
+      };
+    }
+    const departmentId = ctx.query.departmentId;
+
+    const listPromise = getScheduleDateList().map(async (date: any) => {
+      const schdelue = await findAllByKey({
+        departmentId,
+        data: `${date}T00:00:00.000Z`,
+      });
+      if (schdelue) {
+        return schdelue;
+      } else {
+        throw new Error('');
+      }
+    });
+    const schdelueLists = await Promise.all(listPromise);
+    ctx.body = {
+      code: 0,
+      data: schdelueLists,
     };
   } catch (e) {
     ctx.body = {
