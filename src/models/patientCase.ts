@@ -54,3 +54,49 @@ export const createTablePatientCase = function() {
     console.log('创建成功');
   });
 };
+
+
+export const insert = (info: any) => {
+  return PatientCase.create(info).then((res: { id: any; })=> {
+    console.log(res.id);
+    return true;
+  }).catch((e: any) => {
+    console.log(e);
+    return false;
+  });
+};
+
+export const findOneByKey= (params: any, attributes: string[]) => {
+  return PatientCase.findOne({
+    where: {...params},
+  }).then((info: any) => {
+    return info && info.dataValues;
+  });
+};
+
+
+export const findAllByKey= (params: any) => {
+  return PatientCase.findAll({
+    where: {...params},
+  }).then((info: any) => {
+    return info && info.map((item: { dataValues: any; })=> {
+      return item.dataValues;
+    });
+  });
+};
+
+export const destroy = (Params: any) =>{
+  return PatientCase.destroy({
+    where: {
+      ...Params,
+    },
+  });
+};
+
+export const update = (updateParams: any, selectParams: any) =>{
+  return PatientCase.update(updateParams, {
+    where: {
+      ...selectParams,
+    },
+  });
+};

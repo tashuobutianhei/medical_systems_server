@@ -15,6 +15,7 @@ import users from './routes/users';
 import department from './routes/department';
 import doctor from './routes/doctor';
 import schedule from './routes/schedule';
+import order from './routes/order';
 
 
 import {connectMysql} from './models/index';
@@ -82,6 +83,8 @@ app.use(users.routes()).use(users.allowedMethods());
 app.use(department.routes()).use(department.allowedMethods());
 app.use(doctor.routes()).use(doctor.allowedMethods());
 app.use(schedule.routes()).use(schedule.allowedMethods());
+app.use(order.routes()).use(order.allowedMethods());
+
 
 
 // app.use(async (ctx, next) => {

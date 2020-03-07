@@ -53,6 +53,7 @@ var users_1 = __importDefault(require("./routes/users"));
 var department_1 = __importDefault(require("./routes/department"));
 var doctor_1 = __importDefault(require("./routes/doctor"));
 var schedule_1 = __importDefault(require("./routes/schedule"));
+var order_1 = __importDefault(require("./routes/order"));
 var index_2 = require("./models/index");
 var config_1 = require("./config");
 var koaBody = require('koa-body');
@@ -123,6 +124,7 @@ app.use(users_1.default.routes()).use(users_1.default.allowedMethods());
 app.use(department_1.default.routes()).use(department_1.default.allowedMethods());
 app.use(doctor_1.default.routes()).use(doctor_1.default.allowedMethods());
 app.use(schedule_1.default.routes()).use(schedule_1.default.allowedMethods());
+app.use(order_1.default.routes()).use(order_1.default.allowedMethods());
 // app.use(async (ctx, next) => {
 //   console.log(123)
 // })

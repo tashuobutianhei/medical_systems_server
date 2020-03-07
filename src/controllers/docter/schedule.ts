@@ -4,6 +4,7 @@ import {
   findAllByKey,
   update,
 } from '../../models/docterWork';
+import {addOrder, deleteOrder} from './order';
 import moment from 'moment';
 
 
@@ -84,9 +85,16 @@ export const deleteSchedule = async (ctx: any) => {
     }, {
       wokrId: params.wokrId,
     });
+
+    //  同时更新挂号表
+    const deleteRes = await deleteOrder({
+      wokrId: params.wokrId,
+      workerId: params.workerId,
+    });
+
     ctx.body = {
-      code: res ? 0 : -1,
-      data: res ? '更新成功' : '更新失败',
+      code: res && deleteRes ? 0 : -1,
+      data: res && deleteRes ? '更新成功' : '更新失败',
     };
   } catch (e) {
     ctx.body = {
@@ -119,9 +127,16 @@ export const addSchedule = async (ctx: any) => {
     }, {
       wokrId: params.wokrId,
     });
+
+    //  同时更新挂号表
+    const addOrderRes = await addOrder({
+      wokrId: params.wokrId,
+      workerId: params.workerId,
+    });
+
     ctx.body = {
-      code: res ? 0 : -1,
-      data: res ? '更新成功' : '更新失败',
+      code: res && addOrderRes ? 0 : -1,
+      data: res && addOrderRes ? '更新成功' : '更新失败',
     };
   } catch (e) {
     ctx.body = {

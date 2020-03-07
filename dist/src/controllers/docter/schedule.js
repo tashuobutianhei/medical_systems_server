@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var docterWork_1 = require("../../models/docterWork");
+var order_1 = require("./order");
 var moment_1 = __importDefault(require("moment"));
 var getScheduleDateList = function () {
     var ScheduleDateList = [];
@@ -106,11 +107,11 @@ exports.createWorkList = function (ctx, next) { return __awaiter(void 0, void 0,
     });
 }); };
 exports.deleteSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, findResult, midArray, res, e_1;
+    var params, findResult, midArray, res, deleteRes, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 3, , 4]);
                 if (Object.keys(ctx.request.body).length < 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -135,29 +136,35 @@ exports.deleteSchedule = function (ctx) { return __awaiter(void 0, void 0, void 
                 }, {
                     wokrId: params.wokrId,
                 });
-                ctx.body = {
-                    code: res ? 0 : -1,
-                    data: res ? '更新成功' : '更新失败',
-                };
-                return [3 /*break*/, 3];
+                return [4 /*yield*/, order_1.deleteOrder({
+                        wokrId: params.wokrId,
+                        workerId: params.workerId,
+                    })];
             case 2:
+                deleteRes = _a.sent();
+                ctx.body = {
+                    code: res && deleteRes ? 0 : -1,
+                    data: res && deleteRes ? '更新成功' : '更新失败',
+                };
+                return [3 /*break*/, 4];
+            case 3:
                 e_1 = _a.sent();
                 ctx.body = {
                     code: -1,
                     message: '服务错误',
                     data: e_1,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
 exports.addSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, findResult, newDocters, res, e_2;
+    var params, findResult, newDocters, res, addOrderRes, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 3, , 4]);
                 if (Object.keys(ctx.request.body).length < 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -179,20 +186,26 @@ exports.addSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, 
                 }, {
                     wokrId: params.wokrId,
                 });
-                ctx.body = {
-                    code: res ? 0 : -1,
-                    data: res ? '更新成功' : '更新失败',
-                };
-                return [3 /*break*/, 3];
+                return [4 /*yield*/, order_1.addOrder({
+                        wokrId: params.wokrId,
+                        workerId: params.workerId,
+                    })];
             case 2:
+                addOrderRes = _a.sent();
+                ctx.body = {
+                    code: res && addOrderRes ? 0 : -1,
+                    data: res && addOrderRes ? '更新成功' : '更新失败',
+                };
+                return [3 /*break*/, 4];
+            case 3:
                 e_2 = _a.sent();
                 ctx.body = {
                     code: -1,
                     message: '服务错误',
                     data: e_2,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
