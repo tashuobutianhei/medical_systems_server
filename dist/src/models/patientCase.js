@@ -30,14 +30,13 @@ exports.PatientCase = index_1.sequelize.define('PatientCase', {
     },
     docterId: {
         type: index_1.Sequelize.STRING(12),
-        unique: true,
     },
     registerDate: {
         type: index_1.Sequelize.DATE,
         allowNull: false,
     },
     describe: {
-        type: index_1.Sequelize.STRING(100),
+        type: index_1.Sequelize.TEXT,
         allowNull: false,
     },
     docterView: {
@@ -52,7 +51,10 @@ exports.PatientCase = index_1.sequelize.define('PatientCase', {
         type: index_1.Sequelize.STRING(200),
     },
     HospitalizationId: {
-        type: index_1.Sequelize.INTEGER,
+        type: index_1.Sequelize.TEXT,
+    },
+    assayId: {
+        type: index_1.Sequelize.TEXT,
     },
 }, {
     // 参数

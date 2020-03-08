@@ -3,9 +3,12 @@ import {
   insert,
   destroy,
   findOneByKey,
-  update
+  update,
 } from '../../models/order';
-import {insert as insertCase} from '../../models/patientCase';
+import {
+  insert as insertCase,
+  update as updateCase,
+} from '../../models/patientCase';
 
 import randomString from 'random-string';
 
@@ -115,6 +118,41 @@ export const Order = async (ctx: any) => {
     ctx.body = {
       code: -1,
       data: e,
+    };
+  }
+};
+
+export const orderInfo = async (ctx: any) => {
+  const params = ctx.request.body;
+
+  try {
+    const {time, status, todo, medicine, attention, hospital, result = undefined} = params;
+
+    let describe = '';
+    describe += Boolean(time != 'undefined') ? `患者于[${time}]开始发病，`: '';
+    describe += Boolean(status != 'undefined')? `症状表现为[${status}],` : '';
+    describe += Boolean(todo != 'undefined') ? `个人经历有[${todo}],` : '';
+    describe += Boolean(medicine != 'undefined') ? `曾服用药物[${medicine}],` : '';
+    describe += Boolean(attention != 'undefined') ?`注意事项有[${attention}]。` : '';
+
+    if (hospital) {
+      describe += `曾就医，诊断结果为${Boolean(attention != 'undefined') ? result : '无描述'}`;
+    }
+
+    const res = await updateCase({
+      describe,
+    }, {
+      caseId: params.caseId,
+    });
+
+    ctx.body = {
+      code: res ? 0 : 1,
+    };
+  } catch (e) {
+    ctx.body = {
+      code: -1,
+      message: '服务错误',
+      date: e,
     };
   }
 };

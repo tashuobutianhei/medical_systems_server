@@ -19,14 +19,13 @@ export const PatientCase = sequelize.define('PatientCase', {
   },
   docterId: {
     type: Sequelize.STRING(12),
-    unique: true,
   },
   registerDate: {
     type: Sequelize.DATE,
     allowNull: false,
   },
   describe: {
-    type: Sequelize.STRING(100),
+    type: Sequelize.TEXT,
     allowNull: false,
   },
   docterView: {
@@ -41,7 +40,10 @@ export const PatientCase = sequelize.define('PatientCase', {
     type: Sequelize.STRING(200),
   },
   HospitalizationId: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.TEXT,
+  },
+  assayId: {
+    type: Sequelize.TEXT,
   },
 }, {
   // 参数

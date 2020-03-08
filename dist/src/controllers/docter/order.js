@@ -180,3 +180,45 @@ exports.Order = function (ctx) { return __awaiter(void 0, void 0, void 0, functi
         }
     });
 }); };
+exports.orderInfo = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var params, time, status_1, todo, medicine, attention, hospital, _a, result, describe, res, e_4;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                params = ctx.request.body;
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 3, , 4]);
+                time = params.time, status_1 = params.status, todo = params.todo, medicine = params.medicine, attention = params.attention, hospital = params.hospital, _a = params.result, result = _a === void 0 ? undefined : _a;
+                describe = '';
+                describe += Boolean(time != 'undefined') ? "\u60A3\u8005\u4E8E[" + time + "]\u5F00\u59CB\u53D1\u75C5\uFF0C" : '';
+                describe += Boolean(status_1 != 'undefined') ? "\u75C7\u72B6\u8868\u73B0\u4E3A[" + status_1 + "]," : '';
+                describe += Boolean(todo != 'undefined') ? "\u4E2A\u4EBA\u7ECF\u5386\u6709[" + todo + "]," : '';
+                describe += Boolean(medicine != 'undefined') ? "\u66FE\u670D\u7528\u836F\u7269[" + medicine + "]," : '';
+                describe += Boolean(attention != 'undefined') ? "\u6CE8\u610F\u4E8B\u9879\u6709[" + attention + "]\u3002" : '';
+                if (hospital) {
+                    describe += "\u66FE\u5C31\u533B\uFF0C\u8BCA\u65AD\u7ED3\u679C\u4E3A" + (Boolean(attention != 'undefined') ? result : '无描述');
+                }
+                return [4 /*yield*/, patientCase_1.update({
+                        describe: describe,
+                    }, {
+                        caseId: params.caseId,
+                    })];
+            case 2:
+                res = _b.sent();
+                ctx.body = {
+                    code: res ? 0 : 1,
+                };
+                return [3 /*break*/, 4];
+            case 3:
+                e_4 = _b.sent();
+                ctx.body = {
+                    code: -1,
+                    message: '服务错误',
+                    date: e_4,
+                };
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
