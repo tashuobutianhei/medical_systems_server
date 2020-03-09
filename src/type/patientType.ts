@@ -29,6 +29,7 @@ export type patientCase = {
     result: string // 诊断结果
     medicine: string[] // 药物
     HospitalizationId: string
+    status: number, // 1 诊断完成 2 住院 3 出院
 }
 
 // 住院日常检查

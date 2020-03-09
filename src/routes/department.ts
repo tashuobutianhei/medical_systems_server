@@ -2,6 +2,7 @@ import Router from 'koa-router';
 import {addDepartment} from '../controllers/department';
 import {addDocter} from '../controllers/docter/docter';
 import {addAdmin, getDepartment} from '../controllers/department';
+import {getExamination} from '../controllers/examination';
 
 
 const router = new Router();
@@ -13,6 +14,9 @@ router.use(async (ctx: any, next) => {
   // department接口对管理员开放
   let auth = false;
   if (ctx.request.url === '/department' && ctx.request.method === 'GET') {
+    auth = true;
+  }
+  if (ctx.request.url === '/department/examination' && ctx.request.method === 'GET') {
     auth = true;
   }
 
@@ -34,5 +38,6 @@ router.post('/docters', addDocter); // 添加医生
 
 router.post('/admin', addAdmin); // 增加管理员
 
+router.get('/examination', getExamination); // 获取检查信息
 
 export default router;

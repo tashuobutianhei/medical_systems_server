@@ -35,45 +35,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var koa_router_1 = __importDefault(require("koa-router"));
-var department_1 = require("../controllers/department");
-var docter_1 = require("../controllers/docter/docter");
-var department_2 = require("../controllers/department");
-var examination_1 = require("../controllers/examination");
-var router = new koa_router_1.default();
-router.prefix('/department');
-router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var auth;
+var examination_1 = require("../models/examination");
+exports.getExamination = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var res, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                auth = false;
-                if (ctx.request.url === '/department' && ctx.request.method === 'GET') {
-                    auth = true;
-                }
-                if (ctx.request.url === '/department/examination' && ctx.request.method === 'GET') {
-                    auth = true;
-                }
-                if (!(auth || (ctx.state.user && ctx.state.user.userType !== -1))) return [3 /*break*/, 2];
-                return [4 /*yield*/, next()];
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, examination_1.findAllByKey({})];
             case 1:
-                _a.sent();
+                res = _a.sent();
+                ctx.body = {
+                    code: 0,
+                    data: res,
+                };
                 return [3 /*break*/, 3];
-            case 2: return [2 /*return*/, ctx.body = {
-                    code: 401,
-                    message: '无权限',
-                }];
+            case 2:
+                e_1 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    data: e_1,
+                };
+                return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
-}); });
-router.get('/', department_2.getDepartment); // 获取所有科室
-router.post('/', department_1.addDepartment); // 添加科室
-router.post('/docters', docter_1.addDocter); // 添加医生
-router.post('/admin', department_2.addAdmin); // 增加管理员
-router.get('/examination', examination_1.getExamination); // 获取检查信息
-exports.default = router;
+}); };

@@ -5,10 +5,11 @@ import {PatientCase} from './patientCase';
 
 export const Assay = sequelize.define('Assay', {
   assayId: {
-    type: Sequelize.STRING(12),
+    type: Sequelize.INTEGER,
     allowNull: false,
     primaryKey: true,
     unique: true,
+    autoIncrement: true,
   },
   caseId: {
     type: Sequelize.STRING(12),
@@ -18,7 +19,7 @@ export const Assay = sequelize.define('Assay', {
     },
   },
   assayName: {
-    type: Sequelize.STRING(12),
+    type: Sequelize.INTEGER,
     allowNull: false,
   },
   assayResult: {
@@ -38,5 +39,15 @@ export const Assay = sequelize.define('Assay', {
 export const createTableAssay = function() {
   Assay.sync({force: true}).then(() => {
     console.log('创建成功');
+  });
+};
+
+export const insert = (info: any) => {
+  return Assay.create(info).then((res: { id: any; })=> {
+    console.log(res.id);
+    return true;
+  }).catch((e: any) => {
+    console.log(e);
+    return false;
   });
 };

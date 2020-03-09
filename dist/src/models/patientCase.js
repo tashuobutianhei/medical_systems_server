@@ -56,6 +56,9 @@ exports.PatientCase = index_1.sequelize.define('PatientCase', {
     assayId: {
         type: index_1.Sequelize.TEXT,
     },
+    status: {
+        type: index_1.Sequelize.INTEGER,
+    },
 }, {
     // 参数
     timestamps: false,

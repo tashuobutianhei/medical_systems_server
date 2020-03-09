@@ -45,6 +45,9 @@ export const PatientCase = sequelize.define('PatientCase', {
   assayId: {
     type: Sequelize.TEXT,
   },
+  status: {
+    type: Sequelize.INTEGER, //
+  },
 }, {
   // 参数
   timestamps: false,
