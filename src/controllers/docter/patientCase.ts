@@ -9,6 +9,9 @@ import {
 import {
   insert as insertAssay,
 } from '../../models/assay';
+import {
+  insert as insertHos,
+} from '../../models/hospitalizationInfoList';
 
 export const getPatientCase = async (ctx: any) => {
   if (Object.keys(ctx.query).length === 0) {
@@ -79,22 +82,117 @@ export const setPatientCaseModeDoctor = async (ctx: any) => {
     if (!assayMapRes) {
       throw new Error('insert error');
     }
-
-    const assayId = assay.map((item: any) => item.assayId).join(',');
+    const assayId = assayMapRes.map((item: any) => item.assayId).join(',');
 
     const updateRes = await updatePatientCase({
       docterView,
       result,
       medicine,
       assayId,
-      HospitalizationId: Hospitalization ? 1 : 0,
-      status: 1, // 诊断完成
+      HospitalizationId: Hospitalization ? 0 : -1,
+      status: Hospitalization ? 2 : 1, // 诊断完成
     }, {
       'caseId': caseId,
     });
     ctx.body = {
       code: updateRes ? 0 : -1,
       message: '更新成功',
+    };
+  } catch (e) {
+    ctx.body = {
+      code: -1,
+      message: '服务错误',
+    };
+  }
+};
+
+const insertAssayAndGetId = async (assay: any[], caseId: any) => {
+  const assayMap = assay.map(async (item: { examinationId: any; examinationResult: any; }) => {
+    const res = await insertAssay({
+      'caseId': caseId,
+      'assayName': item.examinationId,
+      'assayResult': item.examinationResult,
+      'assayDate': new Date(),
+    });
+    if (res) {
+      return res;
+    } else {
+      throw new Error('insert error');
+    }
+  });
+  const assayMapRes = await Promise.all(assayMap);
+
+  if (!assayMapRes) {
+    throw new Error('insert error');
+  }
+  return assayMapRes.map((item: any) => item.assayId).join(',');
+};
+
+
+export const setPatientCaseModeHos = async (ctx: any) => {
+  try {
+    if (Object.keys(ctx.request.body).length < 0) {
+      return ctx.body = {
+        code: -2,
+        message: '参数有错误',
+      };
+    }
+
+    const params = ctx.request.body;
+    const hospitalList = JSON.parse(params.hospitalList);
+    const {caseId} = params;
+
+    const assayPromise = hospitalList.map(async (item:any) => {
+      if (item.assays.length > 0 && item.assays[0].examinationId !== null) {
+        return {
+          HospitalizationId: item.HospitalizationId,
+          assayId: await insertAssayAndGetId(item.assays, caseId),
+        };
+      };
+      return {};
+    });
+
+    const assayList = await Promise.all(assayPromise);
+
+    const hosPromise = hospitalList.map(async (item: any) => {
+      // console.log({
+      //   caseId,
+      //   assayId: assayList.find((assay: any) => {
+      //     return assay.HospitalizationId === item.HospitalizationId;
+      //   }).assayId || '',
+      //   patientStatus: item.patientStatus || '',
+      //   medicine: item.medicine || '',
+      //   TreatmentRecord: item.TreatmentRecord || '',
+      //   recovery: item.recovery || '',
+      //   date: new Date(),
+      // })
+
+      const mid: any = assayList.find((assay: any) => {
+        return assay.HospitalizationId === item.HospitalizationId;
+      }) || {assayId: ''};
+      mid.assayId;
+
+      const res = await insertHos({
+        caseId,
+        assayId: mid.assayId,
+        patientStatus: item.patientStatus || '',
+        medicine: item.medicine || '',
+        TreatmentRecord: item.TreatmentRecord || '',
+        recovery: item.recovery || '',
+        date: new Date(),
+      });
+      if (res) {
+        return res;
+      } else {
+        throw new Error('insert error');
+      }
+    });
+
+    const hosRes = await Promise.all(hosPromise);
+
+    ctx.body = {
+      code: hosRes ? 0 : -1,
+      data: hosRes,
     };
   } catch (e) {
     ctx.body = {

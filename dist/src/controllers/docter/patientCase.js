@@ -50,6 +50,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var patientCase_1 = require("../../models/patientCase");
 var patient_1 = require("../../models/patient");
 var assay_1 = require("../../models/assay");
+var hospitalizationInfoList_1 = require("../../models/hospitalizationInfoList");
 exports.getPatientCase = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
     var params, resList, res, resMap, e_1;
     return __generator(this, function (_a) {
@@ -153,14 +154,14 @@ exports.setPatientCaseModeDoctor = function (ctx) { return __awaiter(void 0, voi
                 if (!assayMapRes) {
                     throw new Error('insert error');
                 }
-                assayId = assay.map(function (item) { return item.assayId; }).join(',');
+                assayId = assayMapRes.map(function (item) { return item.assayId; }).join(',');
                 return [4 /*yield*/, patientCase_1.update({
                         docterView: docterView,
                         result: result,
                         medicine: medicine,
                         assayId: assayId,
-                        HospitalizationId: Hospitalization ? 1 : 0,
-                        status: 1,
+                        HospitalizationId: Hospitalization ? 0 : -1,
+                        status: Hospitalization ? 2 : 1,
                     }, {
                         'caseId': caseId_1,
                     })];
@@ -173,6 +174,128 @@ exports.setPatientCaseModeDoctor = function (ctx) { return __awaiter(void 0, voi
                 return [3 /*break*/, 4];
             case 3:
                 e_2 = _e.sent();
+                ctx.body = {
+                    code: -1,
+                    message: '服务错误',
+                };
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+var insertAssayAndGetId = function (assay, caseId) { return __awaiter(void 0, void 0, void 0, function () {
+    var assayMap, assayMapRes;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                assayMap = assay.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
+                    var res;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, assay_1.insert({
+                                    'caseId': caseId,
+                                    'assayName': item.examinationId,
+                                    'assayResult': item.examinationResult,
+                                    'assayDate': new Date(),
+                                })];
+                            case 1:
+                                res = _a.sent();
+                                if (res) {
+                                    return [2 /*return*/, res];
+                                }
+                                else {
+                                    throw new Error('insert error');
+                                }
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, Promise.all(assayMap)];
+            case 1:
+                assayMapRes = _a.sent();
+                if (!assayMapRes) {
+                    throw new Error('insert error');
+                }
+                return [2 /*return*/, assayMapRes.map(function (item) { return item.assayId; }).join(',')];
+        }
+    });
+}); };
+exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var params, hospitalList, caseId_2, assayPromise, assayList_1, hosPromise, hosRes, e_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                if (Object.keys(ctx.request.body).length < 0) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -2,
+                            message: '参数有错误',
+                        }];
+                }
+                params = ctx.request.body;
+                hospitalList = JSON.parse(params.hospitalList);
+                caseId_2 = params.caseId;
+                assayPromise = hospitalList.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
+                    var _a;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                if (!(item.assays.length > 0 && item.assays[0].examinationId !== null)) return [3 /*break*/, 2];
+                                _a = {
+                                    HospitalizationId: item.HospitalizationId
+                                };
+                                return [4 /*yield*/, insertAssayAndGetId(item.assays, caseId_2)];
+                            case 1: return [2 /*return*/, (_a.assayId = _b.sent(),
+                                    _a)];
+                            case 2:
+                                ;
+                                return [2 /*return*/, {}];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, Promise.all(assayPromise)];
+            case 1:
+                assayList_1 = _a.sent();
+                hosPromise = hospitalList.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
+                    var mid, res;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                mid = assayList_1.find(function (assay) {
+                                    return assay.HospitalizationId === item.HospitalizationId;
+                                }) || { assayId: '' };
+                                mid.assayId;
+                                return [4 /*yield*/, hospitalizationInfoList_1.insert({
+                                        caseId: caseId_2,
+                                        assayId: mid.assayId,
+                                        patientStatus: item.patientStatus || '',
+                                        medicine: item.medicine || '',
+                                        TreatmentRecord: item.TreatmentRecord || '',
+                                        recovery: item.recovery || '',
+                                        date: new Date(),
+                                    })];
+                            case 1:
+                                res = _a.sent();
+                                if (res) {
+                                    return [2 /*return*/, res];
+                                }
+                                else {
+                                    throw new Error('insert error');
+                                }
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, Promise.all(hosPromise)];
+            case 2:
+                hosRes = _a.sent();
+                ctx.body = {
+                    code: hosRes ? 0 : -1,
+                    data: hosRes,
+                };
+                return [3 /*break*/, 4];
+            case 3:
+                e_3 = _a.sent();
                 ctx.body = {
                     code: -1,
                     message: '服务错误',

@@ -43,11 +43,21 @@ export const createTableAssay = function() {
 };
 
 export const insert = (info: any) => {
-  return Assay.create(info).then((res: { id: any; })=> {
-    console.log(res.id);
-    return true;
+  return Assay.create(info).then((res:any)=> {
+    return res.dataValues;
   }).catch((e: any) => {
     console.log(e);
     return false;
+  });
+};
+
+
+export const findAllByKey= (params: any) => {
+  return Assay.findAll({
+    where: {...params},
+  }).then((info: any) => {
+    return info && info.map((item: { dataValues: any; })=> {
+      return item.dataValues;
+    });
   });
 };

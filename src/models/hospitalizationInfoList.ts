@@ -18,6 +18,9 @@ export const HospitalizationInfoList = sequelize.define(
           key: 'caseId',
         },
       },
+      assayId: {
+        type: Sequelize.TEXT,
+      },
       patientStatus: {
         type: Sequelize.STRING(12),
         allowNull: false,
@@ -47,5 +50,50 @@ export const HospitalizationInfoList = sequelize.define(
 export const createTableHospitalizationInfoList= function() {
   HospitalizationInfoList.sync({force: true}).then(() => {
     console.log('创建成功');
+  });
+};
+
+export const insert = (info: any) => {
+  return HospitalizationInfoList.create(info).then((res: { id: any; })=> {
+    console.log(res.id);
+    return true;
+  }).catch((e: any) => {
+    console.log(e);
+    return false;
+  });
+};
+
+export const findOneByKey= (params: any, attributes: string[]) => {
+  return HospitalizationInfoList.findOne({
+    where: {...params},
+  }).then((info: any) => {
+    return info && info.dataValues;
+  });
+};
+
+
+export const findAllByKey= (params: any) => {
+  return HospitalizationInfoList.findAll({
+    where: {...params},
+  }).then((info: any) => {
+    return info && info.map((item: { dataValues: any; })=> {
+      return item.dataValues;
+    });
+  });
+};
+
+export const destroy = (Params: any) =>{
+  return HospitalizationInfoList.destroy({
+    where: {
+      ...Params,
+    },
+  });
+};
+
+export const update = (updateParams: any, selectParams: any) =>{
+  return HospitalizationInfoList.update(updateParams, {
+    where: {
+      ...selectParams,
+    },
   });
 };

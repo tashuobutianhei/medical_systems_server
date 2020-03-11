@@ -2,7 +2,11 @@ import Router from 'koa-router';
 import {
   getPatientCase as getByworkerId,
   setPatientCaseModeDoctor,
+  setPatientCaseModeHos,
 } from '../controllers/docter/patientCase';
+import {
+  getAssayById
+} from '../controllers/docter/assay';
 
 const router = new Router();
 
@@ -23,5 +27,9 @@ router.use(async (ctx: any, next) => {
 router.get('/', getByworkerId); // 查
 
 router.post('/doctor', setPatientCaseModeDoctor); // 诊断模式下病例
+
+router.post('/hospital', setPatientCaseModeHos); // 诊断模式下病例
+
+router.get('/assay', getAssayById); //
 
 export default router;
