@@ -46,6 +46,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var patientCase_1 = require("../../models/patientCase");
 var patient_1 = require("../../models/patient");
@@ -221,11 +228,11 @@ var insertAssayAndGetId = function (assay, caseId) { return __awaiter(void 0, vo
     });
 }); };
 exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, hospitalList, caseId_2, assayPromise, assayList_1, hosPromise, hosRes, e_3;
+    var params, hospitalList, caseId_2, assayPromise, assayList_1, hosPromise, hosRes, Hospitalization, updateItem, updateHospitalizationId, updateRes, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 5, , 6]);
                 if (Object.keys(ctx.request.body).length < 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -289,19 +296,38 @@ exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0
                 return [4 /*yield*/, Promise.all(hosPromise)];
             case 2:
                 hosRes = _a.sent();
-                ctx.body = {
-                    code: hosRes ? 0 : -1,
-                    data: hosRes,
-                };
-                return [3 /*break*/, 4];
+                if (!hosRes) {
+                    throw new Error('insert error');
+                }
+                Hospitalization = hosRes.map(function (item) { return item.HospitalizationId; });
+                return [4 /*yield*/, patientCase_1.findOneByKey({
+                        caseId: caseId_2,
+                    }, [])];
             case 3:
+                updateItem = _a.sent();
+                updateHospitalizationId = updateItem.HospitalizationId == 0 ?
+                    Hospitalization.join(',') : __spreadArrays(updateItem.HospitalizationId.split(','), Hospitalization);
+                return [4 /*yield*/, patientCase_1.update({
+                        HospitalizationId: updateHospitalizationId,
+                        status: Hospitalization ? 2 : 1,
+                    }, {
+                        'caseId': caseId_2,
+                    })];
+            case 4:
+                updateRes = _a.sent();
+                ctx.body = {
+                    code: updateRes ? 0 : -1,
+                    data: updateRes,
+                };
+                return [3 /*break*/, 6];
+            case 5:
                 e_3 = _a.sent();
                 ctx.body = {
                     code: -1,
                     message: '服务错误',
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
         }
     });
 }); };

@@ -54,9 +54,9 @@ export const createTableHospitalizationInfoList= function() {
 };
 
 export const insert = (info: any) => {
-  return HospitalizationInfoList.create(info).then((res: { id: any; })=> {
+  return HospitalizationInfoList.create(info).then((res: any)=> {
     console.log(res.id);
-    return true;
+    return res.dataValues;
   }).catch((e: any) => {
     console.log(e);
     return false;

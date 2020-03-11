@@ -64,7 +64,7 @@ exports.createTableHospitalizationInfoList = function () {
 exports.insert = function (info) {
     return exports.HospitalizationInfoList.create(info).then(function (res) {
         console.log(res.id);
-        return true;
+        return res.dataValues;
     }).catch(function (e) {
         console.log(e);
         return false;

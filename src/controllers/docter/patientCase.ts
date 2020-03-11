@@ -1,6 +1,7 @@
 
 import {
   findAllByKey,
+  findOneByKey,
   update as updatePatientCase,
 } from '../../models/patientCase';
 import {
@@ -155,18 +156,6 @@ export const setPatientCaseModeHos = async (ctx: any) => {
     const assayList = await Promise.all(assayPromise);
 
     const hosPromise = hospitalList.map(async (item: any) => {
-      // console.log({
-      //   caseId,
-      //   assayId: assayList.find((assay: any) => {
-      //     return assay.HospitalizationId === item.HospitalizationId;
-      //   }).assayId || '',
-      //   patientStatus: item.patientStatus || '',
-      //   medicine: item.medicine || '',
-      //   TreatmentRecord: item.TreatmentRecord || '',
-      //   recovery: item.recovery || '',
-      //   date: new Date(),
-      // })
-
       const mid: any = assayList.find((assay: any) => {
         return assay.HospitalizationId === item.HospitalizationId;
       }) || {assayId: ''};
@@ -190,9 +179,32 @@ export const setPatientCaseModeHos = async (ctx: any) => {
 
     const hosRes = await Promise.all(hosPromise);
 
+    if (!hosRes) {
+      throw new Error('insert error');
+    }
+
+    const Hospitalization = hosRes.map((item: any) => item.HospitalizationId);
+
+
+    const updateItem = await findOneByKey({
+      caseId: caseId,
+    }, []);
+
+    const updateHospitalizationId =
+      updateItem.HospitalizationId == 0 ?
+      Hospitalization.join(',') :
+      [...updateItem.HospitalizationId.split(','), ...Hospitalization];
+
+    const updateRes = await updatePatientCase({
+      HospitalizationId: updateHospitalizationId,
+      status: Hospitalization ? 2 : 1, // 诊断完成
+    }, {
+      'caseId': caseId,
+    });
+
     ctx.body = {
-      code: hosRes ? 0 : -1,
-      data: hosRes,
+      code: updateRes ? 0 : -1,
+      data: updateRes,
     };
   } catch (e) {
     ctx.body = {
