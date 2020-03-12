@@ -190,6 +190,7 @@ exports.setPatientCaseModeDoctor = function (ctx) { return __awaiter(void 0, voi
         }
     });
 }); };
+// 增加检查记录并返回id
 var insertAssayAndGetId = function (assay, caseId) { return __awaiter(void 0, void 0, void 0, function () {
     var assayMap, assayMapRes;
     return __generator(this, function (_a) {
@@ -228,7 +229,7 @@ var insertAssayAndGetId = function (assay, caseId) { return __awaiter(void 0, vo
     });
 }); };
 exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, hospitalList, caseId_2, assayPromise, assayList_1, hosPromise, hosRes, Hospitalization, updateItem, updateHospitalizationId, updateRes, e_3;
+    var params, hospitalList, caseId_2, assayPromise, assayList_1, hosPromise, hosRes, Hospitalization, updateItem, updateHospitalizationId, status_1, updateRes, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -307,9 +308,12 @@ exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0
                 updateItem = _a.sent();
                 updateHospitalizationId = updateItem.HospitalizationId == 0 ?
                     Hospitalization.join(',') : __spreadArrays(updateItem.HospitalizationId.split(','), Hospitalization);
+                status_1 = hospitalList.some(function (item) {
+                    return item.recovery == '1';
+                });
                 return [4 /*yield*/, patientCase_1.update({
                         HospitalizationId: updateHospitalizationId,
-                        status: Hospitalization ? 2 : 1,
+                        status: status_1 ? 3 : 2,
                     }, {
                         'caseId': caseId_2,
                     })];

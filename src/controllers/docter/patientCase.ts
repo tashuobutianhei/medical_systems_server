@@ -107,6 +107,7 @@ export const setPatientCaseModeDoctor = async (ctx: any) => {
   }
 };
 
+// 增加检查记录并返回id
 const insertAssayAndGetId = async (assay: any[], caseId: any) => {
   const assayMap = assay.map(async (item: { examinationId: any; examinationResult: any; }) => {
     const res = await insertAssay({
@@ -143,6 +144,7 @@ export const setPatientCaseModeHos = async (ctx: any) => {
     const hospitalList = JSON.parse(params.hospitalList);
     const {caseId} = params;
 
+    // 创建检查记录
     const assayPromise = hospitalList.map(async (item:any) => {
       if (item.assays.length > 0 && item.assays[0].examinationId !== null) {
         return {
@@ -155,6 +157,7 @@ export const setPatientCaseModeHos = async (ctx: any) => {
 
     const assayList = await Promise.all(assayPromise);
 
+    // 创建住院记录，将检查记录对应
     const hosPromise = hospitalList.map(async (item: any) => {
       const mid: any = assayList.find((assay: any) => {
         return assay.HospitalizationId === item.HospitalizationId;
@@ -183,8 +186,8 @@ export const setPatientCaseModeHos = async (ctx: any) => {
       throw new Error('insert error');
     }
 
+    // 病例更新
     const Hospitalization = hosRes.map((item: any) => item.HospitalizationId);
-
 
     const updateItem = await findOneByKey({
       caseId: caseId,
@@ -195,9 +198,13 @@ export const setPatientCaseModeHos = async (ctx: any) => {
       Hospitalization.join(',') :
       [...updateItem.HospitalizationId.split(','), ...Hospitalization];
 
+    const status = hospitalList.some((item : any) => {
+      return item.recovery == '1';
+    });
+
     const updateRes = await updatePatientCase({
       HospitalizationId: updateHospitalizationId,
-      status: Hospitalization ? 2 : 1, // 诊断完成
+      status: status ? 3 : 2, // 出院与否
     }, {
       'caseId': caseId,
     });
