@@ -9,10 +9,14 @@ import {
 } from '../../models/patient';
 import {
   insert as insertAssay,
+  findOneByKey as findOneAssay,
 } from '../../models/assay';
 import {
   insert as insertHos,
+  findOneByKey as findOneHos,
 } from '../../models/hospitalizationInfoList';
+import randomString from 'random-string';
+
 
 export const getPatientCase = async (ctx: any) => {
   if (Object.keys(ctx.query).length === 0) {
@@ -42,9 +46,63 @@ export const getPatientCase = async (ctx: any) => {
       });
       resList = await Promise.all(resMap);
     }
+
+
+    const resCasesPromise = resList.map(async (item: any) => {
+      // 存在住院记录id的情况下
+      if (item.HospitalizationId != '-1' &&
+       item.HospitalizationId != '0' &&
+      item.HospitalizationId.length > 1) {
+        const hosfindPromise = item.HospitalizationId.split(',').map(async (itemHosId : string) => {
+          const hosRes = await findOneHos({
+            'HospitalizationId': itemHosId,
+          }, []);
+          if (hosRes) {
+            return hosRes;
+          } else {
+            throw new Error('医院记录查找失败');
+          }
+        });
+
+        const hostList = await Promise.all(hosfindPromise);
+
+        // 获取检查list
+        const hostListresult = await Promise.all(hostList.map(async (itemHos: any) => {
+          if (itemHos.assayId.length > 0) {
+            return {
+              ...itemHos,
+              assayList: await Promise.all(itemHos.assayId.split(',').map(async (assayId: any) => {
+                const assay = await findOneAssay({
+                  assayId,
+                });
+                if (assay) {
+                  return assay;
+                } else {
+                  throw new Error('查找化验记录失败');
+                }
+              })),
+            };
+          }
+          return {
+            ...itemHos,
+            assayList: [],
+          };
+        }));
+
+        return {
+          ...item,
+          hostList: hostListresult,
+        };
+      } else {
+        return item;
+      }
+    });
+
+    const resCases = await Promise.all(resCasesPromise);
+
     ctx.body = {
-      code: resList ? 0 : -1,
-      data: resList,
+      code: resCases ? 0 : -1,
+      data: resCases,
     };
   } catch (e) {
     ctx.body = {
@@ -165,6 +223,7 @@ export const setPatientCaseModeHos = async (ctx: any) => {
       mid.assayId;
 
       const res = await insertHos({
+        HospitalizationId: randomString({length: 12, numbers: true}),
         caseId,
         assayId: mid.assayId,
         patientStatus: item.patientStatus || '',
@@ -217,6 +276,7 @@ export const setPatientCaseModeHos = async (ctx: any) => {
     ctx.body = {
       code: -1,
       message: '服务错误',
+      data: e,
     };
   }
 };

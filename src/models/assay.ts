@@ -61,3 +61,11 @@ export const findAllByKey= (params: any) => {
     });
   });
 };
+
+export const findOneByKey= (params: any) => {
+  return Assay.findOne({
+    where: {...params},
+  }).then((info: any) => {
+    return info && info.dataValues;
+  });
+};

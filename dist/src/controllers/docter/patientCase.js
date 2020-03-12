@@ -53,13 +53,17 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var patientCase_1 = require("../../models/patientCase");
 var patient_1 = require("../../models/patient");
 var assay_1 = require("../../models/assay");
 var hospitalizationInfoList_1 = require("../../models/hospitalizationInfoList");
+var random_string_1 = __importDefault(require("random-string"));
 exports.getPatientCase = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, resList, res, resMap, e_1;
+    var params, resList, res, resMap, resCasesPromise, resCases, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -71,7 +75,7 @@ exports.getPatientCase = function (ctx) { return __awaiter(void 0, void 0, void 
                 }
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 5, , 6]);
+                _a.trys.push([1, 6, , 7]);
                 params = ctx.query;
                 resList = [];
                 return [4 /*yield*/, patientCase_1.findAllByKey({
@@ -102,19 +106,91 @@ exports.getPatientCase = function (ctx) { return __awaiter(void 0, void 0, void 
                 resList = _a.sent();
                 _a.label = 4;
             case 4:
-                ctx.body = {
-                    code: resList ? 0 : -1,
-                    data: resList,
-                };
-                return [3 /*break*/, 6];
+                resCasesPromise = resList.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
+                    var hosfindPromise, hostList, hostListresult;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (!(item.HospitalizationId != '-1' &&
+                                    item.HospitalizationId != '0' &&
+                                    item.HospitalizationId.length > 1)) return [3 /*break*/, 3];
+                                hosfindPromise = item.HospitalizationId.split(',').map(function (itemHosId) { return __awaiter(void 0, void 0, void 0, function () {
+                                    var hosRes;
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0: return [4 /*yield*/, hospitalizationInfoList_1.findOneByKey({
+                                                    'HospitalizationId': itemHosId,
+                                                }, [])];
+                                            case 1:
+                                                hosRes = _a.sent();
+                                                if (hosRes) {
+                                                    return [2 /*return*/, hosRes];
+                                                }
+                                                else {
+                                                    throw new Error('医院记录查找失败');
+                                                }
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); });
+                                return [4 /*yield*/, Promise.all(hosfindPromise)];
+                            case 1:
+                                hostList = _a.sent();
+                                return [4 /*yield*/, Promise.all(hostList.map(function (itemHos) { return __awaiter(void 0, void 0, void 0, function () {
+                                        var _a, _b;
+                                        return __generator(this, function (_c) {
+                                            switch (_c.label) {
+                                                case 0:
+                                                    if (!(itemHos.assayId.length > 0)) return [3 /*break*/, 2];
+                                                    _a = [__assign({}, itemHos)];
+                                                    _b = {};
+                                                    return [4 /*yield*/, Promise.all(itemHos.assayId.split(',').map(function (assayId) { return __awaiter(void 0, void 0, void 0, function () {
+                                                            var assay;
+                                                            return __generator(this, function (_a) {
+                                                                switch (_a.label) {
+                                                                    case 0: return [4 /*yield*/, assay_1.findOneByKey({
+                                                                            assayId: assayId,
+                                                                        })];
+                                                                    case 1:
+                                                                        assay = _a.sent();
+                                                                        if (assay) {
+                                                                            return [2 /*return*/, assay];
+                                                                        }
+                                                                        else {
+                                                                            throw new Error('查找化验记录失败');
+                                                                        }
+                                                                        return [2 /*return*/];
+                                                                }
+                                                            });
+                                                        }); }))];
+                                                case 1: return [2 /*return*/, __assign.apply(void 0, _a.concat([(_b.assayList = _c.sent(), _b)]))];
+                                                case 2: return [2 /*return*/, __assign(__assign({}, itemHos), { assayList: [] })];
+                                            }
+                                        });
+                                    }); }))];
+                            case 2:
+                                hostListresult = _a.sent();
+                                return [2 /*return*/, __assign(__assign({}, item), { hostList: hostListresult })];
+                            case 3: return [2 /*return*/, item];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, Promise.all(resCasesPromise)];
             case 5:
+                resCases = _a.sent();
+                ctx.body = {
+                    code: resCases ? 0 : -1,
+                    data: resCases,
+                };
+                return [3 /*break*/, 7];
+            case 6:
                 e_1 = _a.sent();
                 ctx.body = {
                     code: -1,
                     data: e_1,
                 };
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); };
@@ -274,6 +350,7 @@ exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0
                                 }) || { assayId: '' };
                                 mid.assayId;
                                 return [4 /*yield*/, hospitalizationInfoList_1.insert({
+                                        HospitalizationId: random_string_1.default({ length: 12, numbers: true }),
                                         caseId: caseId_2,
                                         assayId: mid.assayId,
                                         patientStatus: item.patientStatus || '',
@@ -329,6 +406,7 @@ exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0
                 ctx.body = {
                     code: -1,
                     message: '服务错误',
+                    data: e_3,
                 };
                 return [3 /*break*/, 6];
             case 6: return [2 /*return*/];

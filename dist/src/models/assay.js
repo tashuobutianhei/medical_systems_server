@@ -68,3 +68,10 @@ exports.findAllByKey = function (params) {
         });
     });
 };
+exports.findOneByKey = function (params) {
+    return exports.Assay.findOne({
+        where: __assign({}, params),
+    }).then(function (info) {
+        return info && info.dataValues;
+    });
+};
