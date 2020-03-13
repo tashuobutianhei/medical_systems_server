@@ -56,7 +56,7 @@ exports.addDocter = function (ctx, next) { return __awaiter(void 0, void 0, void
                         }];
                 }
                 docterInfo.workerId = random_string_1.default({ length: 12, numbers: true });
-                docterInfo.password = bcrypt_1.encode(docterInfo.password);
+                docterInfo.password = bcrypt_1.encode(random_string_1.default({ length: 6, numbers: true }));
                 return [4 /*yield*/, docter_1.insert(docterInfo)];
             case 1:
                 result = _a.sent();
@@ -66,6 +66,40 @@ exports.addDocter = function (ctx, next) { return __awaiter(void 0, void 0, void
                     }];
             case 2:
                 e_1 = _a.sent();
+                return [2 /*return*/, ctx.body = {
+                        code: -3,
+                        message: '服务错误',
+                    }];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.outDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var docterInfo, res, e_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                docterInfo = ctx.request.body;
+                if (!docterInfo.workerId) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -2,
+                            message: '参数有错误',
+                        }];
+                }
+                return [4 /*yield*/, docter_1.update({
+                        status: -1,
+                    }, {
+                        workerId: docterInfo.workerId,
+                    })];
+            case 1:
+                res = _a.sent();
+                return [2 /*return*/, ctx.body = {
+                        code: res ? 0 : 1,
+                        message: res ? '删除' : '删除失败',
+                    }];
+            case 2:
+                e_2 = _a.sent();
                 return [2 /*return*/, ctx.body = {
                         code: -3,
                         message: '服务错误',

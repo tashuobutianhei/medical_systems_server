@@ -58,6 +58,9 @@ export const Docters = sequelize.define('Docters', {
     },
     allowNull: false,
   },
+  status: {
+    type: Sequelize.INTEGER, // 0 或者 null 为在职 -1为离职
+  },
 }, {
   // 参数
   timestamps: false,
@@ -99,5 +102,22 @@ export const findAllByKey= (params: any) => {
     return info && info.map((item: { dataValues: any; })=> {
       return item.dataValues;
     });
+  });
+};
+
+
+export const destroy = (Params: any) =>{
+  return Docters.destroy({
+    where: {
+      ...Params,
+    },
+  });
+};
+
+export const update = (updateParams: any, selectParams: any) =>{
+  return Docters.update(updateParams, {
+    where: {
+      ...selectParams,
+    },
   });
 };

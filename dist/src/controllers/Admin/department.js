@@ -126,8 +126,67 @@ exports.addDepartment = function (ctx, next) { return __awaiter(void 0, void 0, 
         }
     });
 }); };
+exports.deleteDeparment = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var departmentInfo_1, doctorsThisDepartment, result, e_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 4, , 5]);
+                departmentInfo_1 = ctx.request.body;
+                if (!departmentInfo_1.departmentId) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -2,
+                            message: '参数有错误',
+                        }];
+                }
+                return [4 /*yield*/, docter_1.findAllByKey({})];
+            case 1:
+                doctorsThisDepartment = _a.sent();
+                // 删除改科室的所有医生
+                return [4 /*yield*/, Promise.all(doctorsThisDepartment.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
+                        var res;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    if (!(item.departmentId === departmentInfo_1.departmentId)) return [3 /*break*/, 2];
+                                    return [4 /*yield*/, docter_1.update({
+                                            status: -1,
+                                        }, {
+                                            workerId: item.workerId,
+                                        })];
+                                case 1:
+                                    res = _a.sent();
+                                    return [2 /*return*/, res];
+                                case 2: return [2 /*return*/, true];
+                            }
+                        });
+                    }); }))];
+            case 2:
+                // 删除改科室的所有医生
+                _a.sent();
+                return [4 /*yield*/, department_1.destroy({
+                        departmentId: departmentInfo_1.departmentId,
+                    })];
+            case 3:
+                result = _a.sent();
+                ctx.body = {
+                    code: result ? 0 : 1,
+                    message: result ? '删除成功' : '删除失败',
+                };
+                return [3 /*break*/, 5];
+            case 4:
+                e_3 = _a.sent();
+                ctx.body = {
+                    code: -3,
+                    message: '服务错误',
+                };
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); };
 exports.addAdmin = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var adminInfo, result, e_3;
+    var adminInfo, result, e_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -149,7 +208,7 @@ exports.addAdmin = function (ctx, next) { return __awaiter(void 0, void 0, void 
                 };
                 return [3 /*break*/, 3];
             case 2:
-                e_3 = _a.sent();
+                e_4 = _a.sent();
                 ctx.body = {
                     code: -3,
                     message: '服务错误',

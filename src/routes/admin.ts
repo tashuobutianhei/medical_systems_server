@@ -3,9 +3,11 @@ import Router from 'koa-router';
 import {
   getDepartmentExpendDoctor,
   addDepartment,
+  deleteDeparment,
 } from '../controllers/Admin/department';
 import {
   addDocter,
+  outDoctor,
 } from '../controllers/Admin/doctor';
 
 const router = new Router();
@@ -29,7 +31,11 @@ router.get('/department', getDepartmentExpendDoctor); // 获取所有科室,包�
 
 router.post('/department', addDepartment); // 添加科室
 
+router.delete('/department', deleteDeparment); // 删除科室
+
 router.post('/docters', addDocter); // 添加医生
+
+router.delete('/docters', outDoctor); // 删除医生
 
 // router.post('/admin', addAdmin); // 增加管理员
 

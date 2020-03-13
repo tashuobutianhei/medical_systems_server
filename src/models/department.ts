@@ -57,3 +57,20 @@ export const findAllByKey= (params: any) => {
     });
   });
 };
+
+
+export const destroy = (Params: any) =>{
+  return Department.destroy({
+    where: {
+      ...Params,
+    },
+  });
+};
+
+export const update = (updateParams: any, selectParams: any) =>{
+  return Department.update(updateParams, {
+    where: {
+      ...selectParams,
+    },
+  });
+};

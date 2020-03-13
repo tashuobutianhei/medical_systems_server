@@ -13,6 +13,7 @@ export type docterInfo = {
     position: string // 职位
     university: string // 毕业大学
     department: number // 科室
+    status: number | null
 }
 
 // 排班计划

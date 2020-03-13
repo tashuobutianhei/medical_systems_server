@@ -76,6 +76,9 @@ exports.Docters = index_1.sequelize.define('Docters', {
         },
         allowNull: false,
     },
+    status: {
+        type: index_1.Sequelize.INTEGER,
+    },
 }, {
     // 参数
     timestamps: false,
@@ -111,5 +114,15 @@ exports.findAllByKey = function (params) {
         return info && info.map(function (item) {
             return item.dataValues;
         });
+    });
+};
+exports.destroy = function (Params) {
+    return exports.Docters.destroy({
+        where: __assign({}, Params),
+    });
+};
+exports.update = function (updateParams, selectParams) {
+    return exports.Docters.update(updateParams, {
+        where: __assign({}, selectParams),
     });
 };

@@ -104,3 +104,13 @@ exports.findAllByKey = function (params) {
         });
     });
 };
+exports.destroy = function (Params) {
+    return exports.Department.destroy({
+        where: __assign({}, Params),
+    });
+};
+exports.update = function (updateParams, selectParams) {
+    return exports.Department.update(updateParams, {
+        where: __assign({}, selectParams),
+    });
+};
