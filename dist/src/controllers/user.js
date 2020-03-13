@@ -101,7 +101,6 @@ exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, 
                 _b.trys.push([0, 8, , 9]);
                 userInfo = ctx.request.body;
                 info = void 0;
-                console.log(userInfo);
                 if (!userInfo.username || !userInfo.password || !userInfo.userType) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -197,7 +196,7 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                                         case '2': return [3 /*break*/, 7];
                                     }
                                     return [3 /*break*/, 9];
-                                case 2: return [4 /*yield*/, manager_1.findOneByKey('username', userInfo.username, ['uid', 'username'])];
+                                case 2: return [4 /*yield*/, manager_1.findOneByKey('username', info.name, ['uid', 'username'])];
                                 case 3: return [4 /*yield*/, _b.sent()];
                                 case 4:
                                     userInfo = _b.sent();

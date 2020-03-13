@@ -9,7 +9,6 @@ import cors from 'koa2-cors';
 import koajwt from 'koa-jwt';
 // import koaBody from 'koa-body';
 
-
 import index from './routes/index';
 import users from './routes/users';
 import department from './routes/department';
@@ -17,6 +16,7 @@ import doctor from './routes/doctor';
 import schedule from './routes/schedule';
 import order from './routes/order';
 import patientCase from './routes/patientCase';
+import admin from './routes/admin';
 
 
 import {connectMysql} from './models/index';
@@ -53,8 +53,8 @@ app.use(cors({
 }));
 
 // 错误处理
-app.use(async (ctx, next) => {
-  return next().catch((err) => {
+app.use(async (ctx, next: any) => {
+  return await next().catch((err: any) => {
     if (err.status === 401) {
       ctx.status = 401;
       ctx.body = 'Protected resource, use Authorization header to get access\n';
@@ -67,7 +67,7 @@ app.use(async (ctx, next) => {
 app.use(koajwt({
   secret: tokenKey,
 }).unless({
-  path: [/\/users\/login/, /\/users\/getUser/, /\/department/],
+  path: [/\/users\/login/, /\/users\/register/, /\/users\/getUser/, /\/department/],
 }));
 
 // logger
@@ -86,6 +86,7 @@ app.use(doctor.routes()).use(doctor.allowedMethods());
 app.use(schedule.routes()).use(schedule.allowedMethods());
 app.use(order.routes()).use(order.allowedMethods());
 app.use(patientCase.routes()).use(patientCase.allowedMethods());
+app.use(admin.routes()).use(admin.allowedMethods());
 
 // app.use(async (ctx, next) => {
 //   console.log(123)

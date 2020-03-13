@@ -55,6 +55,7 @@ var doctor_1 = __importDefault(require("./routes/doctor"));
 var schedule_1 = __importDefault(require("./routes/schedule"));
 var order_1 = __importDefault(require("./routes/order"));
 var patientCase_1 = __importDefault(require("./routes/patientCase"));
+var admin_1 = __importDefault(require("./routes/admin"));
 var index_2 = require("./models/index");
 var config_1 = require("./config");
 var koaBody = require('koa-body');
@@ -88,21 +89,24 @@ app.use(koa2_cors_1.default({
 // 错误处理
 app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, next().catch(function (err) {
-                if (err.status === 401) {
-                    ctx.status = 401;
-                    ctx.body = 'Protected resource, use Authorization header to get access\n';
-                }
-                else {
-                    throw err;
-                }
-            })];
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, next().catch(function (err) {
+                    if (err.status === 401) {
+                        ctx.status = 401;
+                        ctx.body = 'Protected resource, use Authorization header to get access\n';
+                    }
+                    else {
+                        throw err;
+                    }
+                })];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
     });
 }); });
 app.use(koa_jwt_1.default({
     secret: config_1.tokenKey,
 }).unless({
-    path: [/\/users\/login/, /\/users\/getUser/, /\/department/],
+    path: [/\/users\/login/, /\/users\/register/, /\/users\/getUser/, /\/department/],
 }));
 // logger
 app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
@@ -127,6 +131,7 @@ app.use(doctor_1.default.routes()).use(doctor_1.default.allowedMethods());
 app.use(schedule_1.default.routes()).use(schedule_1.default.allowedMethods());
 app.use(order_1.default.routes()).use(order_1.default.allowedMethods());
 app.use(patientCase_1.default.routes()).use(patientCase_1.default.allowedMethods());
+app.use(admin_1.default.routes()).use(admin_1.default.allowedMethods());
 // app.use(async (ctx, next) => {
 //   console.log(123)
 // })

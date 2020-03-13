@@ -264,7 +264,6 @@ export const setPatientCaseModeHos = async (ctx: any) => {
       return item.recovery == '1';
     });
 
-    console.log(updateHospitalizationId);
     const updateRes = await updatePatientCase({
       HospitalizationId: updateHospitalizationId,
       status: status ? 3 : 2, // 出院与否

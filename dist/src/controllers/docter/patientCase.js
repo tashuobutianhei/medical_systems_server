@@ -389,7 +389,6 @@ exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0
                 status_1 = hospitalList.some(function (item) {
                     return item.recovery == '1';
                 });
-                console.log(updateHospitalizationId);
                 return [4 /*yield*/, patientCase_1.update({
                         HospitalizationId: updateHospitalizationId,
                         status: status_1 ? 3 : 2,

@@ -52,7 +52,6 @@ export const login= async (ctx: any, next: any) => {
   try {
     const userInfo = ctx.request.body;
     let info: any;
-    console.log(userInfo);
     if (!userInfo.username || !userInfo.password || !userInfo.userType) {
       return ctx.body = {
         code: -2,
@@ -73,7 +72,6 @@ export const login= async (ctx: any, next: any) => {
             ['uid', 'password']);
         break;
     }
-
     const comparesResult = compare(userInfo.password, info.password);
 
     if (comparesResult) {
@@ -131,7 +129,7 @@ export const getUser = async (ctx: any, next: any) => {
           let userInfo: any;
           switch (info.userType) {
             case '0':
-              userInfo = await await findOneByKeyAdmin('username', userInfo.username,
+              userInfo = await await findOneByKeyAdmin('username', info.name,
                   ['uid', 'username']);
               break;
             case '1':

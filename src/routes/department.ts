@@ -1,7 +1,5 @@
 import Router from 'koa-router';
-import {addDepartment} from '../controllers/department';
-import {addDocter} from '../controllers/docter/docter';
-import {addAdmin, getDepartment} from '../controllers/department';
+import {getDepartment} from '../controllers/department';
 import {getExamination} from '../controllers/examination';
 
 
@@ -31,12 +29,6 @@ router.use(async (ctx: any, next) => {
 });
 
 router.get('/', getDepartment); // 获取所有科室
-
-router.post('/', addDepartment); // 添加科室
-
-router.post('/docters', addDocter); // 添加医生
-
-router.post('/admin', addAdmin); // 增加管理员
 
 router.get('/examination', getExamination); // 获取检查信息
 
