@@ -252,15 +252,19 @@ export const setPatientCaseModeHos = async (ctx: any) => {
       caseId: caseId,
     }, []);
 
+
+    // 区分第一次修改还是后面多次记录
     const updateHospitalizationId =
       updateItem.HospitalizationId == 0 ?
       Hospitalization.join(',') :
-      [...updateItem.HospitalizationId.split(','), ...Hospitalization];
+      [...updateItem.HospitalizationId.split(','), ...Hospitalization].join(',');
 
+    // 住院记录中存在状态为出院的就改为出院
     const status = hospitalList.some((item : any) => {
       return item.recovery == '1';
     });
 
+    console.log(updateHospitalizationId);
     const updateRes = await updatePatientCase({
       HospitalizationId: updateHospitalizationId,
       status: status ? 3 : 2, // 出院与否
