@@ -7,7 +7,7 @@ router.prefix('/doctor');
 
 router.use(async (ctx: any, next) => {
   let auth = false;
-  if (ctx.request.url === '/doctor' && ctx.request.method === 'GET') {
+  if (ctx.request.method === 'GET') {
     auth = true;
   }
 

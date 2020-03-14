@@ -49,7 +49,7 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
         switch (_a.label) {
             case 0:
                 auth = false;
-                if (ctx.request.url === '/doctor' && ctx.request.method === 'GET') {
+                if (ctx.request.method === 'GET') {
                     auth = true;
                 }
                 if (!(auth || (ctx.state.user && ctx.state.user.userType == 2))) return [3 /*break*/, 2];
