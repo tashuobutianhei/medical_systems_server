@@ -54,8 +54,9 @@ app.use(cors({
 
 // 错误处理
 app.use(async (ctx, next: any) => {
-  return await next().catch((err: any) => {
+  return await next().catch(async (err: any) => {
     if (err.status === 401) {
+      return await next();
       ctx.status = 401;
       ctx.body = 'Protected resource, use Authorization header to get access\n';
     } else {
@@ -67,7 +68,15 @@ app.use(async (ctx, next: any) => {
 app.use(koajwt({
   secret: tokenKey,
 }).unless({
-  path: [/\/users\/login/, /\/users\/register/, /\/users\/getUser/, /\/department/],
+  path: [
+    // /\/users\/login/,
+    // /\/users\/register/,
+    // /\/users\/getUser/,
+    // /\/department/, // 查看科室信息
+    // /\/doctor/, // 查看医生信息
+    // /\/patientCase\/all/,
+    // /\/schedule\/today/,
+  ],
 }));
 
 // logger

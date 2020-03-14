@@ -54,12 +54,6 @@ exports.getDoctors = function (ctx) { return __awaiter(void 0, void 0, void 0, f
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                if (Object.keys(ctx.query).length === 0) {
-                    return [2 /*return*/, ctx.body = {
-                            code: -2,
-                            message: '参数有错误',
-                        }];
-                }
                 params = ctx.query;
                 return [4 /*yield*/, docter_1.findAllByKey(__assign({}, params))];
             case 1:

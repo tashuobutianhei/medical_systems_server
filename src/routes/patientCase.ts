@@ -3,9 +3,10 @@ import {
   getPatientCase as getByworkerId,
   setPatientCaseModeDoctor,
   setPatientCaseModeHos,
+  getAll,
 } from '../controllers/docter/patientCase';
 import {
-  getAssayById
+  getAssayById,
 } from '../controllers/docter/assay';
 
 const router = new Router();
@@ -14,7 +15,11 @@ router.prefix('/patientCase');
 
 router.use(async (ctx: any, next) => {
 
-  if (false || ctx.state.user && ctx.state.user.userType == 2) {
+  let auth = false;
+  if (ctx.request.method === 'GET') {
+    auth = true;
+  }
+  if (auth || ctx.state.user && ctx.state.user.userType == 2) {
     await next();
   } else {
     return ctx.body = {
@@ -25,6 +30,8 @@ router.use(async (ctx: any, next) => {
 });
 
 router.get('/', getByworkerId); // 查
+
+router.get('/all', getAll); // 查
 
 router.post('/doctor', setPatientCaseModeDoctor); // 诊断模式下病例
 

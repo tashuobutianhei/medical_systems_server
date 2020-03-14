@@ -45,10 +45,15 @@ var assay_1 = require("../controllers/docter/assay");
 var router = new koa_router_1.default();
 router.prefix('/patientCase');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var auth;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!(false || ctx.state.user && ctx.state.user.userType == 2)) return [3 /*break*/, 2];
+                auth = false;
+                if (ctx.request.method === 'GET') {
+                    auth = true;
+                }
+                if (!(auth || ctx.state.user && ctx.state.user.userType == 2)) return [3 /*break*/, 2];
                 return [4 /*yield*/, next()];
             case 1:
                 _a.sent();
@@ -62,6 +67,7 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
     });
 }); });
 router.get('/', patientCase_1.getPatientCase); // 查
+router.get('/all', patientCase_1.getAll); // 查
 router.post('/doctor', patientCase_1.setPatientCaseModeDoctor); // 诊断模式下病例
 router.post('/hospital', patientCase_1.setPatientCaseModeHos); // 诊断模式下病例
 router.get('/assay', assay_1.getAssayById); //

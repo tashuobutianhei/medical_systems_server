@@ -6,8 +6,12 @@ const router = new Router();
 router.prefix('/doctor');
 
 router.use(async (ctx: any, next) => {
-  // department接口对管理员开放
-  if (ctx.state.user && ctx.state.user.userType == 2) {
+  let auth = false;
+  if (ctx.request.url === '/doctor' && ctx.request.method === 'GET') {
+    auth = true;
+  }
+
+  if (auth || (ctx.state.user && ctx.state.user.userType == 2)) {
     await next();
   } else {
     return ctx.body = {

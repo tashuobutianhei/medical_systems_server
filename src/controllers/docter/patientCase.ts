@@ -17,6 +17,21 @@ import {
 } from '../../models/hospitalizationInfoList';
 import randomString from 'random-string';
 
+export const getAll = async (ctx: any) => {
+  try {
+    const res = await findAllByKey({});
+
+    ctx.body = {
+      code: res ? 0 : -1,
+      data: res,
+    };
+  } catch (e) {
+    ctx.body = {
+      code: -1,
+      data: e,
+    };
+  }
+};
 
 export const getPatientCase = async (ctx: any) => {
   if (Object.keys(ctx.query).length === 0) {

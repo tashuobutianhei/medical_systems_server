@@ -49,7 +49,7 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
         switch (_a.label) {
             case 0:
                 auth = false;
-                if (ctx.request.url === '/' && ctx.request.method === 'GET') {
+                if (ctx.request.url !== '/createWork' && ctx.request.method === 'GET') {
                     auth = true;
                 }
                 if (!(auth || ctx.state.user && ctx.state.user.userType == 2)) return [3 /*break*/, 2];
@@ -70,4 +70,5 @@ router.post('/', schedule_1.addSchedule); // 改
 router.get('/', schedule_1.getSchedule); // 查
 router.get('/getScheduleOfPeriod', schedule_1.getScheduleOfPeriod); // 查
 router.delete('/', schedule_1.deleteSchedule); // 删
+router.get('/today', schedule_1.getScheduleToday); // 查今日排班
 exports.default = router;

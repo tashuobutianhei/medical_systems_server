@@ -4,7 +4,8 @@ import {
   addSchedule,
   getSchedule,
   deleteSchedule,
-  getScheduleOfPeriod
+  getScheduleOfPeriod,
+  getScheduleToday,
 } from '../controllers/docter/schedule';
 
 const router = new Router();
@@ -14,7 +15,7 @@ router.prefix('/schedule');
 router.use(async (ctx: any, next) => {
   // department接口对管理员开放
   let auth = false;
-  if (ctx.request.url === '/' && ctx.request.method === 'GET') {
+  if (ctx.request.url !== '/createWork' && ctx.request.method === 'GET') {
     auth = true;
   }
 
@@ -37,5 +38,7 @@ router.get('/', getSchedule); // 查
 router.get('/getScheduleOfPeriod', getScheduleOfPeriod); // 查
 
 router.delete('/', deleteSchedule); // 删
+
+router.get('/today', getScheduleToday); // 查今日排班
 
 export default router;

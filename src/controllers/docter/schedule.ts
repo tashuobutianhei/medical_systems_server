@@ -211,3 +211,23 @@ export const getScheduleOfPeriod = async (ctx: any) => {
     };
   }
 };
+
+export const getScheduleToday = async (ctx: any) => {
+  try {
+    const schdelue = await findAllByKey({
+      data: `${moment(new Date()).format('YYYY-MM-DD')}T00:00:00.000Z`,
+    });
+
+    ctx.body = {
+      code: schdelue ? 0 : -1,
+      data: schdelue,
+    };
+  } catch (e) {
+    ctx.body = {
+      code: -1,
+      message: '服务错误',
+      data: e,
+    };
+  }
+};
+

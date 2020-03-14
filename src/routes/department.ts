@@ -11,10 +11,8 @@ router.prefix('/department');
 router.use(async (ctx: any, next) => {
   // department接口对管理员开放
   let auth = false;
-  if (ctx.request.url === '/department' && ctx.request.method === 'GET') {
-    auth = true;
-  }
-  if (ctx.request.url === '/department/examination' && ctx.request.method === 'GET') {
+
+  if (ctx.request.method === 'GET') {
     auth = true;
   }
 

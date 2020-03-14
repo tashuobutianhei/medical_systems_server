@@ -301,3 +301,31 @@ exports.getScheduleOfPeriod = function (ctx) { return __awaiter(void 0, void 0, 
         }
     });
 }); };
+exports.getScheduleToday = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var schdelue, e_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, docterWork_1.findAllByKey({
+                        data: moment_1.default(new Date()).format('YYYY-MM-DD') + "T00:00:00.000Z",
+                    })];
+            case 1:
+                schdelue = _a.sent();
+                ctx.body = {
+                    code: schdelue ? 0 : -1,
+                    data: schdelue,
+                };
+                return [3 /*break*/, 3];
+            case 2:
+                e_5 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    message: '服务错误',
+                    data: e_5,
+                };
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };

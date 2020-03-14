@@ -90,15 +90,17 @@ app.use(koa2_cors_1.default({
 app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, next().catch(function (err) {
-                    if (err.status === 401) {
-                        ctx.status = 401;
-                        ctx.body = 'Protected resource, use Authorization header to get access\n';
-                    }
-                    else {
-                        throw err;
-                    }
-                })];
+            case 0: return [4 /*yield*/, next().catch(function (err) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (!(err.status === 401)) return [3 /*break*/, 2];
+                                return [4 /*yield*/, next()];
+                            case 1: return [2 /*return*/, _a.sent()];
+                            case 2: throw err;
+                        }
+                    });
+                }); })];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
@@ -106,7 +108,15 @@ app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function
 app.use(koa_jwt_1.default({
     secret: config_1.tokenKey,
 }).unless({
-    path: [/\/users\/login/, /\/users\/register/, /\/users\/getUser/, /\/department/],
+    path: [
+    // /\/users\/login/,
+    // /\/users\/register/,
+    // /\/users\/getUser/,
+    // /\/department/, // 查看科室信息
+    // /\/doctor/, // 查看医生信息
+    // /\/patientCase\/all/,
+    // /\/schedule\/today/,
+    ],
 }));
 // logger
 app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
