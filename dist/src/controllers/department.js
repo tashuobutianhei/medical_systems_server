@@ -81,12 +81,13 @@ var department_1 = require("../models/department");
 //   }
 // };
 exports.getDepartment = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var department, e_1;
+    var params, department, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, department_1.findAllByKey({})];
+                params = ctx.query;
+                return [4 /*yield*/, department_1.findAllByKey(params || {})];
             case 1:
                 department = _a.sent();
                 ctx.body = {

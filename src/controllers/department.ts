@@ -51,7 +51,9 @@ import {findAllByKey} from '../models/department';
 
 export const getDepartment = async (ctx: any) => {
   try {
-    const department = await findAllByKey({});
+    const params = ctx.query;
+
+    const department = await findAllByKey(params || {});
     ctx.body = {
       code: department.length ? 0 : -1,
       data: department,

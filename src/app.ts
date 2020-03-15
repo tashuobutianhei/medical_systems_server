@@ -76,6 +76,7 @@ app.use(koajwt({
     /\/patientCase\/all/,
     /\/schedule\/today/,
     /\/schedule\/getScheduleOfPeriod/,
+    /\/admin\/department/,
   ],
 }));
 

@@ -118,6 +118,7 @@ app.use(koa_jwt_1.default({
         /\/patientCase\/all/,
         /\/schedule\/today/,
         /\/schedule\/getScheduleOfPeriod/,
+        /\/admin\/department/,
     ],
 }));
 // logger
