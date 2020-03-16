@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var koa_router_1 = __importDefault(require("koa-router"));
-var order_1 = require("../controllers/docter/order");
+var order_1 = require("../controllers/doctor/order");
 var router = new koa_router_1.default();
 router.prefix('/order');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {

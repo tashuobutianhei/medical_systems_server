@@ -1,6 +1,6 @@
 import {patientCase} from './patientType';
 
-export type docterInfo = {
+export type doctorInfo = {
     workerId: string
     password: string
     name: string
@@ -17,10 +17,10 @@ export type docterInfo = {
 }
 
 // 排班计划
-type docterWork = {
+type doctorWork = {
     data: string // 日期
     shifts: number // 0:早班 1:下午班 2:急诊
-    docters: docterInfo[],
+    doctors: doctorInfo[],
 }
 
 type order = {
@@ -34,11 +34,11 @@ type department = {
     departmentId: number
     departmentName: string
     information: string
-    docterList: docterInfo[]
-    docterWork: docterWork[]
+    doctorList: doctorInfo[]
+    doctorWork: doctorWork[]
 }
 
-export enum docterPosition {
+export enum doctorPosition {
     'director',
     'viceDirectors',
     'attending',

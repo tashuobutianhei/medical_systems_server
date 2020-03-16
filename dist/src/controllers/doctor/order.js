@@ -52,7 +52,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var order_1 = require("../../models/order");
 var patientCase_1 = require("../../models/patientCase");
-var register_1 = require("../..//models/register");
+var register_1 = require("../../models/register");
 var random_string_1 = __importDefault(require("random-string"));
 exports.addOrder = function (params) { return __awaiter(void 0, void 0, void 0, function () {
     var wokrId, workerId, result;
@@ -153,7 +153,7 @@ exports.Order = function (ctx) { return __awaiter(void 0, void 0, void 0, functi
                             message: '挂号已满',
                         }];
                 }
-                uid = ctx.state.user.uid;
+                uid = ctx.state.user._uid;
                 caseId = random_string_1.default({ length: 12, numbers: true });
                 return [4 /*yield*/, patientCase_1.insert({
                         uid: uid,

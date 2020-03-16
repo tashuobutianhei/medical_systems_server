@@ -1,7 +1,7 @@
 /* eslint-disable new-cap */
 import {sequelize, Sequelize} from './index';
-import {DocterWork} from './docterWork';
-import {Docters} from './docter';
+import {DoctorWork} from './doctorWork';
+import {Doctors} from './doctor';
 
 export const Order = sequelize.define('Order', {
   // 属性
@@ -15,7 +15,7 @@ export const Order = sequelize.define('Order', {
   wokrId: {
     type: Sequelize.STRING(12),
     references: {
-      model: DocterWork,
+      model: DoctorWork,
       key: 'wokrId',
     },
     allowNull: false,
@@ -23,7 +23,7 @@ export const Order = sequelize.define('Order', {
   workerId: {
     type: Sequelize.STRING(12),
     references: {
-      model: Docters,
+      model: Doctors,
       key: 'workerId',
     },
     allowNull: false,

@@ -12,7 +12,7 @@ import {
 import {
   findAllByKey as findAllregister,
   insert as insertRegister,
-} from '../..//models/register';
+} from '../../models/register';
 
 import randomString from 'random-string';
 
@@ -103,7 +103,7 @@ export const Order = async (ctx: any) => {
       };
     }
 
-    const uid = ctx.state.user.uid;
+    const uid = ctx.state.user._uid;
     const caseId = randomString({length: 12, numbers: true});
 
     // 生成病例
@@ -111,9 +111,9 @@ export const Order = async (ctx: any) => {
       uid,
       caseId,
       registerDate: new Date(),
-      docterId: params.workerId,
+      doctorId: params.workerId,
       describe: '',
-      docterView: '',
+      doctorView: '',
       result: '',
     });
 

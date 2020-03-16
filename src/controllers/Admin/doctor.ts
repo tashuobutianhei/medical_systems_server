@@ -3,21 +3,21 @@ import randomString from 'random-string';
 import {
   insert as insertDoctor,
   update as updateDoctor
-} from '../../models/docter';
+} from '../../models/doctor';
 import {encode} from '../../utils/bcrypt';
 
-export const addDocter= async (ctx: any, next: any) => {
+export const addDoctor= async (ctx: any, next: any) => {
   try {
-    const docterInfo = ctx.request.body;
-    if (!(typeof docterInfo === 'object' && Object.keys(docterInfo).length > 0)) {
+    const doctorInfo = ctx.request.body;
+    if (!(typeof doctorInfo === 'object' && Object.keys(doctorInfo).length > 0)) {
       return ctx.body = {
         code: -2,
         message: '参数有错误',
       };
     }
-    docterInfo.workerId = randomString({length: 12, numbers: true});
-    docterInfo.password = encode(randomString({length: 6, numbers: true}));
-    const result = await insertDoctor(docterInfo);
+    doctorInfo.workerId = randomString({length: 12, numbers: true});
+    doctorInfo.password = encode(randomString({length: 6, numbers: true}));
+    const result = await insertDoctor(doctorInfo);
     return ctx.body = {
       code: result ? 0 : 1,
       message: result ? '添加成功' : '添加失败',
@@ -32,8 +32,8 @@ export const addDocter= async (ctx: any, next: any) => {
 
 export const outDoctor = async (ctx: any, next: any) => {
   try {
-    const docterInfo = ctx.request.body;
-    if (!docterInfo.workerId) {
+    const doctorInfo = ctx.request.body;
+    if (!doctorInfo.workerId) {
       return ctx.body = {
         code: -2,
         message: '参数有错误',
@@ -42,7 +42,7 @@ export const outDoctor = async (ctx: any, next: any) => {
     const res = await updateDoctor({
       status: -1,
     }, {
-      workerId: docterInfo.workerId,
+      workerId: doctorInfo.workerId,
     });
 
     return ctx.body = {

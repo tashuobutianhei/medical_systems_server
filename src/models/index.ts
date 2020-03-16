@@ -13,8 +13,8 @@ export const sequelize = new Sequelize(
 
 // import {createTableAssay} from './assay';
 // import {createTableDepartment} from './department';
-// import {createTableDocters} from './docter';
-// import {createTableDocterWork} from './docterWork';
+// import {createTableDoctors} from './doctor';
+// import {createTableDoctorWork} from './doctorWork';
 // import {createTableHospitalizationInfoList} from './hospitalizationInfoList';
 // import {createTablePatient} from './patient';
 // import {createTablePatientCase} from './patientCase';
@@ -35,8 +35,8 @@ export const createTable = () => {
   // createTablePatient();
   // createTablePatientCase();
   // createTableDepartment();
-  // createTableDocters();
-  // createTableDocterWork();
+  // createTableDoctors();
+  // createTableDoctorWork();
   console.log(111);
   createTableOrder();
 };

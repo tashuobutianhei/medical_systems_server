@@ -41,7 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var bcrypt_1 = require("../utils/bcrypt");
 var patient_1 = require("../models/patient");
-var docter_1 = require("../models/docter");
+var doctor_1 = require("../models/doctor");
 var manager_1 = require("../models/manager");
 var random_string_1 = __importDefault(require("random-string"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -118,7 +118,7 @@ exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, 
             case 2:
                 info = _b.sent();
                 return [3 /*break*/, 7];
-            case 3: return [4 /*yield*/, docter_1.findOneByKey('workerId', userInfo.username, ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address'])];
+            case 3: return [4 /*yield*/, doctor_1.findOneByKey('workerId', userInfo.username, ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address'])];
             case 4:
                 info = _b.sent();
                 return [3 /*break*/, 7];
@@ -205,7 +205,7 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                                 case 6:
                                     userInfo = _b.sent();
                                     return [3 /*break*/, 9];
-                                case 7: return [4 /*yield*/, docter_1.findOneByKey('workerId', info._uid, ['workerId', 'name', 'idcard', 'sex', 'age',
+                                case 7: return [4 /*yield*/, doctor_1.findOneByKey('workerId', info._uid, ['workerId', 'name', 'idcard', 'sex', 'age',
                                         'tel', 'address', 'information', 'position', 'university', 'departmentId'])];
                                 case 8:
                                     userInfo = _b.sent();

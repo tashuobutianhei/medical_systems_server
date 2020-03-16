@@ -28,7 +28,7 @@ exports.PatientCase = index_1.sequelize.define('PatientCase', {
             key: 'uid',
         },
     },
-    docterId: {
+    doctorId: {
         type: index_1.Sequelize.STRING(12),
     },
     registerDate: {
@@ -39,7 +39,7 @@ exports.PatientCase = index_1.sequelize.define('PatientCase', {
         type: index_1.Sequelize.TEXT,
         allowNull: false,
     },
-    docterView: {
+    doctorView: {
         type: index_1.Sequelize.STRING(100),
         allowNull: false,
     },

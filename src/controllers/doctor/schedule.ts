@@ -3,7 +3,7 @@ import {
   findOneByKey,
   findAllByKey,
   update,
-} from '../../models/docterWork';
+} from '../../models/doctorWork';
 import {addOrder, deleteOrder} from './order';
 import moment from 'moment';
 
@@ -33,8 +33,8 @@ export const createWorkList = async (ctx: any, next: any) => {
   const departmentId = ctx.query.departmentId;
 
   getScheduleDateList().forEach(async (date) => {
-    const DocterWork = await findOneByKey('data', `${date}T00:00:00.000Z`, ['wokrId']);
-    if (DocterWork) {
+    const DoctorWork = await findOneByKey('data', `${date}T00:00:00.000Z`, ['wokrId']);
+    if (DoctorWork) {
 
     } else {
       [0, 1, 2].forEach(async (item) => {
@@ -69,18 +69,18 @@ export const deleteSchedule = async (ctx: any) => {
       };
     }
     const params = ctx.request.body;
-    const findResult = await findOneByKey('wokrId', params.wokrId, ['wokrId', 'docters']);
+    const findResult = await findOneByKey('wokrId', params.wokrId, ['wokrId', 'doctors']);
     if (!findResult) {
       throw new Error('查找失败');
     }
-    if (findResult.docters === null) {
+    if (findResult.doctors === null) {
       throw new Error('无法删除');
     }
-    const midArray = findResult.docters.split(',');
+    const midArray = findResult.doctors.split(',');
     midArray.splice(midArray.indexOf(params.workerId), 1);
 
     const res = update({
-      docters: midArray.length > 0 ? midArray.join(',') : null,
+      doctors: midArray.length > 0 ? midArray.join(',') : null,
       editer: ctx.state.user._uid,
     }, {
       wokrId: params.wokrId,
@@ -114,15 +114,15 @@ export const addSchedule = async (ctx: any) => {
       };
     }
     const params = ctx.request.body;
-    const findResult = await findOneByKey('wokrId', params.wokrId, ['wokrId', 'docters']);
+    const findResult = await findOneByKey('wokrId', params.wokrId, ['wokrId', 'doctors']);
     if (!findResult) {
       throw new Error('查找失败');
     }
     // 拼接
-    const newDocters = findResult.docters === null || findResult.docters === '' ?
-     params.workerId : findResult.docters + `,${params.workerId}`;
+    const newDoctors = findResult.doctors === null || findResult.doctors === '' ?
+     params.workerId : findResult.doctors + `,${params.workerId}`;
     const res = update({
-      docters: Array.from(new Set(newDocters.split(','))).join(','),
+      doctors: Array.from(new Set(newDoctors.split(','))).join(','),
       editer: ctx.state.user._uid,
     }, {
       wokrId: params.wokrId,

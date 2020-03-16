@@ -2,8 +2,8 @@ import Router from 'koa-router';
 import {
   Order,
   findOrder,
-  orderInfo
-} from '../controllers/docter/order';
+  orderInfo,
+} from '../controllers/doctor/order';
 
 const router = new Router();
 

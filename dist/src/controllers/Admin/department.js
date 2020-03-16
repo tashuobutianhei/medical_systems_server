@@ -53,7 +53,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var department_1 = require("../../models/department");
 var manager_1 = require("../../models/manager");
 var random_string_1 = __importDefault(require("random-string"));
-var docter_1 = require("../../models/docter");
+var doctor_1 = require("../../models/doctor");
 exports.getDepartmentExpendDoctor = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
     var departmentList, DepartmentExpendDoctor, e_1;
     return __generator(this, function (_a) {
@@ -67,7 +67,7 @@ exports.getDepartmentExpendDoctor = function (ctx) { return __awaiter(void 0, vo
                         var doctors;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, docter_1.findAllByKey({
+                                case 0: return [4 /*yield*/, doctor_1.findAllByKey({
                                         departmentId: item.departmentId,
                                     })];
                                 case 1:
@@ -139,7 +139,7 @@ exports.deleteDeparment = function (ctx, next) { return __awaiter(void 0, void 0
                             message: '参数有错误',
                         }];
                 }
-                return [4 /*yield*/, docter_1.findAllByKey({})];
+                return [4 /*yield*/, doctor_1.findAllByKey({})];
             case 1:
                 doctorsThisDepartment = _a.sent();
                 // 删除改科室的所有医生
@@ -149,7 +149,7 @@ exports.deleteDeparment = function (ctx, next) { return __awaiter(void 0, void 0
                             switch (_a.label) {
                                 case 0:
                                     if (!(item.departmentId === departmentInfo_1.departmentId)) return [3 /*break*/, 2];
-                                    return [4 /*yield*/, docter_1.update({
+                                    return [4 /*yield*/, doctor_1.update({
                                             status: -1,
                                         }, {
                                             workerId: item.workerId,

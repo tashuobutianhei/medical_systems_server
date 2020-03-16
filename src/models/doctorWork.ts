@@ -3,7 +3,7 @@ import {sequelize, Sequelize} from './index';
 import {Department} from './department';
 
 
-export const DocterWork = sequelize.define('DocterWork', {
+export const DoctorWork = sequelize.define('DoctorWork', {
   // 属性
   wokrId: {
     type: Sequelize.STRING(12), // 2020 02 26 01 0
@@ -27,7 +27,7 @@ export const DocterWork = sequelize.define('DocterWork', {
     type: Sequelize.INTEGER, // 0:早班 1:下午班 2:急诊
     allowNull: false,
   },
-  docters: {
+  doctors: {
     type: Sequelize.STRING(240),
     allowNull: true,
   },
@@ -41,14 +41,14 @@ export const DocterWork = sequelize.define('DocterWork', {
   freezeTableName: true,
 });
 
-export const createTableDocterWork = function() {
-  DocterWork.sync({force: true}).then(() => {
+export const createTableDoctorWork = function() {
+  DoctorWork.sync({force: true}).then(() => {
     console.log('创建成功');
   });
 };
 
-export const insert = (docterWorkInfo: any) => {
-  return DocterWork.create(docterWorkInfo).then((res: { id: any; })=> {
+export const insert = (doctorWorkInfo: any) => {
+  return DoctorWork.create(doctorWorkInfo).then((res: { id: any; })=> {
     console.log(res.id);
     return true;
   }).catch((e: any) => {
@@ -60,7 +60,7 @@ export const insert = (docterWorkInfo: any) => {
 export const findOneByKey= (key: string, value: any, attributes: string[]) => {
   const params:{[proppName:string]:any} = {};
   params[key] = value;
-  return DocterWork.findOne({
+  return DoctorWork.findOne({
     where: {...params},
     attributes: [...attributes],
   }).then((info: any) => {
@@ -70,7 +70,7 @@ export const findOneByKey= (key: string, value: any, attributes: string[]) => {
 
 
 export const findAllByKey= (params: any) => {
-  return DocterWork.findAll({
+  return DoctorWork.findAll({
     where: {...params},
   }).then((info: any) => {
     return info && info.map((item: { dataValues: any; })=> {
@@ -81,7 +81,7 @@ export const findAllByKey= (params: any) => {
 
 export const update = (updateParams: any, selectParams: any) =>{
   console.log(selectParams);
-  return DocterWork.update(updateParams, {
+  return DoctorWork.update(updateParams, {
     where: {
       ...selectParams,
     },

@@ -2,7 +2,7 @@ import {encode, compare} from '../utils/bcrypt';
 import {
   insert as insertPatient,
   findOneByKey as findOneByKeyPatient} from '../models/patient';
-import {findOneByKey as findOneByKeyDocter} from '../models/docter';
+import {findOneByKey as findOneByKeyDoctor} from '../models/doctor';
 import {findOneByKey as findOneByKeyAdmin} from '../models/manager';
 import randomString from 'random-string';
 import jwt from 'jsonwebtoken';
@@ -64,7 +64,7 @@ export const login= async (ctx: any, next: any) => {
             ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address']);
         break;
       case '2':
-        info = await findOneByKeyDocter('workerId', userInfo.username,
+        info = await findOneByKeyDoctor('workerId', userInfo.username,
             ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address']);
         break;
       case '0':
@@ -137,7 +137,7 @@ export const getUser = async (ctx: any, next: any) => {
                   ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address']);
               break;
             case '2':
-              userInfo = await findOneByKeyDocter('workerId', info._uid,
+              userInfo = await findOneByKeyDoctor('workerId', info._uid,
                   ['workerId', 'name', 'idcard', 'sex', 'age',
                     'tel', 'address', 'information', 'position', 'university', 'departmentId']);
               break;

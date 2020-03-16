@@ -9,7 +9,7 @@ import {
   findAllByKey as findAllDoctors,
   insert as insertDoctor,
   update as updateDoctor,
-} from '../../models/docter';
+} from '../../models/doctor';
 
 export const getDepartmentExpendDoctor = async (ctx: any) => {
   try {

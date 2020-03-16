@@ -40,20 +40,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var koa_router_1 = __importDefault(require("koa-router"));
-var patientCase_1 = require("../controllers/docter/patientCase");
-var assay_1 = require("../controllers/docter/assay");
+var patientCase_1 = require("../controllers/doctor/patientCase");
+var assay_1 = require("../controllers/doctor/assay");
 var router = new koa_router_1.default();
 router.prefix('/patientCase');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var auth;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                auth = false;
-                if (ctx.request.method === 'GET') {
-                    auth = true;
-                }
-                if (!(auth || ctx.state.user && ctx.state.user.userType == 2)) return [3 /*break*/, 2];
+                if (!(true || ctx.state.user && ctx.state.user.userType == 2)) return [3 /*break*/, 2];
                 return [4 /*yield*/, next()];
             case 1:
                 _a.sent();

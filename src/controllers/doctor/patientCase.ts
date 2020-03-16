@@ -34,6 +34,7 @@ export const getAll = async (ctx: any) => {
 };
 
 export const getPatientCase = async (ctx: any) => {
+
   if (Object.keys(ctx.query).length === 0) {
     return ctx.body = {
       code: -2,
@@ -44,7 +45,7 @@ export const getPatientCase = async (ctx: any) => {
     const params = ctx.query;
     let resList:any[] = [];
     const res = await findAllByKey({
-      docterId: params.workerId,
+      doctorId: params.workerId,
     });
     if (res.length > 0) {
       const resMap = res.map(async (item: any, index: number, array: any[]) => {
@@ -62,12 +63,12 @@ export const getPatientCase = async (ctx: any) => {
       resList = await Promise.all(resMap);
     }
 
-
     const resCasesPromise = resList.map(async (item: any) => {
       // 存在住院记录id的情况下
       if (item.HospitalizationId != '-1' &&
        item.HospitalizationId != '0' &&
-      item.HospitalizationId.length > 1) {
+       item.HospitalizationId !== null &&
+       item.HospitalizationId.length > 1) {
         const hosfindPromise = item.HospitalizationId.split(',').map(async (itemHosId : string) => {
           const hosRes = await findOneHos({
             'HospitalizationId': itemHosId,
@@ -137,7 +138,7 @@ export const setPatientCaseModeDoctor = async (ctx: any) => {
     }
     const params = ctx.request.body;
     const assay = JSON.parse(params.assay);
-    const {docterView = undefined, result = undefined, medicine = undefined, Hospitalization = false, caseId} = params;
+    const {doctorView = undefined, result = undefined, medicine = undefined, Hospitalization = -1, caseId} = params;
     const assayMap = assay.map(async (item: { examinationId: any; examinationResult: any; }) => {
       const res = await insertAssay({
         'caseId': caseId,
@@ -159,12 +160,12 @@ export const setPatientCaseModeDoctor = async (ctx: any) => {
     const assayId = assayMapRes.map((item: any) => item.assayId).join(',');
 
     const updateRes = await updatePatientCase({
-      docterView,
+      doctorView,
       result,
       medicine,
       assayId,
-      HospitalizationId: Hospitalization ? 0 : -1,
-      status: Hospitalization ? 2 : 1, // 诊断完成
+      HospitalizationId: Hospitalization,
+      status: Hospitalization == 0 ? 2 : 1, // 诊断完成
     }, {
       'caseId': caseId,
     });

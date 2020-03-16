@@ -6,7 +6,7 @@ import {
   deleteDeparment,
 } from '../controllers/Admin/department';
 import {
-  addDocter,
+  addDoctor,
   outDoctor,
 } from '../controllers/Admin/doctor';
 
@@ -33,9 +33,9 @@ router.post('/department', addDepartment); // 添加科室
 
 router.delete('/department', deleteDeparment); // 删除科室
 
-router.post('/docters', addDocter); // 添加医生
+router.post('/doctors', addDoctor); // 添加医生
 
-router.delete('/docters', outDoctor); // 删除医生
+router.delete('/doctors', outDoctor); // 删除医生
 
 // router.post('/admin', addAdmin); // 增加管理员
 

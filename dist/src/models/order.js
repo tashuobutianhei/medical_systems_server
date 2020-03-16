@@ -13,8 +13,8 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable new-cap */
 var index_1 = require("./index");
-var docterWork_1 = require("./docterWork");
-var docter_1 = require("./docter");
+var doctorWork_1 = require("./doctorWork");
+var doctor_1 = require("./doctor");
 exports.Order = index_1.sequelize.define('Order', {
     // 属性
     id: {
@@ -27,7 +27,7 @@ exports.Order = index_1.sequelize.define('Order', {
     wokrId: {
         type: index_1.Sequelize.STRING(12),
         references: {
-            model: docterWork_1.DocterWork,
+            model: doctorWork_1.DoctorWork,
             key: 'wokrId',
         },
         allowNull: false,
@@ -35,7 +35,7 @@ exports.Order = index_1.sequelize.define('Order', {
     workerId: {
         type: index_1.Sequelize.STRING(12),
         references: {
-            model: docter_1.Docters,
+            model: doctor_1.Doctors,
             key: 'workerId',
         },
         allowNull: false,

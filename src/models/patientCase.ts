@@ -17,7 +17,7 @@ export const PatientCase = sequelize.define('PatientCase', {
       key: 'uid',
     },
   },
-  docterId: {
+  doctorId: {
     type: Sequelize.STRING(12),
   },
   registerDate: {
@@ -28,7 +28,7 @@ export const PatientCase = sequelize.define('PatientCase', {
     type: Sequelize.TEXT,
     allowNull: false,
   },
-  docterView: {
+  doctorView: {
     type: Sequelize.STRING(100),
     allowNull: false,
   },

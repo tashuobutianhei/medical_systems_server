@@ -1,5 +1,5 @@
 import Router from 'koa-router';
-import {getDoctors} from '../controllers/docter/docter';
+import {getDoctors} from '../controllers/doctor/doctor';
 
 const router = new Router();
 

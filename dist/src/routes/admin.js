@@ -76,7 +76,7 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
 router.get('/department', department_1.getDepartmentExpendDoctor); // 获取所有科室,包含医生
 router.post('/department', department_1.addDepartment); // 添加科室
 router.delete('/department', department_1.deleteDeparment); // 删除科室
-router.post('/docters', doctor_1.addDocter); // 添加医生
-router.delete('/docters', doctor_1.outDoctor); // 删除医生
+router.post('/doctors', doctor_1.addDoctor); // 添加医生
+router.delete('/doctors', doctor_1.outDoctor); // 删除医生
 // router.post('/admin', addAdmin); // 增加管理员
 exports.default = router;

@@ -4,10 +4,10 @@ import {
   setPatientCaseModeDoctor,
   setPatientCaseModeHos,
   getAll,
-} from '../controllers/docter/patientCase';
+} from '../controllers/doctor/patientCase';
 import {
   getAssayById,
-} from '../controllers/docter/assay';
+} from '../controllers/doctor/assay';
 
 const router = new Router();
 
@@ -15,11 +15,11 @@ router.prefix('/patientCase');
 
 router.use(async (ctx: any, next) => {
 
-  let auth = false;
-  if (ctx.request.method === 'GET') {
-    auth = true;
-  }
-  if (auth || ctx.state.user && ctx.state.user.userType == 2) {
+  // let auth = false;
+  // if (ctx.request.method === 'GET') {
+  //   auth = true;
+  // }
+  if (true || ctx.state.user && ctx.state.user.userType == 2) {
     await next();
   } else {
     return ctx.body = {

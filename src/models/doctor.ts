@@ -1,9 +1,9 @@
 /* eslint-disable new-cap */
 import {sequelize, Sequelize} from './index';
 import {Department} from './department';
-import {docterInfo as docterInfoType} from '../type/docterType';
+import {doctorInfo as doctorInfoType} from '../type/doctorType';
 
-export const Docters = sequelize.define('Docters', {
+export const Doctors = sequelize.define('Doctors', {
   // 属性
   workerId: {
     type: Sequelize.STRING(12),
@@ -67,14 +67,14 @@ export const Docters = sequelize.define('Docters', {
   freezeTableName: true,
 });
 
-export const createTableDocters = function() {
-  Docters.sync({force: true}).then(() => {
+export const createTableDoctors = function() {
+  Doctors.sync({force: true}).then(() => {
     console.log('创建成功');
   });
 };
 
-export const insert = (docterInfo: docterInfoType) => {
-  return Docters.create(docterInfo).then((res: { id: any; })=> {
+export const insert = (doctorInfo: doctorInfoType) => {
+  return Doctors.create(doctorInfo).then((res: { id: any; })=> {
     return true;
   }).catch((e: any) => {
     console.log(e);
@@ -86,7 +86,7 @@ export const insert = (docterInfo: docterInfoType) => {
 export const findOneByKey= (key: string, value: any, attributes: string[]) => {
   const params:{[proppName:string]:any} = {};
   params[key] = value;
-  return Docters.findOne({
+  return Doctors.findOne({
     where: {...params},
     attributes: [...attributes],
   }).then((info: any) => {
@@ -96,7 +96,7 @@ export const findOneByKey= (key: string, value: any, attributes: string[]) => {
 
 
 export const findAllByKey= (params: any) => {
-  return Docters.findAll({
+  return Doctors.findAll({
     where: {...params},
   }).then((info: any) => {
     return info && info.map((item: { dataValues: any; })=> {
@@ -107,7 +107,7 @@ export const findAllByKey= (params: any) => {
 
 
 export const destroy = (Params: any) =>{
-  return Docters.destroy({
+  return Doctors.destroy({
     where: {
       ...Params,
     },
@@ -115,7 +115,7 @@ export const destroy = (Params: any) =>{
 };
 
 export const update = (updateParams: any, selectParams: any) =>{
-  return Docters.update(updateParams, {
+  return Doctors.update(updateParams, {
     where: {
       ...selectParams,
     },

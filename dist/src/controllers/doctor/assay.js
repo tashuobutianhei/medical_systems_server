@@ -35,40 +35,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var koa_router_1 = __importDefault(require("koa-router"));
-var schedule_1 = require("../controllers/doctor/schedule");
-var router = new koa_router_1.default();
-router.prefix('/schedule');
-router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var auth;
+var assay_1 = require("../../models/assay");
+exports.getAssayById = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var params, ResPromise, assayList, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                auth = false;
-                if (ctx.request.url !== '/createWork' && ctx.request.method === 'GET') {
-                    auth = true;
+                _a.trys.push([0, 2, , 3]);
+                params = ctx.query;
+                if (!(params.assayIds)) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -2,
+                            message: '参数有错误',
+                        }];
                 }
-                if (!(auth || ctx.state.user && ctx.state.user.userType == 2)) return [3 /*break*/, 2];
-                return [4 /*yield*/, next()];
+                ResPromise = params.assayIds.split(',').map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
+                    var assayItem;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, assay_1.findAllByKey({
+                                    assayId: item,
+                                })];
+                            case 1:
+                                assayItem = _a.sent();
+                                if (assayItem) {
+                                    return [2 /*return*/, assayItem[0]];
+                                }
+                                else {
+                                    throw new Error('');
+                                }
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, Promise.all(ResPromise)];
             case 1:
-                _a.sent();
+                assayList = _a.sent();
+                ctx.body = {
+                    code: assayList.length ? 0 : -1,
+                    data: assayList,
+                };
                 return [3 /*break*/, 3];
-            case 2: return [2 /*return*/, ctx.body = {
-                    code: 401,
-                    message: '无权限',
-                }];
+            case 2:
+                e_1 = _a.sent();
+                return [2 /*return*/, ctx.body = {
+                        code: -3,
+                        message: '服务错误',
+                    }];
             case 3: return [2 /*return*/];
         }
     });
-}); });
-router.get('/createWork', schedule_1.createWorkList); // 增
-router.post('/', schedule_1.addSchedule); // 改
-router.get('/', schedule_1.getSchedule); // 查
-router.get('/getScheduleOfPeriod', schedule_1.getScheduleOfPeriod); // 查
-router.delete('/', schedule_1.deleteSchedule); // 删
-router.get('/today', schedule_1.getScheduleToday); // 查今日排班
-exports.default = router;
+}); };

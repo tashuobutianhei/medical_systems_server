@@ -40,24 +40,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var random_string_1 = __importDefault(require("random-string"));
-var docter_1 = require("../../models/docter");
+var doctor_1 = require("../../models/doctor");
 var bcrypt_1 = require("../../utils/bcrypt");
-exports.addDocter = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var docterInfo, result, e_1;
+exports.addDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var doctorInfo, result, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                docterInfo = ctx.request.body;
-                if (!(typeof docterInfo === 'object' && Object.keys(docterInfo).length > 0)) {
+                doctorInfo = ctx.request.body;
+                if (!(typeof doctorInfo === 'object' && Object.keys(doctorInfo).length > 0)) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
                             message: '参数有错误',
                         }];
                 }
-                docterInfo.workerId = random_string_1.default({ length: 12, numbers: true });
-                docterInfo.password = bcrypt_1.encode(random_string_1.default({ length: 6, numbers: true }));
-                return [4 /*yield*/, docter_1.insert(docterInfo)];
+                doctorInfo.workerId = random_string_1.default({ length: 12, numbers: true });
+                doctorInfo.password = bcrypt_1.encode(random_string_1.default({ length: 6, numbers: true }));
+                return [4 /*yield*/, doctor_1.insert(doctorInfo)];
             case 1:
                 result = _a.sent();
                 return [2 /*return*/, ctx.body = {
@@ -75,22 +75,22 @@ exports.addDocter = function (ctx, next) { return __awaiter(void 0, void 0, void
     });
 }); };
 exports.outDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var docterInfo, res, e_2;
+    var doctorInfo, res, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                docterInfo = ctx.request.body;
-                if (!docterInfo.workerId) {
+                doctorInfo = ctx.request.body;
+                if (!doctorInfo.workerId) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
                             message: '参数有错误',
                         }];
                 }
-                return [4 /*yield*/, docter_1.update({
+                return [4 /*yield*/, doctor_1.update({
                         status: -1,
                     }, {
-                        workerId: docterInfo.workerId,
+                        workerId: doctorInfo.workerId,
                     })];
             case 1:
                 res = _a.sent();

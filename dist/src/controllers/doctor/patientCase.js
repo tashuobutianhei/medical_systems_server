@@ -138,6 +138,7 @@ exports.getPatientCase = function (ctx) { return __awaiter(void 0, void 0, void 
                             case 0:
                                 if (!(item.HospitalizationId != '-1' &&
                                     item.HospitalizationId != '0' &&
+                                    item.HospitalizationId !== null &&
                                     item.HospitalizationId.length > 1)) return [3 /*break*/, 3];
                                 hosfindPromise = item.HospitalizationId.split(',').map(function (itemHosId) { return __awaiter(void 0, void 0, void 0, function () {
                                     var hosRes;
@@ -233,7 +234,7 @@ exports.setPatientCaseModeDoctor = function (ctx) { return __awaiter(void 0, voi
                 }
                 params = ctx.request.body;
                 assay = JSON.parse(params.assay);
-                _a = params.doctorView, doctorView = _a === void 0 ? undefined : _a, _b = params.result, result = _b === void 0 ? undefined : _b, _c = params.medicine, medicine = _c === void 0 ? undefined : _c, _d = params.Hospitalization, Hospitalization = _d === void 0 ? false : _d, caseId_1 = params.caseId;
+                _a = params.doctorView, doctorView = _a === void 0 ? undefined : _a, _b = params.result, result = _b === void 0 ? undefined : _b, _c = params.medicine, medicine = _c === void 0 ? undefined : _c, _d = params.Hospitalization, Hospitalization = _d === void 0 ? -1 : _d, caseId_1 = params.caseId;
                 assayMap = assay.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
                     var res;
                     return __generator(this, function (_a) {
@@ -268,8 +269,8 @@ exports.setPatientCaseModeDoctor = function (ctx) { return __awaiter(void 0, voi
                         result: result,
                         medicine: medicine,
                         assayId: assayId,
-                        HospitalizationId: Hospitalization ? 0 : -1,
-                        status: Hospitalization ? 2 : 1,
+                        HospitalizationId: Hospitalization,
+                        status: Hospitalization == 0 ? 2 : 1,
                     }, {
                         'caseId': caseId_1,
                     })];

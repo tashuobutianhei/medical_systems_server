@@ -6,7 +6,7 @@ import {
   deleteSchedule,
   getScheduleOfPeriod,
   getScheduleToday,
-} from '../controllers/docter/schedule';
+} from '../controllers/doctor/schedule';
 
 const router = new Router();
 

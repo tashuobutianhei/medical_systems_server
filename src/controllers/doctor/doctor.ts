@@ -1,4 +1,4 @@
-import {findAllByKey} from '../../models/docter';
+import {findAllByKey} from '../../models/doctor';
 
 export const getDoctors = async (ctx:any) => {
   try {
