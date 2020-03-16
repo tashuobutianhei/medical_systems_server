@@ -22,7 +22,7 @@ router.use(async (ctx: any, next) => {
 
 router.get('/', findOrder); // 查
 
-router.post('/', Order); //
+router.post('/', Order); // 挂号
 
 router.post('/info', orderInfo); // 完善信息
 

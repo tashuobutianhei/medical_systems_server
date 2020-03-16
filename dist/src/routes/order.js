@@ -61,6 +61,6 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
     });
 }); });
 router.get('/', order_1.findOrder); // 查
-router.post('/', order_1.Order); //
+router.post('/', order_1.Order); // 挂号
 router.post('/info', order_1.orderInfo); // 完善信息
 exports.default = router;

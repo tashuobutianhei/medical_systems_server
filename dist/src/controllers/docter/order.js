@@ -52,6 +52,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var order_1 = require("../../models/order");
 var patientCase_1 = require("../../models/patientCase");
+var register_1 = require("../..//models/register");
 var random_string_1 = __importDefault(require("random-string"));
 exports.addOrder = function (params) { return __awaiter(void 0, void 0, void 0, function () {
     var wokrId, workerId, result;
@@ -85,11 +86,11 @@ exports.deleteOrder = function (params) { return __awaiter(void 0, void 0, void 
     });
 }); };
 exports.findOrder = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, res, e_2;
+    var params, orderRes, resgisterList, dataResult, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 3, , 4]);
                 if (Object.keys(ctx.query).length === 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -99,29 +100,35 @@ exports.findOrder = function (ctx) { return __awaiter(void 0, void 0, void 0, fu
                 params = ctx.query;
                 return [4 /*yield*/, order_1.findOneByKey(params, [])];
             case 1:
-                res = _a.sent();
-                ctx.body = {
-                    code: res ? 0 : -1,
-                    data: res,
-                };
-                return [3 /*break*/, 3];
+                orderRes = _a.sent();
+                return [4 /*yield*/, register_1.findAllByKey({
+                        id: orderRes.id,
+                    })];
             case 2:
+                resgisterList = _a.sent();
+                dataResult = __assign(__assign({}, orderRes), { patientCases: resgisterList });
+                ctx.body = {
+                    code: dataResult ? 0 : -1,
+                    data: dataResult,
+                };
+                return [3 /*break*/, 4];
+            case 3:
                 e_2 = _a.sent();
                 console.log(e_2);
                 ctx.body = {
                     code: -1,
                 };
                 return [2 /*return*/, false];
-            case 3: return [2 /*return*/];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
 exports.Order = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, findRes, uid, caseId, insertRes, newCases, res, e_3;
+    var params, findRes, requestList, uid, caseId, insertRes, res, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 4, , 5]);
+                _a.trys.push([0, 5, , 6]);
                 params = ctx.request.body;
                 if (ctx.state.user.userType !== 1) {
                     ctx.body = {
@@ -135,7 +142,12 @@ exports.Order = function (ctx) { return __awaiter(void 0, void 0, void 0, functi
                 if (!findRes) {
                     throw new Error('查找失败');
                 }
-                if (!(findRes.limit === null || findRes.patientCases.split(',').length < findRes.limit)) {
+                return [4 /*yield*/, register_1.findAllByKey({
+                        id: findRes.id,
+                    })];
+            case 2:
+                requestList = _a.sent();
+                if (!(findRes.limit === null || requestList.length < findRes.limit)) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
                             message: '挂号已满',
@@ -152,31 +164,30 @@ exports.Order = function (ctx) { return __awaiter(void 0, void 0, void 0, functi
                         docterView: '',
                         result: '',
                     })];
-            case 2:
+            case 3:
                 insertRes = _a.sent();
                 if (!insertRes) {
                     throw new Error('');
                 }
-                newCases = findRes.patientCases === null || findRes.patientCases === '' ?
-                    caseId : findRes.patientCases + ("," + caseId);
-                return [4 /*yield*/, order_1.update({
-                        patientCases: newCases,
-                    }, __assign({}, params))];
-            case 3:
+                return [4 /*yield*/, register_1.insert({
+                        id: findRes.id,
+                        caseId: caseId,
+                    })];
+            case 4:
                 res = _a.sent();
                 ctx.body = {
                     code: res ? 0 : -1,
                     data: { caseId: caseId },
                 };
-                return [3 /*break*/, 5];
-            case 4:
+                return [3 /*break*/, 6];
+            case 5:
                 e_3 = _a.sent();
                 ctx.body = {
                     code: -1,
                     data: e_3,
                 };
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
         }
     });
 }); };

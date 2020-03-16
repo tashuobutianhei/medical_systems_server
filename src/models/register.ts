@@ -1,39 +1,32 @@
 /* eslint-disable new-cap */
 import {sequelize, Sequelize} from './index';
-import {DocterWork} from './docterWork';
-import {Docters} from './docter';
+import {Order} from './order';
+import {PatientCase} from './patientCase';
 
-export const Order = sequelize.define('Order', {
+export const Register = sequelize.define('Register', {
   // 属性
-  id: {
+  registerId: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
     unique: true,
   },
-  wokrId: {
-    type: Sequelize.STRING(12),
-    references: {
-      model: DocterWork,
-      key: 'wokrId',
-    },
-    allowNull: false,
-  },
-  workerId: {
-    type: Sequelize.STRING(12),
-    references: {
-      model: Docters,
-      key: 'workerId',
-    },
-    allowNull: false,
-  },
-  patientCases: { // ,分割数组,废弃
-    type: Sequelize.TEXT,
-  },
-  limit: { // 上限
+  id: {
     type: Sequelize.INTEGER,
-    allowNull: true,
+    references: {
+      model: Order,
+      key: 'id',
+    },
+    allowNull: false,
+  },
+  caseId: {
+    type: Sequelize.STRING(12),
+    references: {
+      model: PatientCase,
+      key: 'caseId',
+    },
+    allowNull: false,
   },
 }, {
   // 参数
@@ -42,14 +35,14 @@ export const Order = sequelize.define('Order', {
 });
 
 export const createTableOrder= function() {
-  Order.sync({force: true}).then(() => {
+  Register.sync({force: true}).then(() => {
     console.log('创建成功');
   });
 };
 
 
 export const insert = (info: any) => {
-  return Order.create(info).then((res: { id: any; })=> {
+  return Register.create(info).then((res: { id: any; })=> {
     console.log(res.id);
     return true;
   }).catch((e: any) => {
@@ -59,7 +52,7 @@ export const insert = (info: any) => {
 };
 
 export const findOneByKey= (params: any, attributes: string[]) => {
-  return Order.findOne({
+  return Register.findOne({
     where: {...params},
   }).then((info: any) => {
     return info && info.dataValues;
@@ -68,7 +61,7 @@ export const findOneByKey= (params: any, attributes: string[]) => {
 
 
 export const findAllByKey= (params: any) => {
-  return Order.findAll({
+  return Register.findAll({
     where: {...params},
   }).then((info: any) => {
     return info && info.map((item: { dataValues: any; })=> {
@@ -78,7 +71,7 @@ export const findAllByKey= (params: any) => {
 };
 
 export const destroy = (Params: any) =>{
-  return Order.destroy({
+  return Register.destroy({
     where: {
       ...Params,
     },
@@ -86,7 +79,7 @@ export const destroy = (Params: any) =>{
 };
 
 export const update = (updateParams: any, selectParams: any) =>{
-  return Order.update(updateParams, {
+  return Register.update(updateParams, {
     where: {
       ...selectParams,
     },

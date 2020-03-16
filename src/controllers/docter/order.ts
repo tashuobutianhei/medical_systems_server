@@ -9,6 +9,10 @@ import {
   insert as insertCase,
   update as updateCase,
 } from '../../models/patientCase';
+import {
+  findAllByKey as findAllregister,
+  insert as insertRegister,
+} from '../..//models/register';
 
 import randomString from 'random-string';
 
@@ -47,10 +51,20 @@ export const findOrder = async (ctx: any) => {
       };
     }
     const params = ctx.query;
-    const res = await findOneByKey(params, []);
+    const orderRes = await findOneByKey(params, []);
+
+    const resgisterList = await findAllregister({
+      id: orderRes.id,
+    });
+
+    const dataResult = {
+      ...orderRes,
+      patientCases: resgisterList,
+    };
+
     ctx.body = {
-      code: res ? 0 : -1,
-      data: res,
+      code: dataResult ? 0 : -1,
+      data: dataResult,
     };
   } catch (e) {
     console.log(e);
@@ -71,12 +85,18 @@ export const Order = async (ctx: any) => {
       };
     }
 
+    // 找到医生挂号信息
     const findRes = await findOneByKey(params, []);
     if (!findRes) {
       throw new Error('查找失败');
     }
 
-    if (!(findRes.limit === null || findRes.patientCases.split(',').length < findRes.limit)) {
+    // 挂号对应关系
+    const requestList = await findAllregister({
+      id: findRes.id,
+    });
+
+    if (!(findRes.limit === null || requestList.length < findRes.limit)) {
       return ctx.body = {
         code: -2,
         message: '挂号已满',
@@ -86,6 +106,7 @@ export const Order = async (ctx: any) => {
     const uid = ctx.state.user.uid;
     const caseId = randomString({length: 12, numbers: true});
 
+    // 生成病例
     const insertRes = await insertCase({
       uid,
       caseId,
@@ -100,14 +121,9 @@ export const Order = async (ctx: any) => {
       throw new Error('');
     }
 
-    // 拼接
-    const newCases = findRes.patientCases === null || findRes.patientCases === '' ?
-      caseId : findRes.patientCases + `,${caseId}`;
-
-    const res = await update({
-      patientCases: newCases,
-    }, {
-      ...params,
+    const res = await insertRegister({
+      id: findRes.id,
+      caseId: caseId,
     });
 
     ctx.body = {
