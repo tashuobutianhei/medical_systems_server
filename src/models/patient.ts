@@ -42,6 +42,9 @@ export const Patient = sequelize.define('Patient', {
   address: {
     type: Sequelize.STRING(200),
   },
+  avatar: {
+    type: Sequelize.STRING(255),
+  },
 }, {
   // 参数
   timestamps: false,

@@ -7,6 +7,9 @@ import {findOneByKey as findOneByKeyAdmin} from '../models/manager';
 import randomString from 'random-string';
 import jwt from 'jsonwebtoken';
 import {tokenKey} from '../config';
+import fs from 'fs';
+import path from 'path';
+import {PatientCase} from '../models/patientCase';
 
 
 export const registerPatient = async (ctx: any, next: any) => {
@@ -160,5 +163,36 @@ export const getUser = async (ctx: any, next: any) => {
           }
         }
       });
+};
+
+export const updateUser = async (ctx:any, next: any) => {
+  if (!ctx.state.usefInfo) {
+    return ctx.body = {
+      code: 401,
+      message: '无权限',
+    };
+  }
+
+  try {
+    console.log(ctx.state.usefInfo);
+    // 获取后缀
+    const postfix = ctx.request.body.avatar.match(/^data:image\/(\w+);base64,/)[1];
+    // 去掉图片base64码前面部分data:image/png;base64
+    const base64 = ctx.request.body.avatar.replace(/^data:image\/\w+;base64,/, '');
+    // 把base64码转成buffer对象，
+    const dataBuffer = new Buffer(base64, 'base64');
+
+    const filename = path.resolve(__dirname, '../../public') + '/Patient/Avatar/' + ctx.state.usefInfo._uid + `.${postfix}`;
+    const res = await fs.writeFileSync(filename, dataBuffer);
+    ctx.body = {
+      code: 0,
+      message: '操作成功',
+    };
+  } catch (e) {
+    ctx.body = {
+      code: -1,
+      message: '服务错误',
+    };
+  }
 };
 

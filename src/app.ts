@@ -1,5 +1,4 @@
 import Koa from 'koa';
-const app = new Koa();
 
 import views from 'koa-views';
 import json from 'koa-json';
@@ -7,8 +6,11 @@ import json from 'koa-json';
 import logger from 'koa-logger';
 import cors from 'koa2-cors';
 import koajwt from 'koa-jwt';
+import jwt from 'jsonwebtoken';
+import path from 'path';
 // import koaBody from 'koa-body';
 
+// route路由
 import index from './routes/index';
 import users from './routes/users';
 import department from './routes/department';
@@ -18,13 +20,13 @@ import order from './routes/order';
 import patientCase from './routes/patientCase';
 import admin from './routes/admin';
 
-
 import {connectMysql} from './models/index';
 import {tokenKey} from './config';
 
+const app = new Koa();
 const koaBody = require('koa-body');
 
-// middlewares
+// 中间件
 // app.use(bodyparser({
 //   enableTypes: ['json', 'form', 'text'],
 // }));
@@ -34,7 +36,8 @@ app.use(koaBody({
 }));
 app.use(json());
 app.use(logger());
-app.use(require('koa-static')(__dirname + '/public'));
+// console.log(path.resolve(__dirname, '../public'));
+app.use(require('koa-static')(path.resolve(__dirname, '../public')));
 app.use(views(__dirname + '/views', {
   extension: 'pug',
 }));
@@ -48,7 +51,7 @@ app.use(cors({
   exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
   maxAge: 5,
   credentials: true,
-  allowMethods: ['GET', 'POST', 'DELETE', 'DELETE', 'OPTIONS'],
+  allowMethods: ['GET', 'POST', 'DELETE', 'DELETE', 'OPTIONS', 'PUT'],
   allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
 }));
 
@@ -66,8 +69,9 @@ app.use(async (ctx, next: any) => {
 
 app.use(koajwt({
   secret: tokenKey,
-}).unless({
+}).unless({ // 为登陆可访问
   path: [
+    // /\/*/,
     /\/users\/login/,
     /\/users\/register/,
     /\/users\/getUser/,
@@ -79,6 +83,26 @@ app.use(koajwt({
     /\/admin\/department/,
   ],
 }));
+
+app.use(async (ctx, next) => {
+  const token = ctx.header.authorization;
+  if (!token) {
+    ctx.state.usefInfo = {};
+    return await next();
+  }
+  await jwt.verify(token.split(' ')[1], tokenKey,
+      async (err: any, info: any)=> {
+        if (err) {
+          ctx.body = {
+            code: 1,
+            message: '服务错误',
+          };
+        } else {
+          ctx.state.usefInfo = info;
+        }
+      });
+  await next();
+});
 
 // logger
 app.use(async (ctx, next) => {

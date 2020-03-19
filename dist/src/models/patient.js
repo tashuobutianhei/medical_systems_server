@@ -60,6 +60,9 @@ exports.Patient = index_1.sequelize.define('Patient', {
     address: {
         type: index_1.Sequelize.STRING(200),
     },
+    avatar: {
+        type: index_1.Sequelize.STRING(255),
+    },
 }, {
     // 参数
     timestamps: false,

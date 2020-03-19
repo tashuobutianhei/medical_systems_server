@@ -40,14 +40,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var koa_1 = __importDefault(require("koa"));
-var app = new koa_1.default();
 var koa_views_1 = __importDefault(require("koa-views"));
 var koa_json_1 = __importDefault(require("koa-json"));
 // import bodyparser from 'koa-bodyparser';
 var koa_logger_1 = __importDefault(require("koa-logger"));
 var koa2_cors_1 = __importDefault(require("koa2-cors"));
 var koa_jwt_1 = __importDefault(require("koa-jwt"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var path_1 = __importDefault(require("path"));
 // import koaBody from 'koa-body';
+// route路由
 var index_1 = __importDefault(require("./routes/index"));
 var users_1 = __importDefault(require("./routes/users"));
 var department_1 = __importDefault(require("./routes/department"));
@@ -58,8 +60,9 @@ var patientCase_1 = __importDefault(require("./routes/patientCase"));
 var admin_1 = __importDefault(require("./routes/admin"));
 var index_2 = require("./models/index");
 var config_1 = require("./config");
+var app = new koa_1.default();
 var koaBody = require('koa-body');
-// middlewares
+// 中间件
 // app.use(bodyparser({
 //   enableTypes: ['json', 'form', 'text'],
 // }));
@@ -69,7 +72,8 @@ app.use(koaBody({
 }));
 app.use(koa_json_1.default());
 app.use(koa_logger_1.default());
-app.use(require('koa-static')(__dirname + '/public'));
+// console.log(path.resolve(__dirname, '../public'));
+app.use(require('koa-static')(path_1.default.resolve(__dirname, '../public')));
 app.use(koa_views_1.default(__dirname + '/views', {
     extension: 'pug',
 }));
@@ -83,7 +87,7 @@ app.use(koa2_cors_1.default({
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
     maxAge: 5,
     credentials: true,
-    allowMethods: ['GET', 'POST', 'DELETE', 'DELETE', 'OPTIONS'],
+    allowMethods: ['GET', 'POST', 'DELETE', 'DELETE', 'OPTIONS', 'PUT'],
     allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
 }));
 // 错误处理
@@ -110,6 +114,7 @@ app.use(koa_jwt_1.default({
     secret: config_1.tokenKey,
 }).unless({
     path: [
+        // /\/*/,
         /\/users\/login/,
         /\/users\/register/,
         /\/users\/getUser/,
@@ -121,6 +126,39 @@ app.use(koa_jwt_1.default({
         /\/admin\/department/,
     ],
 }));
+app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var token;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                token = ctx.header.authorization;
+                if (!!token) return [3 /*break*/, 2];
+                ctx.state.usefInfo = {};
+                return [4 /*yield*/, next()];
+            case 1: return [2 /*return*/, _a.sent()];
+            case 2: return [4 /*yield*/, jsonwebtoken_1.default.verify(token.split(' ')[1], config_1.tokenKey, function (err, info) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        if (err) {
+                            ctx.body = {
+                                code: 1,
+                                message: '服务错误',
+                            };
+                        }
+                        else {
+                            ctx.state.usefInfo = info;
+                        }
+                        return [2 /*return*/];
+                    });
+                }); })];
+            case 3:
+                _a.sent();
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); });
 // logger
 app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {

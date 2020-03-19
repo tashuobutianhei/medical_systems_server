@@ -46,6 +46,8 @@ var manager_1 = require("../models/manager");
 var random_string_1 = __importDefault(require("random-string"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = require("../config");
+var fs_1 = __importDefault(require("fs"));
+var path_1 = __importDefault(require("path"));
 exports.registerPatient = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var userInfo, sesult, e_1;
     return __generator(this, function (_a) {
@@ -235,6 +237,44 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
             case 1:
                 _a.sent();
                 return [2 /*return*/];
+        }
+    });
+}); };
+exports.updateUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var postfix, base64, dataBuffer, filename, res, e_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!ctx.state.usefInfo) {
+                    return [2 /*return*/, ctx.body = {
+                            code: 401,
+                            message: '无权限',
+                        }];
+                }
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                console.log(ctx.state.usefInfo);
+                postfix = ctx.request.body.avatar.match(/^data:image\/(\w+);base64,/)[1];
+                base64 = ctx.request.body.avatar.replace(/^data:image\/\w+;base64,/, '');
+                dataBuffer = new Buffer(base64, 'base64');
+                filename = path_1.default.resolve(__dirname, '../../public') + '/Patient/Avatar/' + ctx.state.usefInfo._uid + ("." + postfix);
+                return [4 /*yield*/, fs_1.default.writeFileSync(filename, dataBuffer)];
+            case 2:
+                res = _a.sent();
+                ctx.body = {
+                    code: 0,
+                    message: '操作成功',
+                };
+                return [3 /*break*/, 4];
+            case 3:
+                e_3 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    message: '服务错误',
+                };
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
