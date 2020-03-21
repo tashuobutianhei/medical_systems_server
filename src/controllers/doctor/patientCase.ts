@@ -299,3 +299,91 @@ export const setPatientCaseModeHos = async (ctx: any) => {
     };
   }
 };
+
+
+export const getByPatient = async (ctx: any) => {
+  try {
+    let resList:any[] = [];
+    const res = await findAllByKey({
+      uid: ctx.state.userInfo._uid,
+    });
+    if (res.length > 0) {
+      const resMap = res.map(async (item: any, index: number, array: any[]) => {
+        const patient = await findPatient('uid', item.uid,
+            ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address']);
+        if (patient) {
+          return {
+            ...item,
+            'patientInfo': patient,
+          };
+        } else {
+          throw new Error('not find patient');
+        }
+      });
+      resList = await Promise.all(resMap);
+    }
+
+    const resCasesPromise = resList.map(async (item: any) => {
+      // 存在住院记录id的情况下
+      if (item.HospitalizationId != '-1' &&
+       item.HospitalizationId != '0' &&
+       item.HospitalizationId !== null &&
+       item.HospitalizationId.length > 1) {
+        const hosfindPromise = item.HospitalizationId.split(',').map(async (itemHosId : string) => {
+          const hosRes = await findOneHos({
+            'HospitalizationId': itemHosId,
+          }, []);
+          if (hosRes) {
+            return hosRes;
+          } else {
+            throw new Error('医院记录查找失败');
+          }
+        });
+
+        const hostList = await Promise.all(hosfindPromise);
+
+        // 获取检查list
+        const hostListresult = await Promise.all(hostList.map(async (itemHos: any) => {
+          if (itemHos.assayId.length > 0) {
+            return {
+              ...itemHos,
+              assayList: await Promise.all(itemHos.assayId.split(',').map(async (assayId: any) => {
+                const assay = await findOneAssay({
+                  assayId,
+                });
+                if (assay) {
+                  return assay;
+                } else {
+                  throw new Error('查找化验记录失败');
+                }
+              })),
+            };
+          }
+          return {
+            ...itemHos,
+            assayList: [],
+          };
+        }));
+
+        return {
+          ...item,
+          hostList: hostListresult,
+        };
+      } else {
+        return item;
+      }
+    });
+
+    const resCases = await Promise.all(resCasesPromise);
+
+    ctx.body = {
+      code: resCases ? 0 : -1,
+      data: resCases,
+    };
+  } catch (e) {
+    ctx.body = {
+      code: -1,
+      data: e,
+    };
+  }
+};

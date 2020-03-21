@@ -62,6 +62,7 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
     });
 }); });
 router.get('/', patientCase_1.getPatientCase); // 查
+router.get('/patient', patientCase_1.getByPatient); // 查找患者下的所有病例
 router.get('/all', patientCase_1.getAll); // 查
 router.post('/doctor', patientCase_1.setPatientCaseModeDoctor); // 诊断模式下病例
 router.post('/hospital', patientCase_1.setPatientCaseModeHos); // 诊断模式下病例

@@ -4,6 +4,7 @@ import {
   setPatientCaseModeDoctor,
   setPatientCaseModeHos,
   getAll,
+  getByPatient,
 } from '../controllers/doctor/patientCase';
 import {
   getAssayById,
@@ -30,6 +31,8 @@ router.use(async (ctx: any, next) => {
 });
 
 router.get('/', getByworkerId); // 查
+
+router.get('/patient', getByPatient); // 查找患者下的所有病例
 
 router.get('/all', getAll); // 查
 

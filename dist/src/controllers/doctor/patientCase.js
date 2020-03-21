@@ -440,3 +440,127 @@ exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0
         }
     });
 }); };
+exports.getByPatient = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var resList, res, resMap, resCasesPromise, resCases, e_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 5, , 6]);
+                resList = [];
+                return [4 /*yield*/, patientCase_1.findAllByKey({
+                        uid: ctx.state.userInfo._uid,
+                    })];
+            case 1:
+                res = _a.sent();
+                if (!(res.length > 0)) return [3 /*break*/, 3];
+                resMap = res.map(function (item, index, array) { return __awaiter(void 0, void 0, void 0, function () {
+                    var patient;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, patient_1.findOneByKey('uid', item.uid, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address'])];
+                            case 1:
+                                patient = _a.sent();
+                                if (patient) {
+                                    return [2 /*return*/, __assign(__assign({}, item), { 'patientInfo': patient })];
+                                }
+                                else {
+                                    throw new Error('not find patient');
+                                }
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, Promise.all(resMap)];
+            case 2:
+                resList = _a.sent();
+                _a.label = 3;
+            case 3:
+                resCasesPromise = resList.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
+                    var hosfindPromise, hostList, hostListresult;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (!(item.HospitalizationId != '-1' &&
+                                    item.HospitalizationId != '0' &&
+                                    item.HospitalizationId !== null &&
+                                    item.HospitalizationId.length > 1)) return [3 /*break*/, 3];
+                                hosfindPromise = item.HospitalizationId.split(',').map(function (itemHosId) { return __awaiter(void 0, void 0, void 0, function () {
+                                    var hosRes;
+                                    return __generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0: return [4 /*yield*/, hospitalizationInfoList_1.findOneByKey({
+                                                    'HospitalizationId': itemHosId,
+                                                }, [])];
+                                            case 1:
+                                                hosRes = _a.sent();
+                                                if (hosRes) {
+                                                    return [2 /*return*/, hosRes];
+                                                }
+                                                else {
+                                                    throw new Error('医院记录查找失败');
+                                                }
+                                                return [2 /*return*/];
+                                        }
+                                    });
+                                }); });
+                                return [4 /*yield*/, Promise.all(hosfindPromise)];
+                            case 1:
+                                hostList = _a.sent();
+                                return [4 /*yield*/, Promise.all(hostList.map(function (itemHos) { return __awaiter(void 0, void 0, void 0, function () {
+                                        var _a, _b;
+                                        return __generator(this, function (_c) {
+                                            switch (_c.label) {
+                                                case 0:
+                                                    if (!(itemHos.assayId.length > 0)) return [3 /*break*/, 2];
+                                                    _a = [__assign({}, itemHos)];
+                                                    _b = {};
+                                                    return [4 /*yield*/, Promise.all(itemHos.assayId.split(',').map(function (assayId) { return __awaiter(void 0, void 0, void 0, function () {
+                                                            var assay;
+                                                            return __generator(this, function (_a) {
+                                                                switch (_a.label) {
+                                                                    case 0: return [4 /*yield*/, assay_1.findOneByKey({
+                                                                            assayId: assayId,
+                                                                        })];
+                                                                    case 1:
+                                                                        assay = _a.sent();
+                                                                        if (assay) {
+                                                                            return [2 /*return*/, assay];
+                                                                        }
+                                                                        else {
+                                                                            throw new Error('查找化验记录失败');
+                                                                        }
+                                                                        return [2 /*return*/];
+                                                                }
+                                                            });
+                                                        }); }))];
+                                                case 1: return [2 /*return*/, __assign.apply(void 0, _a.concat([(_b.assayList = _c.sent(), _b)]))];
+                                                case 2: return [2 /*return*/, __assign(__assign({}, itemHos), { assayList: [] })];
+                                            }
+                                        });
+                                    }); }))];
+                            case 2:
+                                hostListresult = _a.sent();
+                                return [2 /*return*/, __assign(__assign({}, item), { hostList: hostListresult })];
+                            case 3: return [2 /*return*/, item];
+                        }
+                    });
+                }); });
+                return [4 /*yield*/, Promise.all(resCasesPromise)];
+            case 4:
+                resCases = _a.sent();
+                ctx.body = {
+                    code: resCases ? 0 : -1,
+                    data: resCases,
+                };
+                return [3 /*break*/, 6];
+            case 5:
+                e_5 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    data: e_5,
+                };
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
