@@ -12,13 +12,6 @@ import path from 'path';
 
 // route路由
 import index from './routes/index';
-import users from './routes/users';
-import department from './routes/department';
-import doctor from './routes/doctor';
-import schedule from './routes/schedule';
-import order from './routes/order';
-import patientCase from './routes/patientCase';
-import admin from './routes/admin';
 
 import {connectMysql} from './models/index';
 import {tokenKey} from './config';
@@ -27,9 +20,6 @@ const app = new Koa();
 const koaBody = require('koa-body');
 
 // 中间件
-// app.use(bodyparser({
-//   enableTypes: ['json', 'form', 'text'],
-// }));
 app.use(koaBody({
   multipart: true, // 允许上传多个文件
   strict: false,
@@ -69,7 +59,7 @@ app.use(async (ctx, next: any) => {
 
 app.use(koajwt({
   secret: tokenKey,
-}).unless({ // 为登陆可访问
+}).unless({ // 未登陆可访问
   path: [
     // /\/*/,
     /\/users\/login/,
@@ -114,17 +104,6 @@ app.use(async (ctx, next) => {
 
 // routes
 app.use(index.routes()).use(index.allowedMethods());
-app.use(users.routes()).use(users.allowedMethods());
-app.use(department.routes()).use(department.allowedMethods());
-app.use(doctor.routes()).use(doctor.allowedMethods());
-app.use(schedule.routes()).use(schedule.allowedMethods());
-app.use(order.routes()).use(order.allowedMethods());
-app.use(patientCase.routes()).use(patientCase.allowedMethods());
-app.use(admin.routes()).use(admin.allowedMethods());
-
-// app.use(async (ctx, next) => {
-//   console.log(123)
-// })
 
 // error-handling
 app.on('error', (err, ctx) => {

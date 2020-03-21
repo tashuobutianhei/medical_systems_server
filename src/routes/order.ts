@@ -10,7 +10,7 @@ const router = new Router();
 router.prefix('/order');
 
 router.use(async (ctx: any, next) => {
-  if (ctx.state.user) {
+  if (ctx.state.userInfo) {
     await next();
   } else {
     return ctx.body = {

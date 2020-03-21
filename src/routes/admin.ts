@@ -15,15 +15,20 @@ const router = new Router();
 router.prefix('/admin');
 
 router.use(async (ctx: any, next) => {
-  // TODO 权限控制
-  // if (ctx.state.user && ctx.state.user.userType === 0) {
-  //   await next();
-  // } else {
-  //   return ctx.body = {
-  //     code: 401,
-  //     message: '无权限',
-  //   };
-  // }
+  // 只有管理员可访问
+  let auth = false;
+  if (ctx.request.method === 'GET') {
+    auth = true;
+  }
+
+  if (auth || (ctx.state.userInfo && ctx.state.userInfo.userType == 0)) {
+    await next();
+  } else {
+    return ctx.body = {
+      code: 401,
+      message: '无权限',
+    };
+  }
   await next();
 });
 

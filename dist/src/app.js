@@ -51,21 +51,11 @@ var path_1 = __importDefault(require("path"));
 // import koaBody from 'koa-body';
 // route路由
 var index_1 = __importDefault(require("./routes/index"));
-var users_1 = __importDefault(require("./routes/users"));
-var department_1 = __importDefault(require("./routes/department"));
-var doctor_1 = __importDefault(require("./routes/doctor"));
-var schedule_1 = __importDefault(require("./routes/schedule"));
-var order_1 = __importDefault(require("./routes/order"));
-var patientCase_1 = __importDefault(require("./routes/patientCase"));
-var admin_1 = __importDefault(require("./routes/admin"));
 var index_2 = require("./models/index");
 var config_1 = require("./config");
 var app = new koa_1.default();
 var koaBody = require('koa-body');
 // 中间件
-// app.use(bodyparser({
-//   enableTypes: ['json', 'form', 'text'],
-// }));
 app.use(koaBody({
     multipart: true,
     strict: false,
@@ -176,16 +166,6 @@ app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function
 }); });
 // routes
 app.use(index_1.default.routes()).use(index_1.default.allowedMethods());
-app.use(users_1.default.routes()).use(users_1.default.allowedMethods());
-app.use(department_1.default.routes()).use(department_1.default.allowedMethods());
-app.use(doctor_1.default.routes()).use(doctor_1.default.allowedMethods());
-app.use(schedule_1.default.routes()).use(schedule_1.default.allowedMethods());
-app.use(order_1.default.routes()).use(order_1.default.allowedMethods());
-app.use(patientCase_1.default.routes()).use(patientCase_1.default.allowedMethods());
-app.use(admin_1.default.routes()).use(admin_1.default.allowedMethods());
-// app.use(async (ctx, next) => {
-//   console.log(123)
-// })
 // error-handling
 app.on('error', function (err, ctx) {
     console.error('server error', err, ctx);

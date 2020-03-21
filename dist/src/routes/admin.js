@@ -45,29 +45,25 @@ var doctor_1 = require("../controllers/Admin/doctor");
 var router = new koa_router_1.default();
 router.prefix('/admin');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var auth;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: 
-            // TODO 权限控制
-            // if (ctx.state.user && ctx.state.user.userType === 0) {
-            //   await next();
-            // } else {
-            //   return ctx.body = {
-            //     code: 401,
-            //     message: '无权限',
-            //   };
-            // }
-            return [4 /*yield*/, next()];
+            case 0:
+                auth = false;
+                if (ctx.request.method === 'GET') {
+                    auth = true;
+                }
+                if (!(auth || (ctx.state.userInfo && ctx.state.userInfo.userType == 0))) return [3 /*break*/, 2];
+                return [4 /*yield*/, next()];
             case 1:
-                // TODO 权限控制
-                // if (ctx.state.user && ctx.state.user.userType === 0) {
-                //   await next();
-                // } else {
-                //   return ctx.body = {
-                //     code: 401,
-                //     message: '无权限',
-                //   };
-                // }
+                _a.sent();
+                return [3 /*break*/, 3];
+            case 2: return [2 /*return*/, ctx.body = {
+                    code: 401,
+                    message: '无权限',
+                }];
+            case 3: return [4 /*yield*/, next()];
+            case 4:
                 _a.sent();
                 return [2 /*return*/];
         }

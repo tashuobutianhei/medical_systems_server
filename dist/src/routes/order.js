@@ -47,7 +47,7 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!ctx.state.user) return [3 /*break*/, 2];
+                if (!ctx.state.userInfo) return [3 /*break*/, 2];
                 return [4 /*yield*/, next()];
             case 1:
                 _a.sent();

@@ -16,11 +16,12 @@ router.prefix('/patientCase');
 
 router.use(async (ctx: any, next) => {
 
-  // let auth = false;
-  // if (ctx.request.method === 'GET') {
-  //   auth = true;
-  // }
-  if (true || ctx.state.user && ctx.state.user.userType == 2) {
+  let auth = false;
+  if (ctx.request.method === 'GET') {
+    auth = true;
+  }
+
+  if (auth || ctx.state.userInfo && ctx.state.userInfo.userType == 2) {
     await next();
   } else {
     return ctx.body = {
