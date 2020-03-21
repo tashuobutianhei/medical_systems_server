@@ -47,9 +47,7 @@ router.prefix('/users');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                console.log(ctx.state.usefInfo);
-                return [4 /*yield*/, next()];
+            case 0: return [4 /*yield*/, next()];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });

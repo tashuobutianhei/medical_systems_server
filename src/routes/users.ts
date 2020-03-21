@@ -7,9 +7,6 @@ const router = new Router();
 router.prefix('/users');
 
 router.use(async (ctx, next) => {
-  console.log(
-    ctx.state.usefInfo,
-  );
   return await next();
 });
 

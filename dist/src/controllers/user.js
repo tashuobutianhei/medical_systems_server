@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -203,7 +214,7 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                                 case 4:
                                     userInfo = _b.sent();
                                     return [3 /*break*/, 9];
-                                case 5: return [4 /*yield*/, patient_1.findOneByKey('uid', info._uid, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address'])];
+                                case 5: return [4 /*yield*/, patient_1.findOneByKey('uid', info._uid, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar'])];
                                 case 6:
                                     userInfo = _b.sent();
                                     return [3 /*break*/, 9];
@@ -240,12 +251,42 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
         }
     });
 }); };
-exports.updateUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var postfix, base64, dataBuffer, filename, res, e_3;
+var upPhoto = function (avatar, _uid) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, postfix, base64, dataBuffer, filename, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!ctx.state.usefInfo) {
+                _a.trys.push([0, 5, , 6]);
+                return [4 /*yield*/, patient_1.findOneByKey('uid', _uid, ['avatar'])];
+            case 1:
+                user = _a.sent();
+                if (!user.avatar) return [3 /*break*/, 3];
+                return [4 /*yield*/, fs_1.default.unlinkSync(path_1.default.resolve(__dirname, '../../public') + user.avatar)];
+            case 2:
+                _a.sent();
+                _a.label = 3;
+            case 3:
+                postfix = avatar.match(/^data:image\/(\w+);base64,/)[1];
+                base64 = avatar.replace(/^data:image\/\w+;base64,/, '');
+                dataBuffer = Buffer.from(base64, 'base64');
+                filename = path_1.default.resolve(__dirname, '../../public') + '/Patient/Avatar/' + _uid + ("." + postfix);
+                return [4 /*yield*/, fs_1.default.writeFileSync(filename, dataBuffer)];
+            case 4:
+                _a.sent();
+                return [2 /*return*/, '/Patient/Avatar/' + _uid + ("." + postfix)];
+            case 5:
+                e_3 = _a.sent();
+                throw new Error(e_3);
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
+exports.updateUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var data_1, updateParams_1, url, res, e_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!ctx.state.userInfo) {
                     return [2 /*return*/, ctx.body = {
                             code: 401,
                             message: '无权限',
@@ -253,28 +294,38 @@ exports.updateUser = function (ctx, next) { return __awaiter(void 0, void 0, voi
                 }
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                console.log(ctx.state.usefInfo);
-                postfix = ctx.request.body.avatar.match(/^data:image\/(\w+);base64,/)[1];
-                base64 = ctx.request.body.avatar.replace(/^data:image\/\w+;base64,/, '');
-                dataBuffer = new Buffer(base64, 'base64');
-                filename = path_1.default.resolve(__dirname, '../../public') + '/Patient/Avatar/' + ctx.state.usefInfo._uid + ("." + postfix);
-                return [4 /*yield*/, fs_1.default.writeFileSync(filename, dataBuffer)];
+                _a.trys.push([1, 5, , 6]);
+                data_1 = ctx.request.body;
+                updateParams_1 = {};
+                Object.keys(data_1).forEach(function (item) {
+                    updateParams_1[item] = data_1[item];
+                });
+                if (!data_1.avatar) return [3 /*break*/, 3];
+                return [4 /*yield*/, upPhoto(ctx.request.body.avatar, ctx.state.userInfo._uid)];
             case 2:
+                url = _a.sent();
+                updateParams_1.avatar = url;
+                _a.label = 3;
+            case 3:
+                ;
+                return [4 /*yield*/, patient_1.update(__assign({}, updateParams_1), {
+                        uid: ctx.state.userInfo._uid,
+                    })];
+            case 4:
                 res = _a.sent();
                 ctx.body = {
-                    code: 0,
+                    code: res ? 0 : -1,
                     message: '操作成功',
                 };
-                return [3 /*break*/, 4];
-            case 3:
-                e_3 = _a.sent();
+                return [3 /*break*/, 6];
+            case 5:
+                e_4 = _a.sent();
                 ctx.body = {
                     code: -1,
                     message: '服务错误',
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
         }
     });
 }); };

@@ -133,7 +133,7 @@ app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function
             case 0:
                 token = ctx.header.authorization;
                 if (!!token) return [3 /*break*/, 2];
-                ctx.state.usefInfo = {};
+                ctx.state.userInfo = {};
                 return [4 /*yield*/, next()];
             case 1: return [2 /*return*/, _a.sent()];
             case 2: return [4 /*yield*/, jsonwebtoken_1.default.verify(token.split(' ')[1], config_1.tokenKey, function (err, info) { return __awaiter(void 0, void 0, void 0, function () {
@@ -145,7 +145,7 @@ app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function
                             };
                         }
                         else {
-                            ctx.state.usefInfo = info;
+                            ctx.state.userInfo = info;
                         }
                         return [2 /*return*/];
                     });

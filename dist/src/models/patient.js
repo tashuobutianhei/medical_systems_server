@@ -92,3 +92,8 @@ exports.findOneByKey = function (key, value, attributes) {
         return info && info.dataValues;
     });
 };
+exports.update = function (updateParams, selectParams) {
+    return exports.Patient.update(updateParams, {
+        where: __assign({}, selectParams),
+    });
+};

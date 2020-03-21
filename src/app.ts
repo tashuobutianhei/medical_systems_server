@@ -87,7 +87,7 @@ app.use(koajwt({
 app.use(async (ctx, next) => {
   const token = ctx.header.authorization;
   if (!token) {
-    ctx.state.usefInfo = {};
+    ctx.state.userInfo = {};
     return await next();
   }
   await jwt.verify(token.split(' ')[1], tokenKey,
@@ -98,7 +98,7 @@ app.use(async (ctx, next) => {
             message: '服务错误',
           };
         } else {
-          ctx.state.usefInfo = info;
+          ctx.state.userInfo = info;
         }
       });
   await next();

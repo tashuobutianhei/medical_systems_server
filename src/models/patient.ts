@@ -78,4 +78,11 @@ export const findOneByKey= (key: string, value: any, attributes: string[]) => {
   });
 };
 
+export const update = (updateParams: any, selectParams: any) =>{
+  return Patient.update(updateParams, {
+    where: {
+      ...selectParams,
+    },
+  });
+};
 

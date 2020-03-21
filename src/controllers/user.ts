@@ -1,7 +1,9 @@
 import {encode, compare} from '../utils/bcrypt';
 import {
   insert as insertPatient,
-  findOneByKey as findOneByKeyPatient} from '../models/patient';
+  findOneByKey as findOneByKeyPatient,
+  update as updatePatient,
+} from '../models/patient';
 import {findOneByKey as findOneByKeyDoctor} from '../models/doctor';
 import {findOneByKey as findOneByKeyAdmin} from '../models/manager';
 import randomString from 'random-string';
@@ -137,7 +139,7 @@ export const getUser = async (ctx: any, next: any) => {
               break;
             case '1':
               userInfo = await findOneByKeyPatient('uid', info._uid,
-                  ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address']);
+                  ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
               break;
             case '2':
               userInfo = await findOneByKeyDoctor('workerId', info._uid,
@@ -165,8 +167,31 @@ export const getUser = async (ctx: any, next: any) => {
       });
 };
 
+const upPhoto = async (avatar: any, _uid: any) => {
+  try {
+    // 如果存在首先删除文件
+    const user = await findOneByKeyPatient('uid', _uid, ['avatar']);
+    if (user.avatar) {
+      await fs.unlinkSync(path.resolve(__dirname, '../../public') + user.avatar);
+    }
+    // 上传
+    // 获取后缀
+    const postfix = avatar.match(/^data:image\/(\w+);base64,/)[1];
+    // 去掉图片base64码前面部分data:image/png;base64
+    const base64 = avatar.replace(/^data:image\/\w+;base64,/, '');
+    // 把base64码转成buffer对象，
+    const dataBuffer = Buffer.from(base64, 'base64');
+
+    const filename = path.resolve(__dirname, '../../public') + '/Patient/Avatar/' + _uid + `.${postfix}`;
+    await fs.writeFileSync(filename, dataBuffer);
+    return '/Patient/Avatar/' + _uid + `.${postfix}`;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 export const updateUser = async (ctx:any, next: any) => {
-  if (!ctx.state.usefInfo) {
+  if (!ctx.state.userInfo) {
     return ctx.body = {
       code: 401,
       message: '无权限',
@@ -174,18 +199,23 @@ export const updateUser = async (ctx:any, next: any) => {
   }
 
   try {
-    console.log(ctx.state.usefInfo);
-    // 获取后缀
-    const postfix = ctx.request.body.avatar.match(/^data:image\/(\w+);base64,/)[1];
-    // 去掉图片base64码前面部分data:image/png;base64
-    const base64 = ctx.request.body.avatar.replace(/^data:image\/\w+;base64,/, '');
-    // 把base64码转成buffer对象，
-    const dataBuffer = new Buffer(base64, 'base64');
-
-    const filename = path.resolve(__dirname, '../../public') + '/Patient/Avatar/' + ctx.state.usefInfo._uid + `.${postfix}`;
-    const res = await fs.writeFileSync(filename, dataBuffer);
+    const data = ctx.request.body;
+    const updateParams: any = {};
+    Object.keys(data).forEach((item) => {
+      updateParams[item] = data[item];
+    });
+    if (data.avatar) {
+      // 上传头像
+      const url = await upPhoto(ctx.request.body.avatar, ctx.state.userInfo._uid);
+      updateParams.avatar = url;
+    };
+    const res = await updatePatient({
+      ...updateParams,
+    }, {
+      uid: ctx.state.userInfo._uid,
+    });
     ctx.body = {
-      code: 0,
+      code: res ? 0 : -1,
       message: '操作成功',
     };
   } catch (e) {
