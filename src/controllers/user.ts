@@ -4,7 +4,10 @@ import {
   findOneByKey as findOneByKeyPatient,
   update as updatePatient,
 } from '../models/patient';
-import {findOneByKey as findOneByKeyDoctor} from '../models/doctor';
+import {
+  findOneByKey as findOneByKeyDoctor,
+  update as updateDoctor,
+} from '../models/doctor';
 import {findOneByKey as findOneByKeyAdmin} from '../models/manager';
 import randomString from 'random-string';
 import jwt from 'jsonwebtoken';
@@ -144,7 +147,7 @@ export const getUser = async (ctx: any, next: any) => {
             case '2':
               userInfo = await findOneByKeyDoctor('workerId', info._uid,
                   ['workerId', 'name', 'idcard', 'sex', 'age',
-                    'tel', 'address', 'information', 'position', 'university', 'departmentId']);
+                    'tel', 'address', 'information', 'position', 'university', 'departmentId', 'avatar']);
               break;
           }
 
@@ -167,13 +170,22 @@ export const getUser = async (ctx: any, next: any) => {
       });
 };
 
-const upPhoto = async (avatar: any, _uid: any) => {
+const upPhoto = async (avatar: any, _uid: any, userType: any) => {
   try {
     // 如果存在首先删除文件
-    const user = await findOneByKeyPatient('uid', _uid, ['avatar']);
+    let user; let pathUrl;
+    if (userType == 1) {
+      user = await findOneByKeyPatient('uid', _uid, ['avatar']);
+      pathUrl = 'Patient';
+    } else if (userType == 2) {
+      user = await findOneByKeyDoctor('workerId', _uid, ['avatar']);
+      pathUrl = 'Doctor';
+    }
+
     if (user.avatar) {
       await fs.unlinkSync(path.resolve(__dirname, '../../public') + user.avatar);
     }
+
     // 上传
     // 获取后缀
     const postfix = avatar.match(/^data:image\/(\w+);base64,/)[1];
@@ -182,9 +194,10 @@ const upPhoto = async (avatar: any, _uid: any) => {
     // 把base64码转成buffer对象，
     const dataBuffer = Buffer.from(base64, 'base64');
 
-    const filename = path.resolve(__dirname, '../../public') + '/Patient/Avatar/' + _uid + `.${postfix}`;
+    const filename = path.resolve(__dirname, '../../public') + `/${pathUrl}/Avatar/` + _uid + `.${postfix}`;
     await fs.writeFileSync(filename, dataBuffer);
-    return '/Patient/Avatar/' + _uid + `.${postfix}`;
+
+    return `/${pathUrl}/Avatar/` + _uid + `.${postfix}`;
   } catch (e) {
     throw new Error(e);
   }
@@ -204,19 +217,33 @@ export const updateUser = async (ctx:any, next: any) => {
     Object.keys(data).forEach((item) => {
       updateParams[item] = data[item];
     });
+    if (data.password) {
+      updateParams['password'] = encode(data.password);
+    }
     if (data.avatar) {
       // 上传头像
-      const url = await upPhoto(ctx.request.body.avatar, ctx.state.userInfo._uid);
+      const url = await upPhoto(ctx.request.body.avatar, ctx.state.userInfo._uid, ctx.state.userInfo.userType);
       updateParams.avatar = url;
     };
-    const res = await updatePatient({
-      ...updateParams,
-    }, {
-      uid: ctx.state.userInfo._uid,
-    });
+
+    let res;
+    if (ctx.state.userInfo.userType == 1) {
+      res = await updatePatient({
+        ...updateParams,
+      }, {
+        uid: ctx.state.userInfo._uid,
+      });
+    } else if (ctx.state.userInfo.userType == 2) {
+      res = await updateDoctor({
+        ...updateParams,
+      }, {
+        workerId: ctx.state.userInfo._uid,
+      });
+    }
+
     ctx.body = {
       code: res ? 0 : -1,
-      message: '操作成功',
+      message: '修改成功',
     };
   } catch (e) {
     ctx.body = {

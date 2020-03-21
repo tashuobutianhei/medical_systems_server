@@ -61,6 +61,9 @@ export const Doctors = sequelize.define('Doctors', {
   status: {
     type: Sequelize.INTEGER, // 0 或者 null 为在职 -1为离职
   },
+  avatar: {
+    type: Sequelize.STRING(255),
+  },
 }, {
   // 参数
   timestamps: false,

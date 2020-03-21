@@ -219,7 +219,7 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                                     userInfo = _b.sent();
                                     return [3 /*break*/, 9];
                                 case 7: return [4 /*yield*/, doctor_1.findOneByKey('workerId', info._uid, ['workerId', 'name', 'idcard', 'sex', 'age',
-                                        'tel', 'address', 'information', 'position', 'university', 'departmentId'])];
+                                        'tel', 'address', 'information', 'position', 'university', 'departmentId', 'avatar'])];
                                 case 8:
                                     userInfo = _b.sent();
                                     return [3 /*break*/, 9];
@@ -251,33 +251,46 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
         }
     });
 }); };
-var upPhoto = function (avatar, _uid) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, postfix, base64, dataBuffer, filename, e_3;
+var upPhoto = function (avatar, _uid, userType) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, pathUrl, postfix, base64, dataBuffer, filename, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 5, , 6]);
+                _a.trys.push([0, 8, , 9]);
+                user = void 0;
+                pathUrl = void 0;
+                if (!(userType == 1)) return [3 /*break*/, 2];
                 return [4 /*yield*/, patient_1.findOneByKey('uid', _uid, ['avatar'])];
             case 1:
                 user = _a.sent();
-                if (!user.avatar) return [3 /*break*/, 3];
-                return [4 /*yield*/, fs_1.default.unlinkSync(path_1.default.resolve(__dirname, '../../public') + user.avatar)];
+                pathUrl = 'Patient';
+                return [3 /*break*/, 4];
             case 2:
-                _a.sent();
-                _a.label = 3;
+                if (!(userType == 2)) return [3 /*break*/, 4];
+                return [4 /*yield*/, doctor_1.findOneByKey('workerId', _uid, ['avatar'])];
             case 3:
+                user = _a.sent();
+                pathUrl = 'Doctor';
+                _a.label = 4;
+            case 4:
+                if (!user.avatar) return [3 /*break*/, 6];
+                return [4 /*yield*/, fs_1.default.unlinkSync(path_1.default.resolve(__dirname, '../../public') + user.avatar)];
+            case 5:
+                _a.sent();
+                _a.label = 6;
+            case 6:
                 postfix = avatar.match(/^data:image\/(\w+);base64,/)[1];
                 base64 = avatar.replace(/^data:image\/\w+;base64,/, '');
                 dataBuffer = Buffer.from(base64, 'base64');
-                filename = path_1.default.resolve(__dirname, '../../public') + '/Patient/Avatar/' + _uid + ("." + postfix);
+                filename = path_1.default.resolve(__dirname, '../../public') + ("/" + pathUrl + "/Avatar/") + _uid + ("." + postfix);
                 return [4 /*yield*/, fs_1.default.writeFileSync(filename, dataBuffer)];
-            case 4:
+            case 7:
                 _a.sent();
-                return [2 /*return*/, '/Patient/Avatar/' + _uid + ("." + postfix)];
-            case 5:
+                return [2 /*return*/, "/" + pathUrl + "/Avatar/" + _uid + ("." + postfix)];
+            case 8:
                 e_3 = _a.sent();
                 throw new Error(e_3);
-            case 6: return [2 /*return*/];
+            case 9: return [2 /*return*/];
         }
     });
 }); };
@@ -294,38 +307,53 @@ exports.updateUser = function (ctx, next) { return __awaiter(void 0, void 0, voi
                 }
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 5, , 6]);
+                _a.trys.push([1, 8, , 9]);
                 data_1 = ctx.request.body;
                 updateParams_1 = {};
                 Object.keys(data_1).forEach(function (item) {
                     updateParams_1[item] = data_1[item];
                 });
+                if (data_1.password) {
+                    updateParams_1['password'] = bcrypt_1.encode(data_1.password);
+                }
                 if (!data_1.avatar) return [3 /*break*/, 3];
-                return [4 /*yield*/, upPhoto(ctx.request.body.avatar, ctx.state.userInfo._uid)];
+                return [4 /*yield*/, upPhoto(ctx.request.body.avatar, ctx.state.userInfo._uid, ctx.state.userInfo.userType)];
             case 2:
                 url = _a.sent();
                 updateParams_1.avatar = url;
                 _a.label = 3;
             case 3:
                 ;
+                res = void 0;
+                if (!(ctx.state.userInfo.userType == 1)) return [3 /*break*/, 5];
                 return [4 /*yield*/, patient_1.update(__assign({}, updateParams_1), {
                         uid: ctx.state.userInfo._uid,
                     })];
             case 4:
                 res = _a.sent();
+                return [3 /*break*/, 7];
+            case 5:
+                if (!(ctx.state.userInfo.userType == 2)) return [3 /*break*/, 7];
+                return [4 /*yield*/, doctor_1.update(__assign({}, updateParams_1), {
+                        workerId: ctx.state.userInfo._uid,
+                    })];
+            case 6:
+                res = _a.sent();
+                _a.label = 7;
+            case 7:
                 ctx.body = {
                     code: res ? 0 : -1,
-                    message: '操作成功',
+                    message: '修改成功',
                 };
-                return [3 /*break*/, 6];
-            case 5:
+                return [3 /*break*/, 9];
+            case 8:
                 e_4 = _a.sent();
                 ctx.body = {
                     code: -1,
                     message: '服务错误',
                 };
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [3 /*break*/, 9];
+            case 9: return [2 /*return*/];
         }
     });
 }); };

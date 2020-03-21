@@ -79,6 +79,9 @@ exports.Doctors = index_1.sequelize.define('Doctors', {
     status: {
         type: index_1.Sequelize.INTEGER,
     },
+    avatar: {
+        type: index_1.Sequelize.STRING(255),
+    },
 }, {
     // 参数
     timestamps: false,
