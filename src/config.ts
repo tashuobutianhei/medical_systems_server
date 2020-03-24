@@ -1,3 +1,5 @@
+import redis from 'redis';
+
 export const tokenKey = 'coderlismedicalsystems';
 
 export const mysqlDbOption = {
@@ -15,3 +17,8 @@ export const mysqlDbOption = {
     },
   },
 };
+
+const client = redis.createClient(6379, '127.0.0.1');
+
+
+export const redisOption = {client: client, db: 1};

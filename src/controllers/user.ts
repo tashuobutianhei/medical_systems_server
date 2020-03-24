@@ -15,7 +15,10 @@ import {tokenKey} from '../config';
 import fs from 'fs';
 import path from 'path';
 import {PatientCase} from '../models/patientCase';
-
+import {
+  storeUser,
+  getUserStore,
+  patientInfo, adminInfo, doctorInfo} from '../store/user';
 
 export const registerPatient = async (ctx: any, next: any) => {
   try {
@@ -69,11 +72,12 @@ export const login= async (ctx: any, next: any) => {
     switch (userInfo.userType) {
       case '1':
         info = await findOneByKeyPatient('username', userInfo.username,
-            ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address']);
+            ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
         break;
       case '2':
         info = await findOneByKeyDoctor('workerId', userInfo.username,
-            ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address']);
+            ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address',
+              'information', 'position', 'university', 'departmentId', 'avatar']);
         break;
       case '0':
         info = await findOneByKeyAdmin('username', userInfo.username,
@@ -93,6 +97,8 @@ export const login= async (ctx: any, next: any) => {
 
       delete info.password;
       info.type = userInfo.userType;
+
+      storeUser(userInfo.userType, id, info);
 
       ctx.body = {
         code: 0,
@@ -134,23 +140,22 @@ export const getUser = async (ctx: any, next: any) => {
             message: '服务错误',
           };
         } else {
-          let userInfo: any;
-          switch (info.userType) {
-            case '0':
-              userInfo = await await findOneByKeyAdmin('username', info.name,
-                  ['uid', 'username']);
-              break;
-            case '1':
-              userInfo = await findOneByKeyPatient('uid', info._uid,
-                  ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
-              break;
-            case '2':
-              userInfo = await findOneByKeyDoctor('workerId', info._uid,
-                  ['workerId', 'name', 'idcard', 'sex', 'age',
-                    'tel', 'address', 'information', 'position', 'university', 'departmentId', 'avatar']);
-              break;
-          }
-
+          let userInfo: any = await getUserStore(info._uid); // 使用redis缓存用户信息
+          // switch (info.userType) {
+          //   case '0':
+          //     userInfo = await await findOneByKeyAdmin('username', info.name,
+          //         ['uid', 'username']);
+          //     break;
+          //   case '1':
+          //     userInfo = await findOneByKeyPatient('uid', info._uid,
+          //         ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
+          //     break;
+          //   case '2':
+          //     userInfo = await findOneByKeyDoctor('workerId', info._uid,
+          //         ['workerId', 'name', 'idcard', 'sex', 'age',
+          //           'tel', 'address', 'information', 'position', 'university', 'departmentId', 'avatar']);
+          //     break;
+          // }
           if (userInfo) {
             userInfo.type = info.userType - 0;
             ctx.body = {

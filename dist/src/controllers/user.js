@@ -59,6 +59,7 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = require("../config");
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
+var user_1 = require("../store/user");
 exports.registerPatient = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var userInfo, sesult, e_1;
     return __generator(this, function (_a) {
@@ -127,11 +128,12 @@ exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, 
                     case '0': return [3 /*break*/, 5];
                 }
                 return [3 /*break*/, 7];
-            case 1: return [4 /*yield*/, patient_1.findOneByKey('username', userInfo.username, ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address'])];
+            case 1: return [4 /*yield*/, patient_1.findOneByKey('username', userInfo.username, ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar'])];
             case 2:
                 info = _b.sent();
                 return [3 /*break*/, 7];
-            case 3: return [4 /*yield*/, doctor_1.findOneByKey('workerId', userInfo.username, ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address'])];
+            case 3: return [4 /*yield*/, doctor_1.findOneByKey('workerId', userInfo.username, ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address',
+                    'information', 'position', 'university', 'departmentId', 'avatar'])];
             case 4:
                 info = _b.sent();
                 return [3 /*break*/, 7];
@@ -150,6 +152,7 @@ exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, 
                     }, config_1.tokenKey, { expiresIn: '72h' });
                     delete info.password;
                     info.type = userInfo.userType;
+                    user_1.storeUser(userInfo.userType, id, info);
                     ctx.body = {
                         code: 0,
                         data: {
@@ -190,40 +193,34 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                         }];
                 }
                 return [4 /*yield*/, jsonwebtoken_1.default.verify(token.split(' ')[1], config_1.tokenKey, function (err, info) { return __awaiter(void 0, void 0, void 0, function () {
-                        var userInfo, _a;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
+                        var userInfo;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
                                 case 0:
                                     if (!err) return [3 /*break*/, 1];
                                     ctx.body = {
                                         code: 1,
                                         message: '服务错误',
                                     };
-                                    return [3 /*break*/, 10];
-                                case 1:
-                                    userInfo = void 0;
-                                    _a = info.userType;
-                                    switch (_a) {
-                                        case '0': return [3 /*break*/, 2];
-                                        case '1': return [3 /*break*/, 5];
-                                        case '2': return [3 /*break*/, 7];
-                                    }
-                                    return [3 /*break*/, 9];
-                                case 2: return [4 /*yield*/, manager_1.findOneByKey('username', info.name, ['uid', 'username'])];
-                                case 3: return [4 /*yield*/, _b.sent()];
-                                case 4:
-                                    userInfo = _b.sent();
-                                    return [3 /*break*/, 9];
-                                case 5: return [4 /*yield*/, patient_1.findOneByKey('uid', info._uid, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar'])];
-                                case 6:
-                                    userInfo = _b.sent();
-                                    return [3 /*break*/, 9];
-                                case 7: return [4 /*yield*/, doctor_1.findOneByKey('workerId', info._uid, ['workerId', 'name', 'idcard', 'sex', 'age',
-                                        'tel', 'address', 'information', 'position', 'university', 'departmentId', 'avatar'])];
-                                case 8:
-                                    userInfo = _b.sent();
-                                    return [3 /*break*/, 9];
-                                case 9:
+                                    return [3 /*break*/, 3];
+                                case 1: return [4 /*yield*/, user_1.getUserStore(info._uid)];
+                                case 2:
+                                    userInfo = _a.sent();
+                                    // switch (info.userType) {
+                                    //   case '0':
+                                    //     userInfo = await await findOneByKeyAdmin('username', info.name,
+                                    //         ['uid', 'username']);
+                                    //     break;
+                                    //   case '1':
+                                    //     userInfo = await findOneByKeyPatient('uid', info._uid,
+                                    //         ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
+                                    //     break;
+                                    //   case '2':
+                                    //     userInfo = await findOneByKeyDoctor('workerId', info._uid,
+                                    //         ['workerId', 'name', 'idcard', 'sex', 'age',
+                                    //           'tel', 'address', 'information', 'position', 'university', 'departmentId', 'avatar']);
+                                    //     break;
+                                    // }
                                     if (userInfo) {
                                         userInfo.type = info.userType - 0;
                                         ctx.body = {
@@ -240,8 +237,8 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                                             message: '无权限',
                                         };
                                     }
-                                    _b.label = 10;
-                                case 10: return [2 /*return*/];
+                                    _a.label = 3;
+                                case 3: return [2 /*return*/];
                             }
                         });
                     }); })];
