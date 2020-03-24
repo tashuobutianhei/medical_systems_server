@@ -98,7 +98,7 @@ export const login= async (ctx: any, next: any) => {
       delete info.password;
       info.type = userInfo.userType;
 
-      storeUser(userInfo.userType, id, info);
+      storeUser(id, info);
 
       ctx.body = {
         code: 0,
@@ -175,6 +175,27 @@ export const getUser = async (ctx: any, next: any) => {
       });
 };
 
+const getUserInfoFromdb = async (userInfo: any) => {
+  let info: any;
+  switch (userInfo.userType) {
+    case '1':
+      info = await findOneByKeyPatient('uid', userInfo._uid,
+          ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
+      break;
+    case '2':
+      info = await findOneByKeyDoctor('workerId', userInfo._uid,
+          ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address',
+            'information', 'position', 'university', 'departmentId', 'avatar']);
+      break;
+    case '0':
+      info = await findOneByKeyAdmin('uid', userInfo._uid,
+          ['uid', 'password']);
+      break;
+  }
+  return info;
+};
+
+
 const upPhoto = async (avatar: any, _uid: any, userType: any) => {
   try {
     // 如果存在首先删除文件
@@ -245,6 +266,13 @@ export const updateUser = async (ctx:any, next: any) => {
         workerId: ctx.state.userInfo._uid,
       });
     }
+
+    // 更新用户信息后，保持redis和mysql一致性
+    const userinfoNew = await getUserInfoFromdb(ctx.state.userInfo);
+    delete userinfoNew.password;
+    userinfoNew.type = ctx.state.userInfo.userType;
+
+    storeUser(ctx.state.userInfo._uid, userinfoNew);
 
     ctx.body = {
       code: res ? 0 : -1,

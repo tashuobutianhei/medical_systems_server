@@ -152,7 +152,7 @@ exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, 
                     }, config_1.tokenKey, { expiresIn: '72h' });
                     delete info.password;
                     info.type = userInfo.userType;
-                    user_1.storeUser(userInfo.userType, id, info);
+                    user_1.storeUser(id, info);
                     ctx.body = {
                         code: 0,
                         data: {
@@ -248,6 +248,35 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
         }
     });
 }); };
+var getUserInfoFromdb = function (userInfo) { return __awaiter(void 0, void 0, void 0, function () {
+    var info, _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = userInfo.userType;
+                switch (_a) {
+                    case '1': return [3 /*break*/, 1];
+                    case '2': return [3 /*break*/, 3];
+                    case '0': return [3 /*break*/, 5];
+                }
+                return [3 /*break*/, 7];
+            case 1: return [4 /*yield*/, patient_1.findOneByKey('uid', userInfo._uid, ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar'])];
+            case 2:
+                info = _b.sent();
+                return [3 /*break*/, 7];
+            case 3: return [4 /*yield*/, doctor_1.findOneByKey('workerId', userInfo._uid, ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address',
+                    'information', 'position', 'university', 'departmentId', 'avatar'])];
+            case 4:
+                info = _b.sent();
+                return [3 /*break*/, 7];
+            case 5: return [4 /*yield*/, manager_1.findOneByKey('uid', userInfo._uid, ['uid', 'password'])];
+            case 6:
+                info = _b.sent();
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/, info];
+        }
+    });
+}); };
 var upPhoto = function (avatar, _uid, userType) { return __awaiter(void 0, void 0, void 0, function () {
     var user, pathUrl, postfix, base64, dataBuffer, filename, e_3;
     return __generator(this, function (_a) {
@@ -292,7 +321,7 @@ var upPhoto = function (avatar, _uid, userType) { return __awaiter(void 0, void 
     });
 }); };
 exports.updateUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var data_1, updateParams_1, url, res, e_4;
+    var data_1, updateParams_1, url, res, userinfoNew, e_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -304,7 +333,7 @@ exports.updateUser = function (ctx, next) { return __awaiter(void 0, void 0, voi
                 }
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 8, , 9]);
+                _a.trys.push([1, 9, , 10]);
                 data_1 = ctx.request.body;
                 updateParams_1 = {};
                 Object.keys(data_1).forEach(function (item) {
@@ -337,20 +366,25 @@ exports.updateUser = function (ctx, next) { return __awaiter(void 0, void 0, voi
             case 6:
                 res = _a.sent();
                 _a.label = 7;
-            case 7:
+            case 7: return [4 /*yield*/, getUserInfoFromdb(ctx.state.userInfo)];
+            case 8:
+                userinfoNew = _a.sent();
+                delete userinfoNew.password;
+                userinfoNew.type = ctx.state.userInfo.userType;
+                user_1.storeUser(ctx.state.userInfo._uid, userinfoNew);
                 ctx.body = {
                     code: res ? 0 : -1,
                     message: '修改成功',
                 };
-                return [3 /*break*/, 9];
-            case 8:
+                return [3 /*break*/, 10];
+            case 9:
                 e_4 = _a.sent();
                 ctx.body = {
                     code: -1,
                     message: '服务错误',
                 };
-                return [3 /*break*/, 9];
-            case 9: return [2 /*return*/];
+                return [3 /*break*/, 10];
+            case 10: return [2 /*return*/];
         }
     });
 }); };

@@ -48,13 +48,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("./index");
-exports.storeUser = function (userType, uid, info) { return __awaiter(void 0, void 0, void 0, function () {
+exports.storeUser = function (uid, info) { return __awaiter(void 0, void 0, void 0, function () {
     var e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, index_1.store.client.hmset(uid, __assign(__assign({}, info), { userType: userType }))];
+                return [4 /*yield*/, index_1.store.client.hmset(uid, __assign({}, info))];
             case 1:
                 _a.sent();
                 return [4 /*yield*/, index_1.store.client.expire(uid, 259200)];

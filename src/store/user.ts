@@ -36,12 +36,11 @@ export type adminInfo = {
 }
 
 export const storeUser = async (
-  userType: string,
   uid: string,
   info: patientInfo | adminInfo | doctorInfo,
 ) => {
   try {
-    await store.client.hmset(uid, {...info, userType});
+    await store.client.hmset(uid, {...info});
     await store.client.expire(uid, 259200); // 72小时
   } catch (e) {
 
