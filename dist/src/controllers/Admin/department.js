@@ -54,8 +54,48 @@ var department_1 = require("../../models/department");
 var manager_1 = require("../../models/manager");
 var random_string_1 = __importDefault(require("random-string"));
 var doctor_1 = require("../../models/doctor");
+exports.getHosptalInfo = function (departmentId) {
+    if (departmentId === void 0) { departmentId = undefined; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var params, departmentList, DepartmentExpendDoctor, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 3, , 4]);
+                    params = {};
+                    if (departmentId) {
+                        params.departmentId = departmentId;
+                    }
+                    return [4 /*yield*/, department_1.findAllByKey(params)];
+                case 1:
+                    departmentList = _a.sent();
+                    return [4 /*yield*/, Promise.all(departmentList.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
+                            var doctors;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, doctor_1.findAllByKey({
+                                            departmentId: item.departmentId,
+                                        })];
+                                    case 1:
+                                        doctors = _a.sent();
+                                        return [2 /*return*/, __assign(__assign({}, item), { doctorList: doctors })];
+                                }
+                            });
+                        }); }))];
+                case 2:
+                    DepartmentExpendDoctor = _a.sent();
+                    return [2 /*return*/, DepartmentExpendDoctor];
+                case 3:
+                    e_1 = _a.sent();
+                    console.log(e_1);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+};
 exports.getDepartmentExpendDoctor = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var departmentList, DepartmentExpendDoctor, e_1;
+    var departmentList, DepartmentExpendDoctor, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -84,7 +124,7 @@ exports.getDepartmentExpendDoctor = function (ctx) { return __awaiter(void 0, vo
                 };
                 return [3 /*break*/, 4];
             case 3:
-                e_1 = _a.sent();
+                e_2 = _a.sent();
                 ctx.body = {
                     code: -3,
                     message: '服务错误',
@@ -95,7 +135,7 @@ exports.getDepartmentExpendDoctor = function (ctx) { return __awaiter(void 0, vo
     });
 }); };
 exports.addDepartment = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var departmentInfo, result, e_2;
+    var departmentInfo, result, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -116,7 +156,7 @@ exports.addDepartment = function (ctx, next) { return __awaiter(void 0, void 0, 
                 };
                 return [3 /*break*/, 3];
             case 2:
-                e_2 = _a.sent();
+                e_3 = _a.sent();
                 ctx.body = {
                     code: -3,
                     message: '服务错误',
@@ -127,7 +167,7 @@ exports.addDepartment = function (ctx, next) { return __awaiter(void 0, void 0, 
     });
 }); };
 exports.deleteDeparment = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var departmentInfo_1, doctorsThisDepartment, result, e_3;
+    var departmentInfo_1, doctorsThisDepartment, result, e_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -175,7 +215,7 @@ exports.deleteDeparment = function (ctx, next) { return __awaiter(void 0, void 0
                 };
                 return [3 /*break*/, 5];
             case 4:
-                e_3 = _a.sent();
+                e_4 = _a.sent();
                 ctx.body = {
                     code: -3,
                     message: '服务错误',
@@ -186,7 +226,7 @@ exports.deleteDeparment = function (ctx, next) { return __awaiter(void 0, void 0
     });
 }); };
 exports.addAdmin = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var adminInfo, result, e_4;
+    var adminInfo, result, e_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -208,7 +248,7 @@ exports.addAdmin = function (ctx, next) { return __awaiter(void 0, void 0, void 
                 };
                 return [3 /*break*/, 3];
             case 2:
-                e_4 = _a.sent();
+                e_5 = _a.sent();
                 ctx.body = {
                     code: -3,
                     message: '服务错误',

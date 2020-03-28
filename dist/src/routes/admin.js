@@ -62,10 +62,7 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
                     code: 401,
                     message: '无权限',
                 }];
-            case 3: return [4 /*yield*/, next()];
-            case 4:
-                _a.sent();
-                return [2 /*return*/];
+            case 3: return [2 /*return*/];
         }
     });
 }); });

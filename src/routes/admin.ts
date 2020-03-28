@@ -29,7 +29,6 @@ router.use(async (ctx: any, next) => {
       message: '无权限',
     };
   }
-  await next();
 });
 
 router.get('/department', getDepartmentExpendDoctor); // 获取所有科室,包含医生

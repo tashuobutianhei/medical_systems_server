@@ -4,6 +4,10 @@ import {
   findAllByKey,
 } from '../models/examination';
 
+export const getExaminationMethod = async () => {
+  return await findAllByKey({});
+};
+
 export const getExamination = async (ctx: any) => {
   try {
     const res = await findAllByKey({});

@@ -11,6 +11,34 @@ import {
   update as updateDoctor,
 } from '../../models/doctor';
 
+export const getHosptalInfo = async (departmentId:any = undefined) => {
+  try {
+    let params:{
+      departmentId?: any
+    } = {};
+    if (departmentId) {
+      params.departmentId = departmentId;
+    }
+    const departmentList = await findAllByKeyDerpartment(params);
+
+    const DepartmentExpendDoctor = await Promise.all(
+        departmentList.map(async (item: any) => {
+          const doctors = await findAllDoctors({
+            departmentId: item.departmentId,
+          });
+          return {
+            ...item,
+            doctorList: doctors,
+          };
+        }),
+    );
+
+    return DepartmentExpendDoctor;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const getDepartmentExpendDoctor = async (ctx: any) => {
   try {
     const departmentList = await findAllByKeyDerpartment({});

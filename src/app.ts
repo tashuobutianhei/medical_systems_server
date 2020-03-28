@@ -8,10 +8,14 @@ import cors from 'koa2-cors';
 import koajwt from 'koa-jwt';
 import jwt from 'jsonwebtoken';
 import path from 'path';
+// 没有声明文件
+// const { ApolloServer, gql } = require('apollo-server-koa');
+
 // import koaBody from 'koa-body';
 
 // route路由
 import index from './routes/index';
+import {graphql} from '../src/graphql/index';
 
 import {connectMysql} from './models/index';
 import {tokenKey} from './config';
@@ -19,6 +23,8 @@ import {tokenKey} from './config';
 const app = new Koa();
 const koaBody = require('koa-body');
 
+// 引入grahql
+graphql.applyMiddleware({app});
 // 中间件
 app.use(koaBody({
   multipart: true, // 允许上传多个文件

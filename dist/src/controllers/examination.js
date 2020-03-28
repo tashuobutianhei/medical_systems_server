@@ -37,6 +37,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var examination_1 = require("../models/examination");
+exports.getExaminationMethod = function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, examination_1.findAllByKey({})];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
 exports.getExamination = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
     var res, e_1;
     return __generator(this, function (_a) {

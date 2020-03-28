@@ -48,13 +48,18 @@ var koa2_cors_1 = __importDefault(require("koa2-cors"));
 var koa_jwt_1 = __importDefault(require("koa-jwt"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var path_1 = __importDefault(require("path"));
+// 没有声明文件
+// const { ApolloServer, gql } = require('apollo-server-koa');
 // import koaBody from 'koa-body';
 // route路由
 var index_1 = __importDefault(require("./routes/index"));
-var index_2 = require("./models/index");
+var index_2 = require("../src/graphql/index");
+var index_3 = require("./models/index");
 var config_1 = require("./config");
 var app = new koa_1.default();
 var koaBody = require('koa-body');
+// 引入grahql
+index_2.graphql.applyMiddleware({ app: app });
 // 中间件
 app.use(koaBody({
     multipart: true,
@@ -154,7 +159,7 @@ app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                index_2.connectMysql();
+                index_3.connectMysql();
                 return [4 /*yield*/, next()];
             case 1:
                 _a.sent();
