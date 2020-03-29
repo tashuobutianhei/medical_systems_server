@@ -135,11 +135,19 @@ export const getUser = async (ctx: any, next: any) => {
   await jwt.verify(token.split(' ')[1], tokenKey,
       async (err: any, info: any)=> {
         if (err) {
+          if (err.name === 'TokenExpiredError') {
+            return ctx.body = {
+              code: 1000,
+              message: '过期',
+            };
+          }
+
           ctx.body = {
             code: 1,
             message: '服务错误',
           };
         } else {
+          console.log(1111);
           let userInfo: any = await getUserStore(info._uid); // 使用redis缓存用户信息
           // switch (info.userType) {
           //   case '0':

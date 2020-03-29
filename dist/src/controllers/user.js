@@ -198,12 +198,20 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                             switch (_a.label) {
                                 case 0:
                                     if (!err) return [3 /*break*/, 1];
+                                    if (err.name === 'TokenExpiredError') {
+                                        return [2 /*return*/, ctx.body = {
+                                                code: 1000,
+                                                message: '过期',
+                                            }];
+                                    }
                                     ctx.body = {
                                         code: 1,
                                         message: '服务错误',
                                     };
                                     return [3 /*break*/, 3];
-                                case 1: return [4 /*yield*/, user_1.getUserStore(info._uid)];
+                                case 1:
+                                    console.log(1111);
+                                    return [4 /*yield*/, user_1.getUserStore(info._uid)];
                                 case 2:
                                     userInfo = _a.sent();
                                     // switch (info.userType) {

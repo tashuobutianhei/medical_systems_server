@@ -79,7 +79,7 @@ var departmentType = new graphql_1.GraphQLObjectType({
             departmentId: { type: graphql_1.GraphQLInt },
             departmentName: { type: graphql_1.GraphQLString },
             information: { type: graphql_1.GraphQLString },
-            doctors: { type: new graphql_1.GraphQLList(doctorType) },
+            doctorList: { type: new graphql_1.GraphQLList(doctorType) },
         };
     },
 });
@@ -115,9 +115,6 @@ var hosipatalInfo = {
                         return [4 /*yield*/, examination_1.getExaminationMethod()];
                     case 2:
                         examiation = _a.sent();
-                        console.log(params.departmentId);
-                        console.log(111);
-                        console.log(examiation);
                         return [2 /*return*/, {
                                 departmentInfoList: result,
                                 examiation: examiation,

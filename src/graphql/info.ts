@@ -49,7 +49,7 @@ const departmentType = new GraphQLObjectType({
       departmentId: {type: GraphQLInt},
       departmentName: {type: GraphQLString},
       information: {type: GraphQLString},
-      doctors: {type: new GraphQLList(doctorType)},
+      doctorList: {type: new GraphQLList(doctorType)},
     };
   },
 });
@@ -78,16 +78,8 @@ const hosipatalInfo = {
     },
   },
   async resolve(root: any, params: any, options: any) {
-    // const result = await ArticleController.queryArticle({
-    //   id: params.id,
-    //   limit: params.limit,
-    //   skip: params.skip,
-    // });
     const result = await getHosptalInfo(params.departmentId);
     const examiation = await getExaminationMethod();
-    console.log(params.departmentId)
-    console.log(111);
-    console.log(examiation);
     return {
       departmentInfoList: result,
       examiation: examiation,
