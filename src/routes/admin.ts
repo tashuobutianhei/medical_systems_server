@@ -9,6 +9,7 @@ import {
   addDoctor,
   outDoctor,
 } from '../controllers/Admin/doctor';
+import {resetInfoStore} from '../store/info';
 
 const router = new Router();
 
@@ -20,7 +21,6 @@ router.use(async (ctx: any, next) => {
   if (ctx.request.method === 'GET') {
     auth = true;
   }
-
   if (auth || (ctx.state.userInfo && ctx.state.userInfo.userType == 0)) {
     await next();
   } else {
@@ -40,6 +40,13 @@ router.delete('/department', deleteDeparment); // 删除科室
 router.post('/doctors', addDoctor); // 添加医生
 
 router.delete('/doctors', outDoctor); // 删除医生
+
+router.use(async (ctx, next) => {
+  if (ctx.request.method !== 'GET') {
+    resetInfoStore();
+  };
+  await next();
+});
 
 // router.post('/admin', addAdmin); // 增加管理员
 

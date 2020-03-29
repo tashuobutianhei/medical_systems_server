@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var graphql_1 = require("graphql");
 var department_1 = require("../controllers/Admin/department");
 var examination_1 = require("../controllers/examination");
+var info_1 = require("../store/info");
 var examiationType = new graphql_1.GraphQLObjectType({
     name: 'exainationType',
     description: '化验项目',
@@ -106,15 +107,24 @@ var hosipatalInfo = {
     },
     resolve: function (root, params, options) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, examiation;
+            var redisData, result, examiation;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, department_1.getHosptalInfo(params.departmentId)];
+                    case 0: return [4 /*yield*/, info_1.getInfoStore()];
                     case 1:
+                        redisData = _a.sent();
+                        if (!(redisData && Object.keys(redisData).length > 0)) return [3 /*break*/, 2];
+                        return [2 /*return*/, redisData];
+                    case 2: return [4 /*yield*/, department_1.getHosptalInfo(params.departmentId)];
+                    case 3:
                         result = _a.sent();
                         return [4 /*yield*/, examination_1.getExaminationMethod()];
-                    case 2:
+                    case 4:
                         examiation = _a.sent();
+                        info_1.storeInfo({
+                            departmentInfoList: result,
+                            examiation: examiation,
+                        });
                         return [2 /*return*/, {
                                 departmentInfoList: result,
                                 examiation: examiation,

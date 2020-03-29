@@ -35,57 +35,67 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var koa_router_1 = __importDefault(require("koa-router"));
+var index_1 = require("./index");
 var department_1 = require("../controllers/Admin/department");
-var doctor_1 = require("../controllers/Admin/doctor");
-var info_1 = require("../store/info");
-var router = new koa_router_1.default();
-router.prefix('/admin');
-router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var auth;
+var examination_1 = require("../controllers/examination");
+exports.storeInfo = function (info) { return __awaiter(void 0, void 0, void 0, function () {
+    var e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                auth = false;
-                if (ctx.request.method === 'GET') {
-                    auth = true;
-                }
-                if (!(auth || (ctx.state.userInfo && ctx.state.userInfo.userType == 0))) return [3 /*break*/, 2];
-                return [4 /*yield*/, next()];
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, index_1.store.client.set('commonInfo', JSON.stringify(info))];
             case 1:
                 _a.sent();
-                return [3 /*break*/, 3];
-            case 2: return [2 /*return*/, ctx.body = {
-                    code: 401,
-                    message: '无权限',
-                }];
-            case 3: return [2 /*return*/];
+                return [4 /*yield*/, index_1.store.client.expire('commonInfo', 2592000)];
+            case 2:
+                _a.sent(); // 720小时
+                return [3 /*break*/, 4];
+            case 3:
+                e_1 = _a.sent();
+                console.log(e_1);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
-}); });
-router.get('/department', department_1.getDepartmentExpendDoctor); // 获取所有科室,包含医生
-router.post('/department', department_1.addDepartment); // 添加科室
-router.delete('/department', department_1.deleteDeparment); // 删除科室
-router.post('/doctors', doctor_1.addDoctor); // 添加医生
-router.delete('/doctors', doctor_1.outDoctor); // 删除医生
-router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+}); };
+exports.getInfoStore = function () {
+    return new Promise(function (res, rej) {
+        index_1.store.client.get('commonInfo', function (err, data) {
+            if (err) {
+                console.log(err);
+                rej(err);
+            }
+            ;
+            res(JSON.parse(data));
+        });
+    });
+};
+exports.resetInfoStore = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var result, examiation;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                if (ctx.request.method !== 'GET') {
-                    info_1.resetInfoStore();
-                }
-                ;
-                return [4 /*yield*/, next()];
+            case 0: return [4 /*yield*/, department_1.getHosptalInfo()];
             case 1:
-                _a.sent();
-                return [2 /*return*/];
+                result = _a.sent();
+                return [4 /*yield*/, examination_1.getExaminationMethod()];
+            case 2:
+                examiation = _a.sent();
+                exports.storeInfo({
+                    departmentInfoList: result,
+                    examiation: examiation,
+                });
+                return [2 /*return*/, new Promise(function (res, rej) {
+                        index_1.store.client.get('commonInfo', function (err, data) {
+                            if (err) {
+                                console.log(err);
+                                rej(err);
+                            }
+                            ;
+                            res(JSON.parse(data));
+                        });
+                    })];
         }
     });
-}); });
-// router.post('/admin', addAdmin); // 增加管理员
-exports.default = router;
+}); };

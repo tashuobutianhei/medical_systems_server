@@ -6,6 +6,8 @@ import {
 import {getHosptalInfo} from '../controllers/Admin/department';
 import {getExaminationMethod} from '../controllers/examination';
 
+import {getInfoStore, storeInfo} from '../store/info';
+
 
 const examiationType = new GraphQLObjectType({
   name: 'exainationType',
@@ -78,12 +80,21 @@ const hosipatalInfo = {
     },
   },
   async resolve(root: any, params: any, options: any) {
-    const result = await getHosptalInfo(params.departmentId);
-    const examiation = await getExaminationMethod();
-    return {
-      departmentInfoList: result,
-      examiation: examiation,
-    };
+    const redisData:any = await getInfoStore();
+    if (redisData && Object.keys(redisData).length > 0) {
+      return redisData;
+    } else {
+      const result = await getHosptalInfo(params.departmentId);
+      const examiation = await getExaminationMethod();
+      storeInfo({
+        departmentInfoList: result,
+        examiation: examiation,
+      });
+      return {
+        departmentInfoList: result,
+        examiation: examiation,
+      };
+    }
   },
 };
 

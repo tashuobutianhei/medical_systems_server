@@ -39,7 +39,7 @@ export const getHosptalInfo = async (departmentId:any = undefined) => {
   }
 };
 
-export const getDepartmentExpendDoctor = async (ctx: any) => {
+export const getDepartmentExpendDoctor = async (ctx: any, next: any) => {
   try {
     const departmentList = await findAllByKeyDerpartment({});
 
@@ -54,11 +54,11 @@ export const getDepartmentExpendDoctor = async (ctx: any) => {
           };
         }),
     );
-
     ctx.body = {
       code: DepartmentExpendDoctor ? 0 : -1,
       data: DepartmentExpendDoctor,
     };
+    next();
   } catch (e) {
     ctx.body = {
       code: -3,
@@ -82,6 +82,7 @@ export const addDepartment = async (ctx: any, next: any) => {
       code: result ? 0 : 1,
       message: result ? '添加成功' : '添加失败',
     };
+    await next();
   } catch (e) {
     ctx.body = {
       code: -3,
@@ -126,6 +127,7 @@ export const deleteDeparment = async (ctx: any, next: any) => {
       code: result ? 0 : 1,
       message: result ? '删除成功' : '删除失败',
     };
+    await next();
   } catch (e) {
     ctx.body = {
       code: -3,
@@ -151,6 +153,7 @@ export const addAdmin= async (ctx: any, next: any) => {
       code: result ? 0 : 1,
       message: result ? '添加成功' : '添加失败',
     };
+    await next();
   } catch (e) {
     ctx.body = {
       code: -3,

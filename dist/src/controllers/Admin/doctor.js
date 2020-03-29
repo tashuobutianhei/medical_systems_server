@@ -47,7 +47,7 @@ exports.addDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 3, , 4]);
                 doctorInfo = ctx.request.body;
                 if (!(typeof doctorInfo === 'object' && Object.keys(doctorInfo).length > 0)) {
                     return [2 /*return*/, ctx.body = {
@@ -60,17 +60,20 @@ exports.addDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void
                 return [4 /*yield*/, doctor_1.insert(doctorInfo)];
             case 1:
                 result = _a.sent();
+                return [4 /*yield*/, next()];
+            case 2:
+                _a.sent();
                 return [2 /*return*/, ctx.body = {
                         code: result ? 0 : 1,
                         message: result ? '添加成功' : '添加失败',
                     }];
-            case 2:
+            case 3:
                 e_1 = _a.sent();
                 return [2 /*return*/, ctx.body = {
                         code: -3,
                         message: '服务错误',
                     }];
-            case 3: return [2 /*return*/];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
@@ -79,7 +82,7 @@ exports.outDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 3, , 4]);
                 doctorInfo = ctx.request.body;
                 if (!doctorInfo.workerId) {
                     return [2 /*return*/, ctx.body = {
@@ -94,17 +97,20 @@ exports.outDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void
                     })];
             case 1:
                 res = _a.sent();
+                return [4 /*yield*/, next()];
+            case 2:
+                _a.sent();
                 return [2 /*return*/, ctx.body = {
                         code: res ? 0 : 1,
                         message: res ? '删除' : '删除失败',
                     }];
-            case 2:
+            case 3:
                 e_2 = _a.sent();
                 return [2 /*return*/, ctx.body = {
                         code: -3,
                         message: '服务错误',
                     }];
-            case 3: return [2 /*return*/];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
