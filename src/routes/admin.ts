@@ -9,6 +9,9 @@ import {
   addDoctor,
   outDoctor,
 } from '../controllers/Admin/doctor';
+import {
+  findAllPatient
+} from '../controllers/Admin/user';
 import {resetInfoStore} from '../store/info';
 
 const router = new Router();
@@ -32,6 +35,8 @@ router.use(async (ctx: any, next) => {
 });
 
 router.get('/department', getDepartmentExpendDoctor); // 获取所有科室,包含医生
+
+router.get('/user', findAllPatient); // 获取患者/分页
 
 router.post('/department', addDepartment); // 添加科室
 

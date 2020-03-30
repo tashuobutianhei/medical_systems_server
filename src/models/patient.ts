@@ -86,3 +86,19 @@ export const update = (updateParams: any, selectParams: any) =>{
   });
 };
 
+export const findAllByKey= (params: {
+  userInfo: any
+  offset: number,
+  limit: number
+}) => {
+  return Patient.findAll({
+    where: params.userInfo,
+    offset: params.offset, limit: params.limit,
+  }).then((info: any) => {
+    return info && info.map((item: { dataValues: any; })=> {
+      return item.dataValues;
+    });
+  });
+};
+
+

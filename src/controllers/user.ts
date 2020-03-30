@@ -19,6 +19,7 @@ import {
   storeUser,
   getUserStore,
   patientInfo, adminInfo, doctorInfo} from '../store/user';
+import {resetInfoStore} from '../store/info';
 
 export const registerPatient = async (ctx: any, next: any) => {
   try {
@@ -273,6 +274,7 @@ export const updateUser = async (ctx:any, next: any) => {
       }, {
         workerId: ctx.state.userInfo._uid,
       });
+      resetInfoStore(); // 更新redis中信息
     }
 
     // 更新用户信息后，保持redis和mysql一致性

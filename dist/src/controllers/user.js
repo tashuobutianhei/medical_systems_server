@@ -60,6 +60,7 @@ var config_1 = require("../config");
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
 var user_1 = require("../store/user");
+var info_1 = require("../store/info");
 exports.registerPatient = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var userInfo, sesult, e_1;
     return __generator(this, function (_a) {
@@ -373,6 +374,7 @@ exports.updateUser = function (ctx, next) { return __awaiter(void 0, void 0, voi
                     })];
             case 6:
                 res = _a.sent();
+                info_1.resetInfoStore(); // 更新redis中信息
                 _a.label = 7;
             case 7: return [4 /*yield*/, getUserInfoFromdb(ctx.state.userInfo)];
             case 8:

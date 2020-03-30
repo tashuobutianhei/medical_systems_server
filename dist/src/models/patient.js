@@ -97,3 +97,13 @@ exports.update = function (updateParams, selectParams) {
         where: __assign({}, selectParams),
     });
 };
+exports.findAllByKey = function (params) {
+    return exports.Patient.findAll({
+        where: params.userInfo,
+        offset: params.offset, limit: params.limit,
+    }).then(function (info) {
+        return info && info.map(function (item) {
+            return item.dataValues;
+        });
+    });
+};
