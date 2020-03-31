@@ -43,7 +43,7 @@ export const storeUser = async (
     await store.client.hmset(uid, {...info});
     await store.client.expire(uid, 259200); // 72小时
   } catch (e) {
-
+    console.log(e);
   }
 };
 

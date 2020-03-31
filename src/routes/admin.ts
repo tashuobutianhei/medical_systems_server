@@ -10,8 +10,11 @@ import {
   outDoctor,
 } from '../controllers/Admin/doctor';
 import {
-  findAllPatient
+  findAllPatient,
 } from '../controllers/Admin/user';
+import {
+  getCommonInfo,
+} from '../controllers/Admin/info';
 import {resetInfoStore} from '../store/info';
 
 const router = new Router();
@@ -45,6 +48,8 @@ router.delete('/department', deleteDeparment); // 删除科室
 router.post('/doctors', addDoctor); // 添加医生
 
 router.delete('/doctors', outDoctor); // 删除医生
+
+router.get('/info', getCommonInfo); // 获取医院信息
 
 router.use(async (ctx, next) => {
   if (ctx.request.method !== 'GET') {

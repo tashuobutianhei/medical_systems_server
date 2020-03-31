@@ -35,61 +35,47 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var koa_router_1 = __importDefault(require("koa-router"));
-var department_1 = require("../controllers/Admin/department");
-var doctor_1 = require("../controllers/Admin/doctor");
-var user_1 = require("../controllers/Admin/user");
-var info_1 = require("../controllers/Admin/info");
-var info_2 = require("../store/info");
-var router = new koa_router_1.default();
-router.prefix('/admin');
-router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var auth;
+var commonInfo_1 = require("../../models/commonInfo");
+var getCommonInfoMethod = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var info, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                auth = false;
-                if (ctx.request.method === 'GET') {
-                    auth = true;
-                }
-                if (!(auth || (ctx.state.userInfo && ctx.state.userInfo.userType == 0))) return [3 /*break*/, 2];
-                return [4 /*yield*/, next()];
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, commonInfo_1.findAllByKey({})];
             case 1:
-                _a.sent();
-                return [3 /*break*/, 3];
-            case 2: return [2 /*return*/, ctx.body = {
-                    code: 401,
-                    message: '无权限',
-                }];
+                info = _a.sent();
+                return [2 /*return*/, info];
+            case 2:
+                e_1 = _a.sent();
+                throw new Error(e_1);
             case 3: return [2 /*return*/];
         }
     });
-}); });
-router.get('/department', department_1.getDepartmentExpendDoctor); // 获取所有科室,包含医生
-router.get('/user', user_1.findAllPatient); // 获取患者/分页
-router.post('/department', department_1.addDepartment); // 添加科室
-router.delete('/department', department_1.deleteDeparment); // 删除科室
-router.post('/doctors', doctor_1.addDoctor); // 添加医生
-router.delete('/doctors', doctor_1.outDoctor); // 删除医生
-router.get('/info', info_1.getCommonInfo); // 获取医院信息
-router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+}); };
+exports.getCommonInfo = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var info, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (ctx.request.method !== 'GET') {
-                    info_2.resetInfoStore();
-                }
-                ;
-                return [4 /*yield*/, next()];
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, getCommonInfoMethod()];
             case 1:
-                _a.sent();
-                return [2 /*return*/];
+                info = _a.sent();
+                ctx.body = {
+                    code: 0,
+                    data: info[0],
+                };
+                return [3 /*break*/, 3];
+            case 2:
+                e_2 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    error: e_2,
+                };
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
-}); });
-// router.post('/admin', addAdmin); // 增加管理员
-exports.default = router;
+}); };

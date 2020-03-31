@@ -63,6 +63,7 @@ exports.storeUser = function (uid, info) { return __awaiter(void 0, void 0, void
                 return [3 /*break*/, 4];
             case 3:
                 e_1 = _a.sent();
+                console.log(e_1);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

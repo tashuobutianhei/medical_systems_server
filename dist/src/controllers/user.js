@@ -194,9 +194,9 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                         }];
                 }
                 return [4 /*yield*/, jsonwebtoken_1.default.verify(token.split(' ')[1], config_1.tokenKey, function (err, info) { return __awaiter(void 0, void 0, void 0, function () {
-                        var userInfo;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        var userInfo, _a;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0:
                                     if (!err) return [3 /*break*/, 1];
                                     if (err.name === 'TokenExpiredError') {
@@ -209,27 +209,35 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                                         code: 1,
                                         message: '服务错误',
                                     };
-                                    return [3 /*break*/, 3];
+                                    return [3 /*break*/, 11];
                                 case 1:
                                     console.log(1111);
                                     return [4 /*yield*/, user_1.getUserStore(info._uid)];
                                 case 2:
-                                    userInfo = _a.sent();
-                                    // switch (info.userType) {
-                                    //   case '0':
-                                    //     userInfo = await await findOneByKeyAdmin('username', info.name,
-                                    //         ['uid', 'username']);
-                                    //     break;
-                                    //   case '1':
-                                    //     userInfo = await findOneByKeyPatient('uid', info._uid,
-                                    //         ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
-                                    //     break;
-                                    //   case '2':
-                                    //     userInfo = await findOneByKeyDoctor('workerId', info._uid,
-                                    //         ['workerId', 'name', 'idcard', 'sex', 'age',
-                                    //           'tel', 'address', 'information', 'position', 'university', 'departmentId', 'avatar']);
-                                    //     break;
-                                    // }
+                                    userInfo = _b.sent();
+                                    if (!!userInfo) return [3 /*break*/, 10];
+                                    _a = info.userType;
+                                    switch (_a) {
+                                        case '0': return [3 /*break*/, 3];
+                                        case '1': return [3 /*break*/, 6];
+                                        case '2': return [3 /*break*/, 8];
+                                    }
+                                    return [3 /*break*/, 10];
+                                case 3: return [4 /*yield*/, manager_1.findOneByKey('username', info.name, ['uid', 'username'])];
+                                case 4: return [4 /*yield*/, _b.sent()];
+                                case 5:
+                                    userInfo = _b.sent();
+                                    return [3 /*break*/, 10];
+                                case 6: return [4 /*yield*/, patient_1.findOneByKey('uid', info._uid, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar'])];
+                                case 7:
+                                    userInfo = _b.sent();
+                                    return [3 /*break*/, 10];
+                                case 8: return [4 /*yield*/, doctor_1.findOneByKey('workerId', info._uid, ['workerId', 'name', 'idcard', 'sex', 'age',
+                                        'tel', 'address', 'information', 'position', 'university', 'departmentId', 'avatar'])];
+                                case 9:
+                                    userInfo = _b.sent();
+                                    return [3 /*break*/, 10];
+                                case 10:
                                     if (userInfo) {
                                         userInfo.type = info.userType - 0;
                                         ctx.body = {
@@ -246,8 +254,8 @@ exports.getUser = function (ctx, next) { return __awaiter(void 0, void 0, void 0
                                             message: '无权限',
                                         };
                                     }
-                                    _a.label = 3;
-                                case 3: return [2 /*return*/];
+                                    _b.label = 11;
+                                case 11: return [2 /*return*/];
                             }
                         });
                     }); })];

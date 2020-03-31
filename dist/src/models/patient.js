@@ -52,6 +52,7 @@ exports.Patient = index_1.sequelize.define('Patient', {
     },
     age: {
         type: index_1.Sequelize.INTEGER,
+        defaultValue: 0,
     },
     tel: {
         type: index_1.Sequelize.STRING(11),
@@ -59,9 +60,11 @@ exports.Patient = index_1.sequelize.define('Patient', {
     },
     address: {
         type: index_1.Sequelize.STRING(200),
+        defaultValue: '',
     },
     avatar: {
         type: index_1.Sequelize.STRING(255),
+        defaultValue: '',
     },
 }, {
     // 参数

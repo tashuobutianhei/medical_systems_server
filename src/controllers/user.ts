@@ -150,21 +150,24 @@ export const getUser = async (ctx: any, next: any) => {
         } else {
           console.log(1111);
           let userInfo: any = await getUserStore(info._uid); // 使用redis缓存用户信息
-          // switch (info.userType) {
-          //   case '0':
-          //     userInfo = await await findOneByKeyAdmin('username', info.name,
-          //         ['uid', 'username']);
-          //     break;
-          //   case '1':
-          //     userInfo = await findOneByKeyPatient('uid', info._uid,
-          //         ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
-          //     break;
-          //   case '2':
-          //     userInfo = await findOneByKeyDoctor('workerId', info._uid,
-          //         ['workerId', 'name', 'idcard', 'sex', 'age',
-          //           'tel', 'address', 'information', 'position', 'university', 'departmentId', 'avatar']);
-          //     break;
-          // }
+
+          if (!userInfo) { // 防止redis出错
+            switch (info.userType) {
+              case '0':
+                userInfo = await await findOneByKeyAdmin('username', info.name,
+                    ['uid', 'username']);
+                break;
+              case '1':
+                userInfo = await findOneByKeyPatient('uid', info._uid,
+                    ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
+                break;
+              case '2':
+                userInfo = await findOneByKeyDoctor('workerId', info._uid,
+                    ['workerId', 'name', 'idcard', 'sex', 'age',
+                      'tel', 'address', 'information', 'position', 'university', 'departmentId', 'avatar']);
+                break;
+            }
+          }
           if (userInfo) {
             userInfo.type = info.userType - 0;
             ctx.body = {

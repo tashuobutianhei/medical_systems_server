@@ -34,6 +34,7 @@ export const Patient = sequelize.define('Patient', {
   },
   age: {
     type: Sequelize.INTEGER,
+    defaultValue: 0,
   },
   tel: {
     type: Sequelize.STRING(11),
@@ -41,9 +42,11 @@ export const Patient = sequelize.define('Patient', {
   },
   address: {
     type: Sequelize.STRING(200),
+    defaultValue: '',
   },
   avatar: {
     type: Sequelize.STRING(255),
+    defaultValue: '',
   },
 }, {
   // 参数

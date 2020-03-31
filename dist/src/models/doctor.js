@@ -78,9 +78,11 @@ exports.Doctors = index_1.sequelize.define('Doctors', {
     },
     status: {
         type: index_1.Sequelize.INTEGER,
+        defaultValue: 0,
     },
     avatar: {
         type: index_1.Sequelize.STRING(255),
+        defaultValue: '',
     },
 }, {
     // 参数
