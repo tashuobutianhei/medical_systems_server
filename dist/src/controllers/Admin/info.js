@@ -172,7 +172,6 @@ exports.update = function (ctx, next) { return __awaiter(void 0, void 0, void 0,
                 return [3 /*break*/, 7];
             case 6:
                 e_4 = _b.sent();
-                console.log(e_4);
                 ctx.body = {
                     code: -1,
                     error: e_4,

@@ -88,7 +88,6 @@ export const update = async (ctx: any, next: any) => {
     };
     await next();
   } catch (e) {
-    console.log(e)
     ctx.body = {
       code: -1,
       error: e,

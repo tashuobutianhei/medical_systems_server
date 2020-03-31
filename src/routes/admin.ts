@@ -14,8 +14,12 @@ import {
 } from '../controllers/Admin/user';
 import {
   getCommonInfo,
-  update as updateCommonInfo
+  update as updateCommonInfo,
 } from '../controllers/Admin/info';
+import {
+  addExamination,
+  deleteExamination,
+} from '../controllers/examination';
 import {resetInfoStore} from '../store/info';
 
 const router = new Router();
@@ -53,6 +57,10 @@ router.delete('/doctors', outDoctor); // 删除医生
 router.get('/info', getCommonInfo); // 获取医院信息
 
 router.post('/info', updateCommonInfo);
+
+router.post('/exam', addExamination);
+
+router.delete('/exam', deleteExamination);
 
 router.use(async (ctx, next) => {
   if (ctx.request.method !== 'GET') {

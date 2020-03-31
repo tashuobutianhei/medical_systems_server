@@ -70,3 +70,64 @@ exports.getExamination = function (ctx) { return __awaiter(void 0, void 0, void 
         }
     });
 }); };
+exports.addExamination = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var body, res, e_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                body = ctx.request.body;
+                console.log(body);
+                return [4 /*yield*/, examination_1.inset(body)];
+            case 1:
+                res = _a.sent();
+                ctx.body = {
+                    code: res ? 0 : -1,
+                    data: res,
+                };
+                return [4 /*yield*/, next()];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                e_2 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    data: e_2,
+                };
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.deleteExamination = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var body, res, e_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                body = ctx.request.body;
+                return [4 /*yield*/, examination_1.destroy({
+                        examinationId: body.examinationId,
+                    })];
+            case 1:
+                res = _a.sent();
+                ctx.body = {
+                    code: res ? 0 : -1,
+                    data: res,
+                };
+                return [4 /*yield*/, next()];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                e_3 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    data: e_3,
+                };
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };

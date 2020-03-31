@@ -23,23 +23,14 @@ export const Examination = sequelize.define('Examination', {
   freezeTableName: true,
 });
 
-// export const createTableDepartment = function() {
-//   Examination.sync({force: true}).then(() => {
-//     console.log('创建成功');
-//   });
-// };
-
-// export const inset = async function(department: any) {
-//   const result = await Examination.findAndCountAll();
-
-//   const departmentId = ++result.count;
-//   return Examination.create({...department, departmentId: departmentId}).then((res: { id: any; })=> {
-//     return true;
-//   }).catch((e: any) => {
-//     console.log(e);
-//     return false;
-//   });
-// };
+export const inset = async function(info: any) {
+  return Examination.create({...info}).then((res: { id: any; })=> {
+    return true;
+  }).catch((e: any) => {
+    console.log(e);
+    return false;
+  });
+};
 
 
 export const findAllByKey= (params: any) => {
@@ -47,5 +38,14 @@ export const findAllByKey= (params: any) => {
     return info && info.map((item: { dataValues: any; })=> {
       return item.dataValues;
     });
+  });
+};
+
+
+export const destroy = (Params: any) =>{
+  return Examination.destroy({
+    where: {
+      ...Params,
+    },
   });
 };
