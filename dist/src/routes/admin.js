@@ -76,6 +76,7 @@ router.delete('/department', department_1.deleteDeparment); // 删除科室
 router.post('/doctors', doctor_1.addDoctor); // 添加医生
 router.delete('/doctors', doctor_1.outDoctor); // 删除医生
 router.get('/info', info_1.getCommonInfo); // 获取医院信息
+router.post('/info', info_1.update);
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {

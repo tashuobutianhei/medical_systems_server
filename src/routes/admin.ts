@@ -14,6 +14,7 @@ import {
 } from '../controllers/Admin/user';
 import {
   getCommonInfo,
+  update as updateCommonInfo
 } from '../controllers/Admin/info';
 import {resetInfoStore} from '../store/info';
 
@@ -50,6 +51,8 @@ router.post('/doctors', addDoctor); // 添加医生
 router.delete('/doctors', outDoctor); // 删除医生
 
 router.get('/info', getCommonInfo); // 获取医院信息
+
+router.post('/info', updateCommonInfo);
 
 router.use(async (ctx, next) => {
   if (ctx.request.method !== 'GET') {

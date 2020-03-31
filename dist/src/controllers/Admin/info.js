@@ -35,8 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var commonInfo_1 = require("../../models/commonInfo");
+var fs_1 = __importDefault(require("fs"));
+var path_1 = __importDefault(require("path"));
 var getCommonInfoMethod = function () { return __awaiter(void 0, void 0, void 0, function () {
     var info, e_1;
     return __generator(this, function (_a) {
@@ -76,6 +81,104 @@ exports.getCommonInfo = function (ctx) { return __awaiter(void 0, void 0, void 0
                 };
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
+        }
+    });
+}); };
+var upFile = function (file) { return __awaiter(void 0, void 0, void 0, function () {
+    var filename, base64, dataBuffer;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                filename = path_1.default.resolve(__dirname, '../../../public') + ("/Common/carousel/" + file.name);
+                base64 = file.thumbUrl.replace(/^data:image\/\w+;base64,/, '');
+                dataBuffer = Buffer.from(base64, 'base64');
+                return [4 /*yield*/, fs_1.default.writeFileSync(filename, dataBuffer)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/, "/Common/carousel/" + file.name];
+        }
+    });
+}); };
+var updateCarousel = function (body) { return __awaiter(void 0, void 0, void 0, function () {
+    var data, storeMap_1, storeFile_1, e_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 4, , 5]);
+                data = JSON.parse(body.data);
+                storeMap_1 = [];
+                storeFile_1 = [];
+                data.forEach(function (item) {
+                    if (/^store-*/.test(item.uid)) {
+                        storeMap_1.push(item.name); // 已经存储图片了，无需存储
+                    }
+                    else {
+                        storeFile_1.push(item);
+                    }
+                });
+                if (!(storeFile_1.length > 0)) return [3 /*break*/, 2];
+                return [4 /*yield*/, Promise.all(storeFile_1.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
+                        var fileUrl;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, upFile(item)];
+                                case 1:
+                                    fileUrl = _a.sent();
+                                    storeMap_1.push(fileUrl);
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); }))];
+            case 1:
+                _a.sent();
+                _a.label = 2;
+            case 2: return [4 /*yield*/, commonInfo_1.update({
+                    carousel: storeMap_1.join(','),
+                }, { id: 1 })];
+            case 3:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 4:
+                e_3 = _a.sent();
+                throw new Error(e_3);
+            case 5: return [2 /*return*/];
+        }
+    });
+}); };
+exports.update = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var body, _a, e_4;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 6, , 7]);
+                body = ctx.request.body;
+                _a = body.type;
+                switch (_a) {
+                    case 'carousel': return [3 /*break*/, 1];
+                }
+                return [3 /*break*/, 3];
+            case 1: return [4 /*yield*/, updateCarousel(body)];
+            case 2:
+                _b.sent();
+                return [3 /*break*/, 4];
+            case 3: return [3 /*break*/, 4];
+            case 4:
+                ctx.body = {
+                    code: 0,
+                };
+                return [4 /*yield*/, next()];
+            case 5:
+                _b.sent();
+                return [3 /*break*/, 7];
+            case 6:
+                e_4 = _b.sent();
+                console.log(e_4);
+                ctx.body = {
+                    code: -1,
+                    error: e_4,
+                };
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); };
