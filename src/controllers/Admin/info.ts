@@ -79,7 +79,16 @@ export const update = async (ctx: any, next: any) => {
       case 'carousel':
         await updateCarousel(body);
         break;
-
+      case 'order':
+        await updateCommonInfo({
+          order: body.data,
+        }, {id: 1});
+        break;
+      case 'doctor':
+        await updateCommonInfo({
+          doctor: body.data,
+        }, {id: 1});
+        break;
       default:
         break;
     }

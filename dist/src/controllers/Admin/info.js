@@ -150,34 +150,48 @@ exports.update = function (ctx, next) { return __awaiter(void 0, void 0, void 0,
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 6, , 7]);
+                _b.trys.push([0, 10, , 11]);
                 body = ctx.request.body;
                 _a = body.type;
                 switch (_a) {
                     case 'carousel': return [3 /*break*/, 1];
+                    case 'order': return [3 /*break*/, 3];
+                    case 'doctor': return [3 /*break*/, 5];
                 }
-                return [3 /*break*/, 3];
+                return [3 /*break*/, 7];
             case 1: return [4 /*yield*/, updateCarousel(body)];
             case 2:
                 _b.sent();
-                return [3 /*break*/, 4];
-            case 3: return [3 /*break*/, 4];
+                return [3 /*break*/, 8];
+            case 3: return [4 /*yield*/, commonInfo_1.update({
+                    order: body.data,
+                }, { id: 1 })];
             case 4:
+                _b.sent();
+                return [3 /*break*/, 8];
+            case 5: return [4 /*yield*/, commonInfo_1.update({
+                    doctor: body.data,
+                }, { id: 1 })];
+            case 6:
+                _b.sent();
+                return [3 /*break*/, 8];
+            case 7: return [3 /*break*/, 8];
+            case 8:
                 ctx.body = {
                     code: 0,
                 };
                 return [4 /*yield*/, next()];
-            case 5:
+            case 9:
                 _b.sent();
-                return [3 /*break*/, 7];
-            case 6:
+                return [3 /*break*/, 11];
+            case 10:
                 e_4 = _b.sent();
                 ctx.body = {
                     code: -1,
                     error: e_4,
                 };
-                return [3 /*break*/, 7];
-            case 7: return [2 /*return*/];
+                return [3 /*break*/, 11];
+            case 11: return [2 /*return*/];
         }
     });
 }); };
