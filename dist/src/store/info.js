@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("./index");
 var department_1 = require("../controllers/Admin/department");
 var examination_1 = require("../controllers/examination");
+var info_1 = require("../controllers/Admin/info");
 exports.storeInfo = function (info) { return __awaiter(void 0, void 0, void 0, function () {
     var e_1;
     return __generator(this, function (_a) {
@@ -73,7 +74,7 @@ exports.getInfoStore = function () {
     });
 };
 exports.resetInfoStore = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var result, examiation;
+    var result, examiation, commonInfo;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, department_1.getHosptalInfo()];
@@ -82,9 +83,13 @@ exports.resetInfoStore = function () { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, examination_1.getExaminationMethod()];
             case 2:
                 examiation = _a.sent();
+                return [4 /*yield*/, info_1.getCommonInfoMethod()];
+            case 3:
+                commonInfo = _a.sent();
                 exports.storeInfo({
                     departmentInfoList: result,
                     examiation: examiation,
+                    commonInfo: commonInfo[0],
                 });
                 return [2 /*return*/, new Promise(function (res, rej) {
                         index_1.store.client.get('commonInfo', function (err, data) {

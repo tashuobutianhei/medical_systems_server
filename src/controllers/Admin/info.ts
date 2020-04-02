@@ -5,7 +5,7 @@ import {
 import fs from 'fs';
 import path from 'path';
 
-const getCommonInfoMethod = async () => {
+export const getCommonInfoMethod = async () => {
   try {
     const info = await findAllByKey({});
     return info;

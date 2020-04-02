@@ -2,6 +2,8 @@ import {store} from './index';
 
 import {getHosptalInfo} from '../controllers/Admin/department';
 import {getExaminationMethod} from '../controllers/examination';
+import {getCommonInfoMethod} from '../controllers/Admin/info';
+
 
 export const storeInfo = async (info:any) => {
   try {
@@ -27,10 +29,12 @@ export const getInfoStore = () => {
 export const resetInfoStore = async () => {
   const result = await getHosptalInfo();
   const examiation = await getExaminationMethod();
+  const commonInfo = await getCommonInfoMethod();
 
   storeInfo({
     departmentInfoList: result,
     examiation: examiation,
+    commonInfo: commonInfo[0],
   });
 
   return new Promise((res: any, rej: any) => {

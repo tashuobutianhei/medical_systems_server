@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var commonInfo_1 = require("../../models/commonInfo");
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
-var getCommonInfoMethod = function () { return __awaiter(void 0, void 0, void 0, function () {
+exports.getCommonInfoMethod = function () { return __awaiter(void 0, void 0, void 0, function () {
     var info, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -65,7 +65,7 @@ exports.getCommonInfo = function (ctx) { return __awaiter(void 0, void 0, void 0
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, getCommonInfoMethod()];
+                return [4 /*yield*/, exports.getCommonInfoMethod()];
             case 1:
                 info = _a.sent();
                 ctx.body = {

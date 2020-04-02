@@ -5,6 +5,7 @@ import {
   GraphQLInt} from 'graphql';
 import {getHosptalInfo} from '../controllers/Admin/department';
 import {getExaminationMethod} from '../controllers/examination';
+import {getCommonInfoMethod} from '../controllers/Admin/info';
 
 import {getInfoStore, storeInfo} from '../store/info';
 
@@ -56,6 +57,19 @@ const departmentType = new GraphQLObjectType({
   },
 });
 
+const commonInfoType = new GraphQLObjectType({
+  name: 'commonInfo',
+  description: '医院信息',
+  fields() {
+    return {
+      id: {type: GraphQLInt},
+      carousel: {type: GraphQLString},
+      order: {type: GraphQLString},
+      doctor: {type: GraphQLString},
+    };
+  },
+});
+
 
 // 定义单个文章对象
 const Info = new GraphQLObjectType({
@@ -65,6 +79,7 @@ const Info = new GraphQLObjectType({
     return {
       departmentInfoList: {type: new GraphQLList(departmentType)},
       examiation: {type: new GraphQLList(examiationType)},
+      commonInfo: {type: commonInfoType},
     };
   },
 });
@@ -86,13 +101,16 @@ const hosipatalInfo = {
     } else {
       const result = await getHosptalInfo(params.departmentId);
       const examiation = await getExaminationMethod();
+      const commonInfo = await getCommonInfoMethod();
       storeInfo({
         departmentInfoList: result,
         examiation: examiation,
+        commonInfo: commonInfo[0],
       });
       return {
         departmentInfoList: result,
         examiation: examiation,
+        commonInfo: commonInfo[0],
       };
     }
   },
