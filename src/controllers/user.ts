@@ -39,7 +39,7 @@ export const registerPatient = async (ctx: any, next: any) => {
 
       if (sesult) {
         ctx.body = {
-          code: 1,
+          code: 0,
           message: '成功',
         };
       } else {
@@ -62,42 +62,55 @@ export const registerPatient = async (ctx: any, next: any) => {
 
 export const login= async (ctx: any, next: any) => {
   try {
-    const userInfo = ctx.request.body;
+    let {userType, loginType} = ctx.request.body;
+    const loginInfo = JSON.parse(ctx.request.body.userInfo);
+    loginType = parseInt(loginType);
     let info: any;
-    if (!userInfo.username || !userInfo.password || !userInfo.userType) {
-      return ctx.body = {
-        code: -2,
-        message: '参数有错误',
-      };
-    }
-    switch (userInfo.userType) {
+    if (loginType === 0) {
+      const captcha = ctx.cookies.get('captcha');
+      if (captcha !== loginInfo.captcha) {
+        return ctx.body = {
+          code: -1,
+          message: '验证码错误',
+        };
+      }
+    } else if (loginType === 1) {
+
+    };
+
+    switch (userType) {
       case '1':
-        info = await findOneByKeyPatient('username', userInfo.username,
-            ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
+        if (loginType === 0) {
+          info = await findOneByKeyPatient('username', loginInfo.username,
+          ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
+        } else if (loginType === 1) {
+          info = await findOneByKeyPatient('tel', loginInfo.tel,
+          ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
+        }
         break;
       case '2':
-        info = await findOneByKeyDoctor('workerId', userInfo.username,
+        info = await findOneByKeyDoctor('workerId', loginInfo.username,
             ['workerId', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address',
               'information', 'position', 'university', 'departmentId', 'avatar']);
         break;
       case '0':
-        info = await findOneByKeyAdmin('username', userInfo.username,
+        info = await findOneByKeyAdmin('username', loginInfo.username,
             ['uid', 'password']);
         break;
     }
-    const comparesResult = compare(userInfo.password, info.password);
+    const comparesResult = compare(loginInfo.password, info.password);
 
     if (comparesResult) {
       const id = info.uid || info.workerId;
       // 验证成功，登陆
       const token = jwt.sign({
-        name: userInfo.username,
+        name: loginInfo.username,
         _uid: id,
-        userType: userInfo.userType,
+        userType: userType,
       }, tokenKey, {expiresIn: '72h'});
 
       delete info.password;
-      info.type = userInfo.userType;
+      info.type = userType;
 
       storeUser(id, info);
 
@@ -118,7 +131,8 @@ export const login= async (ctx: any, next: any) => {
   } catch (e) {
     ctx.body = {
       code: -3,
-      message: '用户名不存在',
+      message: '登陆失败',
+      date: e,
     };
   }
 };

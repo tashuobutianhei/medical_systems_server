@@ -110,6 +110,7 @@ app.use(koa_jwt_1.default({
 }).unless({
     path: [
         // /\/*/,
+        /\/users\/*/,
         /\/users\/login/,
         /\/users\/register/,
         /\/users\/getUser/,

@@ -68,6 +68,7 @@ app.use(koajwt({
 }).unless({ // 未登陆可访问
   path: [
     // /\/*/,
+    /\/users\/*/,
     /\/users\/login/,
     /\/users\/register/,
     /\/users\/getUser/,

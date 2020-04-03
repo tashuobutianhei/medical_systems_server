@@ -1,5 +1,6 @@
 import Router from 'koa-router';
 import {registerPatient, login, getUser, updateUser} from '../controllers/user';
+import {captcha, checkUserInfo} from '../controllers/tool';
 import {createTable} from '../models/index';
 
 const router = new Router();
@@ -23,5 +24,9 @@ router.get('/getUser', getUser);
 router.get('/create', createTable);
 
 router.put('/', updateUser);
+
+router.get('/captcha', captcha);
+
+router.get('/checkUserInfo', checkUserInfo);
 
 export default router;

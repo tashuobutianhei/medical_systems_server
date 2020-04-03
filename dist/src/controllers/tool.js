@@ -35,32 +35,54 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var koa_router_1 = __importDefault(require("koa-router"));
-var user_1 = require("../controllers/user");
-var tool_1 = require("../controllers/tool");
-var index_1 = require("../models/index");
-var router = new koa_router_1.default();
-router.prefix('/users');
-router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+var patient_1 = require("../models/patient");
+var captchapng = require('captchapng');
+exports.captcha = function (ctx) {
+    try {
+        var cap = Math.floor(Math.random() * 9000 + 1000);
+        var p = new captchapng(80, 30, cap);
+        p.color(0, 0, 0, 0);
+        p.color(80, 80, 80, 255);
+        var base64 = p.getBase64();
+        ctx.cookies.set('captcha', cap, { maxAge: 360000, httpOnly: true });
+        ctx.status = 200;
+        // ctx.set({'Content-Type' : 'image/png');
+        ctx.body = {
+            code: 0,
+            cap: 'data:image/png;base64,' + base64,
+        };
+    }
+    catch (e) {
+        ctx.body = {
+            code: -1,
+            data: e,
+        };
+    }
+};
+exports.checkUserInfo = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var query, info, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, next()];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                query = ctx.query;
+                return [4 /*yield*/, patient_1.findOneByKey(query.key, query.value, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar'])];
+            case 1:
+                info = _a.sent();
+                ctx.body = {
+                    code: 0,
+                    data: info,
+                };
+                return [3 /*break*/, 3];
+            case 2:
+                e_1 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    error: e_1,
+                };
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
-}); });
-router.get('/', function (ctx, next) {
-    ctx.body = 'this is a users response!';
-});
-router.post('/register', user_1.registerPatient);
-router.post('/login', user_1.login);
-router.get('/getUser', user_1.getUser);
-router.get('/create', index_1.createTable);
-router.put('/', user_1.updateUser);
-router.get('/captcha', tool_1.captcha);
-router.get('/checkUserInfo', tool_1.checkUserInfo);
-exports.default = router;
+}); };
