@@ -63,4 +63,5 @@ router.get('/create', index_1.createTable);
 router.put('/', user_1.updateUser);
 router.get('/captcha', tool_1.captcha);
 router.get('/checkUserInfo', tool_1.checkUserInfo);
+router.get('/phone', tool_1.phone);
 exports.default = router;

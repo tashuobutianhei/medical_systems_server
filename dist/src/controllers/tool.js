@@ -35,9 +35,63 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var patient_1 = require("../models/patient");
+var axios_1 = __importDefault(require("axios"));
+var bcrypt_1 = require("../utils/bcrypt");
+var urlencode_1 = __importDefault(require("urlencode"));
 var captchapng = require('captchapng');
+exports.phone = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var query, code, response, e_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                query = ctx.query;
+                code = Math.floor(Math.random() * 9000 + 1000) + '';
+                console.log(code);
+                return [4 /*yield*/, axios_1.default({
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        url: 'http://api01.monyun.cn:7901/sms/v2/std/single_send',
+                        data: {
+                            userid: 'E10CR1',
+                            pwd: 'w1dF98',
+                            apikey: '8074e341df6d201b15f71e72492845ff',
+                            mobile: query.mobile,
+                            content: urlencode_1.default("\u9A8C\u8BC1\u7801\uFF1A" + code + "\uFF0C\u6253\u6B7B\u90FD\u4E0D\u8981\u544A\u8BC9\u522B\u4EBA\u54E6\uFF01", 'gbk'),
+                        },
+                    })];
+            case 1:
+                response = _a.sent();
+                console.log(response.data);
+                if (response.data.result === 0) {
+                    ctx.cookies.set(query.type === 'login' ? 'loginPhoneCaptcha' : 'regPhoneCaptcha', bcrypt_1.encode(code), { maxAge: 360000, httpOnly: true });
+                    return [2 /*return*/, ctx.body = {
+                            code: 0,
+                        }];
+                }
+                else {
+                    ctx.body = {
+                        code: -1,
+                        error: '验证服务错误',
+                    };
+                }
+                return [3 /*break*/, 3];
+            case 2:
+                e_1 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    error: e_1,
+                };
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
 exports.captcha = function (ctx) {
     try {
         var cap = Math.floor(Math.random() * 9000 + 1000);
@@ -61,7 +115,7 @@ exports.captcha = function (ctx) {
     }
 };
 exports.checkUserInfo = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var query, info, e_1;
+    var query, info, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -76,10 +130,10 @@ exports.checkUserInfo = function (ctx) { return __awaiter(void 0, void 0, void 0
                 };
                 return [3 /*break*/, 3];
             case 2:
-                e_1 = _a.sent();
+                e_2 = _a.sent();
                 ctx.body = {
                     code: -1,
-                    error: e_1,
+                    error: e_2,
                 };
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];

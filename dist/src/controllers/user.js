@@ -62,17 +62,25 @@ var path_1 = __importDefault(require("path"));
 var user_1 = require("../store/user");
 var info_1 = require("../store/info");
 exports.registerPatient = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var userInfo, sesult, e_1;
+    var userInfo, phoneCaptcha, sesult, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 4, , 5]);
                 userInfo = ctx.request.body;
                 if (!(typeof userInfo === 'object' && Object.keys(userInfo).length > 0)) return [3 /*break*/, 2];
+                phoneCaptcha = ctx.cookies.get('regPhoneCaptcha');
+                if (!bcrypt_1.compare(userInfo.phoneCaptcha, phoneCaptcha)) {
+                    return [2 /*return*/, ctx.body = {
+                            code: -1,
+                            message: '手机验证码错误',
+                        }];
+                }
                 // 密码加密
                 userInfo.password = bcrypt_1.encode(userInfo.password);
                 // 生成随机 uid TODO:uid从数据库校验
                 userInfo.uid = random_string_1.default({ length: 12, numbers: true });
+                delete userInfo.phoneCaptcha;
                 return [4 /*yield*/, patient_1.insert(userInfo)
                         .catch(function (e) {
                         console.log(e);
@@ -101,7 +109,7 @@ exports.registerPatient = function (ctx, next) { return __awaiter(void 0, void 0
                 e_1 = _a.sent();
                 ctx.body = {
                     code: -1,
-                    message: e_1,
+                    message: '服务错误',
                 };
                 return [3 /*break*/, 5];
             case 5: return [2 /*return*/];
@@ -109,7 +117,7 @@ exports.registerPatient = function (ctx, next) { return __awaiter(void 0, void 0
     });
 }); };
 exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, userType, loginType, loginInfo, info, captcha, _b, comparesResult, id, token, e_2;
+    var _a, userType, loginType, loginInfo, info, captcha, phoneCaptcha, _b, comparesResult, id, token, e_2;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
@@ -128,6 +136,13 @@ exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, 
                     }
                 }
                 else if (loginType === 1) {
+                    phoneCaptcha = ctx.cookies.get('loginPhoneCaptcha');
+                    if (!bcrypt_1.compare(loginInfo.loginPhoneCaptcha, phoneCaptcha)) {
+                        return [2 /*return*/, ctx.body = {
+                                code: -1,
+                                message: '手机验证码错误',
+                            }];
+                    }
                 }
                 ;
                 _b = userType;
@@ -160,7 +175,14 @@ exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, 
                 info = _c.sent();
                 return [3 /*break*/, 10];
             case 10:
-                comparesResult = bcrypt_1.compare(loginInfo.password, info.password);
+                comparesResult = false;
+                // 两种登陆方式，电话验证码和密码
+                if (loginType === 1) {
+                    comparesResult = true;
+                }
+                else if (loginType === 0) {
+                    comparesResult = bcrypt_1.compare(loginInfo.password, info.password);
+                }
                 if (comparesResult) {
                     id = info.uid || info.workerId;
                     token = jsonwebtoken_1.default.sign({

@@ -26,10 +26,20 @@ export const registerPatient = async (ctx: any, next: any) => {
     const userInfo = ctx.request.body;
     // 传参校验
     if (typeof userInfo === 'object' && Object.keys(userInfo).length > 0) {
+      const phoneCaptcha = ctx.cookies.get('regPhoneCaptcha');
+      if (!compare(userInfo.phoneCaptcha, phoneCaptcha)) {
+        return ctx.body = {
+          code: -1,
+          message: '手机验证码错误',
+        };
+      }
+
       // 密码加密
       userInfo.password = encode(userInfo.password);
       // 生成随机 uid TODO:uid从数据库校验
       userInfo.uid = randomString({length: 12, numbers: true});
+
+      delete userInfo.phoneCaptcha;
       // 插入
       const sesult = await insertPatient(userInfo)
           .catch((e:any) => {
@@ -54,7 +64,7 @@ export const registerPatient = async (ctx: any, next: any) => {
   } catch (e) {
     ctx.body = {
       code: -1,
-      message: e,
+      message: '服务错误',
     };
   }
 };
@@ -66,7 +76,9 @@ export const login= async (ctx: any, next: any) => {
     const loginInfo = JSON.parse(ctx.request.body.userInfo);
     loginType = parseInt(loginType);
     let info: any;
+
     if (loginType === 0) {
+      // 验证码+密码登陆
       const captcha = ctx.cookies.get('captcha');
       if (captcha !== loginInfo.captcha) {
         return ctx.body = {
@@ -75,17 +87,22 @@ export const login= async (ctx: any, next: any) => {
         };
       }
     } else if (loginType === 1) {
-
+      const phoneCaptcha = ctx.cookies.get('loginPhoneCaptcha');
+      if (!compare(loginInfo.loginPhoneCaptcha, phoneCaptcha)) {
+        return ctx.body = {
+          code: -1,
+          message: '手机验证码错误',
+        };
+      }
     };
-
     switch (userType) {
       case '1':
         if (loginType === 0) {
           info = await findOneByKeyPatient('username', loginInfo.username,
-          ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
+              ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
         } else if (loginType === 1) {
           info = await findOneByKeyPatient('tel', loginInfo.tel,
-          ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
+              ['username', 'uid', 'name', 'password', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar']);
         }
         break;
       case '2':
@@ -98,7 +115,13 @@ export const login= async (ctx: any, next: any) => {
             ['uid', 'password']);
         break;
     }
-    const comparesResult = compare(loginInfo.password, info.password);
+    let comparesResult = false;
+    // 两种登陆方式，电话验证码和密码
+    if (loginType === 1) {
+      comparesResult = true;
+    } else if (loginType === 0) {
+      comparesResult = compare(loginInfo.password, info.password);
+    }
 
     if (comparesResult) {
       const id = info.uid || info.workerId;
