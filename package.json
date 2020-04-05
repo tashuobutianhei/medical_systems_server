@@ -64,11 +64,13 @@
   },
   "devDependencies": {
     "@types/koa-jwt": "^3.3.0",
+    "@types/koa-log4": "^2.3.1",
     "@typescript-eslint/eslint-plugin": "^2.20.0",
     "@typescript-eslint/parser": "^2.20.0",
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
     "koa-jwt": "^3.6.0",
+    "koa-log4": "^2.3.2",
     "nodemon": "^1.19.1"
   }
 }

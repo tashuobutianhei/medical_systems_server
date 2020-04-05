@@ -50,6 +50,7 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var path_1 = __importDefault(require("path"));
 // 没有声明文件
 // const { ApolloServer, gql } = require('apollo-server-koa');
+var logger_1 = require("./logger");
 // import koaBody from 'koa-body';
 // route路由
 var index_1 = __importDefault(require("./routes/index"));
@@ -58,6 +59,8 @@ var index_3 = require("./models/index");
 var config_1 = require("./config");
 var app = new koa_1.default();
 var koaBody = require('koa-body');
+// 记录访问日志
+app.use(logger_1.accessLogger());
 // 引入grahql
 index_2.graphql.applyMiddleware({ app: app });
 // 中间件
@@ -175,5 +178,6 @@ app.use(index_1.default.routes()).use(index_1.default.allowedMethods());
 // error-handling
 app.on('error', function (err, ctx) {
     console.error('server error', err, ctx);
+    logger_1.logger.error(err);
 });
 module.exports = app;

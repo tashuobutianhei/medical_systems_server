@@ -11,6 +11,7 @@ import path from 'path';
 // 没有声明文件
 // const { ApolloServer, gql } = require('apollo-server-koa');
 
+import {logger as log4, accessLogger} from './logger';
 // import koaBody from 'koa-body';
 
 // route路由
@@ -23,6 +24,8 @@ import {tokenKey} from './config';
 const app = new Koa();
 const koaBody = require('koa-body');
 
+// 记录访问日志
+app.use(accessLogger());
 // 引入grahql
 graphql.applyMiddleware({app});
 // 中间件
@@ -115,6 +118,7 @@ app.use(index.routes()).use(index.allowedMethods());
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx);
+  log4.error(err);
 });
 
 module.exports = app;
