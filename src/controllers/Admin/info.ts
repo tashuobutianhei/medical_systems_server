@@ -1,7 +1,8 @@
 import {
   findAllByKey,
-  update as updateCommonInfo
+  update as updateCommonInfo,
 } from '../../models/commonInfo';
+
 import fs from 'fs';
 import path from 'path';
 
@@ -64,7 +65,6 @@ const updateCarousel = async (body: {
     await updateCommonInfo({
       carousel: storeMap.join(','),
     }, {id: 1});
-
   } catch (e) {
     throw new Error(e);
   }

@@ -20,6 +20,12 @@ import {
   addExamination,
   deleteExamination,
 } from '../controllers/examination';
+import {
+  insertOfArticle,
+  deleteOfArticle,
+  updateOfArticle,
+  findOfArticle,
+} from '../controllers/Admin/article';
 import {resetInfoStore} from '../store/info';
 
 const router = new Router();
@@ -61,6 +67,13 @@ router.post('/info', updateCommonInfo);
 router.post('/exam', addExamination);
 
 router.delete('/exam', deleteExamination);
+
+// 文章系统，增删改查
+router.get('/article', findOfArticle);
+router.post('/article', insertOfArticle);
+router.put('/article', updateOfArticle);
+router.delete('/article', deleteOfArticle);
+
 
 router.use(async (ctx, next) => {
   if (ctx.request.method !== 'GET') {
