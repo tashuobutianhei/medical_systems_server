@@ -78,7 +78,7 @@ export const findOrder = async (ctx: any) => {
 export const Order = async (ctx: any) => {
   try {
     const params = ctx.request.body;
-    if (ctx.state.user.userType !== 1) {
+    if (ctx.state.userInfo.userType !== 1) {
       ctx.body = {
         code: 402,
         message: '用户身份错误',
@@ -103,7 +103,7 @@ export const Order = async (ctx: any) => {
       };
     }
 
-    const uid = ctx.state.user._uid;
+    const uid = ctx.state.userInfo._uid;
     const caseId = randomString({length: 12, numbers: true});
 
     // 生成病例

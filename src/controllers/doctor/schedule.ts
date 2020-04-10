@@ -81,7 +81,7 @@ export const deleteSchedule = async (ctx: any) => {
 
     const res = update({
       doctors: midArray.length > 0 ? midArray.join(',') : null,
-      editer: ctx.state.user._uid,
+      editer: ctx.state.userInfo._uid,
     }, {
       wokrId: params.wokrId,
     });
@@ -123,7 +123,7 @@ export const addSchedule = async (ctx: any) => {
      params.workerId : findResult.doctors + `,${params.workerId}`;
     const res = update({
       doctors: Array.from(new Set(newDoctors.split(','))).join(','),
-      editer: ctx.state.user._uid,
+      editer: ctx.state.userInfo._uid,
     }, {
       wokrId: params.wokrId,
     });

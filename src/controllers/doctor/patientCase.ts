@@ -138,7 +138,7 @@ export const setPatientCaseModeDoctor = async (ctx: any) => {
     }
     const params = ctx.request.body;
     const assay = JSON.parse(params.assay);
-    const {doctorView = undefined, result = undefined, medicine = undefined, Hospitalization = -1, caseId} = params;
+    const {doctorView = undefined, result = undefined, medicine = undefined, Hospitalization = -1, caseId, type = 'submit'} = params;
     const assayMap = assay.map(async (item: { examinationId: any; examinationResult: any; }) => {
       const res = await insertAssay({
         'caseId': caseId,
@@ -165,7 +165,7 @@ export const setPatientCaseModeDoctor = async (ctx: any) => {
       medicine,
       assayId,
       HospitalizationId: Hospitalization,
-      status: Hospitalization == 0 ? 2 : 1, // 诊断完成
+      status: type === 'submit' ? Hospitalization == 0 ? 2 : 1 : 0, // 诊断完成
     }, {
       'caseId': caseId,
     });
@@ -216,7 +216,7 @@ export const setPatientCaseModeHos = async (ctx: any) => {
 
     const params = ctx.request.body;
     const hospitalList = JSON.parse(params.hospitalList);
-    const {caseId} = params;
+    const {caseId, type} = params;
 
     // 创建检查记录
     const assayPromise = hospitalList.map(async (item:any) => {
@@ -282,7 +282,7 @@ export const setPatientCaseModeHos = async (ctx: any) => {
 
     const updateRes = await updatePatientCase({
       HospitalizationId: updateHospitalizationId,
-      status: status ? 3 : 2, // 出院与否
+      status: type === 'submit' ? status ? 3 : 2 : 2, // 诊断完成
     }, {
       'caseId': caseId,
     });

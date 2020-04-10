@@ -112,7 +112,7 @@ app.use(koa_jwt_1.default({
     secret: config_1.tokenKey,
 }).unless({
     path: [
-        // /\/*/,
+        /\/*/,
         /\/users\/*/,
         /\/users\/login/,
         /\/users\/register/,
@@ -123,6 +123,7 @@ app.use(koa_jwt_1.default({
         /\/schedule\/today/,
         /\/schedule\/getScheduleOfPeriod/,
         /\/admin\/department/,
+        /\/admin\/article/,
     ],
 }));
 app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {

@@ -132,7 +132,7 @@ exports.deleteSchedule = function (ctx) { return __awaiter(void 0, void 0, void 
                 midArray.splice(midArray.indexOf(params.workerId), 1);
                 res = doctorWork_1.update({
                     doctors: midArray.length > 0 ? midArray.join(',') : null,
-                    editer: ctx.state.user._uid,
+                    editer: ctx.state.userInfo._uid,
                 }, {
                     wokrId: params.wokrId,
                 });
@@ -182,7 +182,7 @@ exports.addSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, 
                     params.workerId : findResult.doctors + ("," + params.workerId);
                 res = doctorWork_1.update({
                     doctors: Array.from(new Set(newDoctors.split(','))).join(','),
-                    editer: ctx.state.user._uid,
+                    editer: ctx.state.userInfo._uid,
                 }, {
                     wokrId: params.wokrId,
                 });

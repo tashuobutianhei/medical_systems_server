@@ -221,11 +221,11 @@ exports.getPatientCase = function (ctx) { return __awaiter(void 0, void 0, void 
     });
 }); };
 exports.setPatientCaseModeDoctor = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, assay, _a, doctorView, _b, result, _c, medicine, _d, Hospitalization, caseId_1, assayMap, assayMapRes, assayId, updateRes, e_3;
-    return __generator(this, function (_e) {
-        switch (_e.label) {
+    var params, assay, _a, doctorView, _b, result, _c, medicine, _d, Hospitalization, caseId_1, _e, type, assayMap, assayMapRes, assayId, updateRes, e_3;
+    return __generator(this, function (_f) {
+        switch (_f.label) {
             case 0:
-                _e.trys.push([0, 3, , 4]);
+                _f.trys.push([0, 3, , 4]);
                 if (Object.keys(ctx.request.body).length < 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -234,7 +234,7 @@ exports.setPatientCaseModeDoctor = function (ctx) { return __awaiter(void 0, voi
                 }
                 params = ctx.request.body;
                 assay = JSON.parse(params.assay);
-                _a = params.doctorView, doctorView = _a === void 0 ? undefined : _a, _b = params.result, result = _b === void 0 ? undefined : _b, _c = params.medicine, medicine = _c === void 0 ? undefined : _c, _d = params.Hospitalization, Hospitalization = _d === void 0 ? -1 : _d, caseId_1 = params.caseId;
+                _a = params.doctorView, doctorView = _a === void 0 ? undefined : _a, _b = params.result, result = _b === void 0 ? undefined : _b, _c = params.medicine, medicine = _c === void 0 ? undefined : _c, _d = params.Hospitalization, Hospitalization = _d === void 0 ? -1 : _d, caseId_1 = params.caseId, _e = params.type, type = _e === void 0 ? 'submit' : _e;
                 assayMap = assay.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
                     var res;
                     return __generator(this, function (_a) {
@@ -259,7 +259,7 @@ exports.setPatientCaseModeDoctor = function (ctx) { return __awaiter(void 0, voi
                 }); });
                 return [4 /*yield*/, Promise.all(assayMap)];
             case 1:
-                assayMapRes = _e.sent();
+                assayMapRes = _f.sent();
                 if (!assayMapRes) {
                     throw new Error('insert error');
                 }
@@ -270,19 +270,19 @@ exports.setPatientCaseModeDoctor = function (ctx) { return __awaiter(void 0, voi
                         medicine: medicine,
                         assayId: assayId,
                         HospitalizationId: Hospitalization,
-                        status: Hospitalization == 0 ? 2 : 1,
+                        status: type === 'submit' ? Hospitalization == 0 ? 2 : 1 : 0,
                     }, {
                         'caseId': caseId_1,
                     })];
             case 2:
-                updateRes = _e.sent();
+                updateRes = _f.sent();
                 ctx.body = {
                     code: updateRes ? 0 : -1,
                     message: '更新成功',
                 };
                 return [3 /*break*/, 4];
             case 3:
-                e_3 = _e.sent();
+                e_3 = _f.sent();
                 ctx.body = {
                     code: -1,
                     message: '服务错误',
@@ -331,7 +331,7 @@ var insertAssayAndGetId = function (assay, caseId) { return __awaiter(void 0, vo
     });
 }); };
 exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var params, hospitalList, caseId_2, assayPromise, assayList_1, hosPromise, hosRes, Hospitalization, updateItem, updateHospitalizationId, status_1, updateRes, e_4;
+    var params, hospitalList, caseId_2, type, assayPromise, assayList_1, hosPromise, hosRes, Hospitalization, updateItem, updateHospitalizationId, status_1, updateRes, e_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -344,7 +344,7 @@ exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0
                 }
                 params = ctx.request.body;
                 hospitalList = JSON.parse(params.hospitalList);
-                caseId_2 = params.caseId;
+                caseId_2 = params.caseId, type = params.type;
                 assayPromise = hospitalList.map(function (item) { return __awaiter(void 0, void 0, void 0, function () {
                     var _a;
                     return __generator(this, function (_b) {
@@ -417,7 +417,7 @@ exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0
                 });
                 return [4 /*yield*/, patientCase_1.update({
                         HospitalizationId: updateHospitalizationId,
-                        status: status_1 ? 3 : 2,
+                        status: type === 'submit' ? status_1 ? 3 : 2 : 2,
                     }, {
                         'caseId': caseId_2,
                     })];

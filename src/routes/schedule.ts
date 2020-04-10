@@ -19,7 +19,7 @@ router.use(async (ctx: any, next) => {
     auth = true;
   }
 
-  if (auth || ctx.state.user && ctx.state.user.userType == 2) {
+  if (auth || ctx.state.userInfo && ctx.state.userInfo.userType == 2) {
     await next();
   } else {
     return ctx.body = {

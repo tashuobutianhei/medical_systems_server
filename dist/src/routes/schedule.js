@@ -52,7 +52,7 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
                 if (ctx.request.url !== '/createWork' && ctx.request.method === 'GET') {
                     auth = true;
                 }
-                if (!(auth || ctx.state.user && ctx.state.user.userType == 2)) return [3 /*break*/, 2];
+                if (!(auth || ctx.state.userInfo && ctx.state.userInfo.userType == 2)) return [3 /*break*/, 2];
                 return [4 /*yield*/, next()];
             case 1:
                 _a.sent();

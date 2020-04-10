@@ -130,7 +130,7 @@ exports.Order = function (ctx) { return __awaiter(void 0, void 0, void 0, functi
             case 0:
                 _a.trys.push([0, 5, , 6]);
                 params = ctx.request.body;
-                if (ctx.state.user.userType !== 1) {
+                if (ctx.state.userInfo.userType !== 1) {
                     ctx.body = {
                         code: 402,
                         message: '用户身份错误',
@@ -153,7 +153,7 @@ exports.Order = function (ctx) { return __awaiter(void 0, void 0, void 0, functi
                             message: '挂号已满',
                         }];
                 }
-                uid = ctx.state.user._uid;
+                uid = ctx.state.userInfo._uid;
                 caseId = random_string_1.default({ length: 12, numbers: true });
                 return [4 /*yield*/, patientCase_1.insert({
                         uid: uid,

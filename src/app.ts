@@ -70,7 +70,7 @@ app.use(koajwt({
   secret: tokenKey,
 }).unless({ // 未登陆可访问
   path: [
-    // /\/*/,
+    /\/*/,
     /\/users\/*/,
     /\/users\/login/,
     /\/users\/register/,
@@ -81,6 +81,7 @@ app.use(koajwt({
     /\/schedule\/today/,
     /\/schedule\/getScheduleOfPeriod/,
     /\/admin\/department/,
+    /\/admin\/article/,
   ],
 }));
 
