@@ -5,9 +5,18 @@ import {
   findAllByKey as findArticle,
 } from '../../models/article';
 
-export const findOfArticle = async (ctx:any) => {
+export const findOfArticleMehtod = async () => {
   try {
     const val = await findArticle({});
+    return val;
+  } catch (e) {
+    throw new Error(e);
+  };
+};
+
+export const findOfArticle = async (ctx:any) => {
+  try {
+    const val = await findOfArticleMehtod();
 
     ctx.body = {
       code: 0,
@@ -22,7 +31,7 @@ export const findOfArticle = async (ctx:any) => {
 };
 
 
-export const insertOfArticle = async (ctx: any) => {
+export const insertOfArticle = async (ctx: any, next: any) => {
   try {
     const body = ctx.request.body;
     const {value, title, type} = body;
@@ -37,6 +46,7 @@ export const insertOfArticle = async (ctx: any) => {
       code: 0,
       data: val,
     };
+    await next();
   } catch (e) {
     ctx.body = {
       code: -1,
@@ -45,7 +55,7 @@ export const insertOfArticle = async (ctx: any) => {
   }
 };
 
-export const updateOfArticle = async (ctx: any) => {
+export const updateOfArticle = async (ctx: any, next: any) => {
   try {
     const body = ctx.request.body;
     const {value, title, textId} = body;
@@ -61,6 +71,7 @@ export const updateOfArticle = async (ctx: any) => {
       code: 0,
       data: val,
     };
+    await next();
   } catch (e) {
     ctx.body = {
       code: -1,
@@ -69,7 +80,7 @@ export const updateOfArticle = async (ctx: any) => {
   }
 };
 
-export const deleteOfArticle = async (ctx: any) => {
+export const deleteOfArticle = async (ctx: any, next: any) => {
   try {
     const body = ctx.request.body;
     const {textId} = body;
@@ -81,6 +92,7 @@ export const deleteOfArticle = async (ctx: any) => {
       code: 0,
       data: val,
     };
+    await next();
   } catch (e) {
     ctx.body = {
       code: -1,

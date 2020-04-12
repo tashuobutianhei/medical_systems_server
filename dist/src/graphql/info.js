@@ -40,6 +40,7 @@ var graphql_1 = require("graphql");
 var department_1 = require("../controllers/Admin/department");
 var examination_1 = require("../controllers/examination");
 var info_1 = require("../controllers/Admin/info");
+var article_1 = require("../controllers/Admin/article");
 var info_2 = require("../store/info");
 var examiationType = new graphql_1.GraphQLObjectType({
     name: 'exainationType',
@@ -97,6 +98,19 @@ var commonInfoType = new graphql_1.GraphQLObjectType({
         };
     },
 });
+var articleInfoType = new graphql_1.GraphQLObjectType({
+    name: 'articleInfo',
+    description: '文章公告',
+    fields: function () {
+        return {
+            textId: { type: graphql_1.GraphQLInt },
+            title: { type: graphql_1.GraphQLString },
+            value: { type: graphql_1.GraphQLString },
+            type: { type: graphql_1.GraphQLInt },
+            update: { type: graphql_1.GraphQLString },
+        };
+    },
+});
 // 定义单个文章对象
 var Info = new graphql_1.GraphQLObjectType({
     name: 'info',
@@ -106,6 +120,7 @@ var Info = new graphql_1.GraphQLObjectType({
             departmentInfoList: { type: new graphql_1.GraphQLList(departmentType) },
             examiation: { type: new graphql_1.GraphQLList(examiationType) },
             commonInfo: { type: commonInfoType },
+            articleInfo: { type: new graphql_1.GraphQLList(articleInfoType) },
         };
     },
 });
@@ -121,7 +136,7 @@ var hosipatalInfo = {
     },
     resolve: function (root, params, options) {
         return __awaiter(this, void 0, void 0, function () {
-            var redisData, result, examiation, commonInfo;
+            var redisData, result, examiation, commonInfo, articleInfo;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, info_2.getInfoStore()];
@@ -138,15 +153,20 @@ var hosipatalInfo = {
                         return [4 /*yield*/, info_1.getCommonInfoMethod()];
                     case 5:
                         commonInfo = _a.sent();
+                        return [4 /*yield*/, article_1.findOfArticleMehtod()];
+                    case 6:
+                        articleInfo = _a.sent();
                         info_2.storeInfo({
                             departmentInfoList: result,
                             examiation: examiation,
                             commonInfo: commonInfo[0],
+                            articleInfo: articleInfo,
                         });
                         return [2 /*return*/, {
                                 departmentInfoList: result,
                                 examiation: examiation,
                                 commonInfo: commonInfo[0],
+                                articleInfo: articleInfo,
                             }];
                 }
             });

@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var article_1 = require("../../models/article");
-exports.findOfArticle = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.findOfArticleMehtod = function () { return __awaiter(void 0, void 0, void 0, function () {
     var val, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -46,36 +46,23 @@ exports.findOfArticle = function (ctx) { return __awaiter(void 0, void 0, void 0
                 return [4 /*yield*/, article_1.findAllByKey({})];
             case 1:
                 val = _a.sent();
-                ctx.body = {
-                    code: 0,
-                    data: val,
-                };
-                return [3 /*break*/, 3];
+                return [2 /*return*/, val];
             case 2:
                 e_1 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    error: e_1,
-                };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                throw new Error(e_1);
+            case 3:
+                ;
+                return [2 /*return*/];
         }
     });
 }); };
-exports.insertOfArticle = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var body, value, title, type, val, e_2;
+exports.findOfArticle = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var val, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                body = ctx.request.body;
-                value = body.value, title = body.title, type = body.type;
-                return [4 /*yield*/, article_1.insert({
-                        value: value,
-                        title: title,
-                        type: parseInt(type),
-                        update: new Date(),
-                    })];
+                return [4 /*yield*/, exports.findOfArticleMehtod()];
             case 1:
                 val = _a.sent();
                 ctx.body = {
@@ -94,12 +81,47 @@ exports.insertOfArticle = function (ctx) { return __awaiter(void 0, void 0, void
         }
     });
 }); };
-exports.updateOfArticle = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var body, value, title, textId, val, e_3;
+exports.insertOfArticle = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var body, value, title, type, val, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 3, , 4]);
+                body = ctx.request.body;
+                value = body.value, title = body.title, type = body.type;
+                return [4 /*yield*/, article_1.insert({
+                        value: value,
+                        title: title,
+                        type: parseInt(type),
+                        update: new Date(),
+                    })];
+            case 1:
+                val = _a.sent();
+                ctx.body = {
+                    code: 0,
+                    data: val,
+                };
+                return [4 /*yield*/, next()];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                e_3 = _a.sent();
+                ctx.body = {
+                    code: -1,
+                    error: e_3,
+                };
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.updateOfArticle = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var body, value, title, textId, val, e_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
                 body = ctx.request.body;
                 value = body.value, title = body.title, textId = body.textId;
                 return [4 /*yield*/, article_1.update({
@@ -115,24 +137,27 @@ exports.updateOfArticle = function (ctx) { return __awaiter(void 0, void 0, void
                     code: 0,
                     data: val,
                 };
-                return [3 /*break*/, 3];
+                return [4 /*yield*/, next()];
             case 2:
-                e_3 = _a.sent();
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                e_4 = _a.sent();
                 ctx.body = {
                     code: -1,
-                    error: e_3,
+                    error: e_4,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
-exports.deleteOfArticle = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var body, textId, val, e_4;
+exports.deleteOfArticle = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var body, textId, val, e_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 3, , 4]);
                 body = ctx.request.body;
                 textId = body.textId;
                 return [4 /*yield*/, article_1.destroy({
@@ -144,15 +169,18 @@ exports.deleteOfArticle = function (ctx) { return __awaiter(void 0, void 0, void
                     code: 0,
                     data: val,
                 };
-                return [3 /*break*/, 3];
+                return [4 /*yield*/, next()];
             case 2:
-                e_4 = _a.sent();
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                e_5 = _a.sent();
                 ctx.body = {
                     code: -1,
-                    error: e_4,
+                    error: e_5,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };

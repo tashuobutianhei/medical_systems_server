@@ -2,10 +2,12 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLList,
-  GraphQLInt} from 'graphql';
+  GraphQLInt,
+} from 'graphql';
 import {getHosptalInfo} from '../controllers/Admin/department';
 import {getExaminationMethod} from '../controllers/examination';
 import {getCommonInfoMethod} from '../controllers/Admin/info';
+import {findOfArticleMehtod} from '../controllers/Admin/article';
 
 import {getInfoStore, storeInfo} from '../store/info';
 
@@ -70,6 +72,20 @@ const commonInfoType = new GraphQLObjectType({
   },
 });
 
+const articleInfoType = new GraphQLObjectType({
+  name: 'articleInfo',
+  description: '文章公告',
+  fields() {
+    return {
+      textId: {type: GraphQLInt},
+      title: {type: GraphQLString},
+      value: {type: GraphQLString},
+      type: {type: GraphQLInt},
+      update: {type: GraphQLString},
+    };
+  },
+});
+
 
 // 定义单个文章对象
 const Info = new GraphQLObjectType({
@@ -80,6 +96,7 @@ const Info = new GraphQLObjectType({
       departmentInfoList: {type: new GraphQLList(departmentType)},
       examiation: {type: new GraphQLList(examiationType)},
       commonInfo: {type: commonInfoType},
+      articleInfo: {type: new GraphQLList(articleInfoType)},
     };
   },
 });
@@ -102,15 +119,18 @@ const hosipatalInfo = {
       const result = await getHosptalInfo(params.departmentId);
       const examiation = await getExaminationMethod();
       const commonInfo = await getCommonInfoMethod();
+      const articleInfo = await findOfArticleMehtod();
       storeInfo({
         departmentInfoList: result,
         examiation: examiation,
         commonInfo: commonInfo[0],
+        articleInfo,
       });
       return {
         departmentInfoList: result,
         examiation: examiation,
         commonInfo: commonInfo[0],
+        articleInfo,
       };
     }
   },

@@ -37,9 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("./index");
-var department_1 = require("../controllers/Admin/department");
-var examination_1 = require("../controllers/examination");
-var info_1 = require("../controllers/Admin/info");
 var article_1 = require("../controllers/Admin/article");
 exports.storeInfo = function (info) { return __awaiter(void 0, void 0, void 0, function () {
     var e_1;
@@ -47,10 +44,10 @@ exports.storeInfo = function (info) { return __awaiter(void 0, void 0, void 0, f
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, index_1.store.client.set('commonInfo', JSON.stringify(info))];
+                return [4 /*yield*/, index_1.store.client.set('articleInfo', JSON.stringify(info))];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, index_1.store.client.expire('commonInfo', 2592000)];
+                return [4 /*yield*/, index_1.store.client.expire('articleInfo', 2592000)];
             case 2:
                 _a.sent(); // 720小时
                 return [3 /*break*/, 4];
@@ -62,9 +59,9 @@ exports.storeInfo = function (info) { return __awaiter(void 0, void 0, void 0, f
         }
     });
 }); };
-exports.getInfoStore = function () {
+exports.getArticleStore = function () {
     return new Promise(function (res, rej) {
-        index_1.store.client.get('commonInfo', function (err, data) {
+        index_1.store.client.get('articleInfo', function (err, data) {
             if (err) {
                 console.log(err);
                 rej(err);
@@ -74,30 +71,18 @@ exports.getInfoStore = function () {
         });
     });
 };
-exports.resetInfoStore = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var result, examiation, commonInfo, articleInfo;
+exports.resetArticleInfoStore = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var info;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, department_1.getHosptalInfo()];
+            case 0: return [4 /*yield*/, article_1.findOfArticleMehtod()];
             case 1:
-                result = _a.sent();
-                return [4 /*yield*/, examination_1.getExaminationMethod()];
-            case 2:
-                examiation = _a.sent();
-                return [4 /*yield*/, info_1.getCommonInfoMethod()];
-            case 3:
-                commonInfo = _a.sent();
-                return [4 /*yield*/, article_1.findOfArticleMehtod()];
-            case 4:
-                articleInfo = _a.sent();
+                info = _a.sent();
                 exports.storeInfo({
-                    departmentInfoList: result,
-                    examiation: examiation,
-                    commonInfo: commonInfo[0],
-                    articleInfo: articleInfo,
+                    articleList: info,
                 });
                 return [2 /*return*/, new Promise(function (res, rej) {
-                        index_1.store.client.get('commonInfo', function (err, data) {
+                        index_1.store.client.get('articleInfo', function (err, data) {
                             if (err) {
                                 console.log(err);
                                 rej(err);

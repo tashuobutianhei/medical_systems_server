@@ -12,19 +12,23 @@ export const Article = sequelize.define('Article', {
   },
   title: {
     type: Sequelize.TEXT,
-    allowNull: true,
+    allowNull: false,
+    defaultValue: '',
   },
   value: {
     type: Sequelize.TEXT,
-    allowNull: true,
+    allowNull: false,
+    defaultValue: '',
   },
   type: { // 0 医院公告 1 文章
     type: Sequelize.INTEGER,
     allowNull: false,
+    defaultValue: 0,
   },
   update: {
     type: Sequelize.DATE,
     allowNull: false,
+    defaultValue: new Date(),
   },
 }, {
   // 参数

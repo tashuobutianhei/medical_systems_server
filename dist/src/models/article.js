@@ -23,19 +23,23 @@ exports.Article = index_1.sequelize.define('Article', {
     },
     title: {
         type: index_1.Sequelize.TEXT,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: '',
     },
     value: {
         type: index_1.Sequelize.TEXT,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: '',
     },
     type: {
         type: index_1.Sequelize.INTEGER,
         allowNull: false,
+        defaultValue: 0,
     },
     update: {
         type: index_1.Sequelize.DATE,
         allowNull: false,
+        defaultValue: new Date(),
     },
 }, {
     // 参数
