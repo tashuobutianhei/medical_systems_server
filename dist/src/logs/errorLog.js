@@ -35,43 +35,41 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var koa_router_1 = __importDefault(require("koa-router"));
-var schedule_1 = require("../controllers/doctor/schedule");
-var errorLog_1 = require("../middware/errorLog");
-var router = new koa_router_1.default();
-router.prefix('/schedule');
-router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var auth;
+var logger_1 = require("../logger");
+exports.logError = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+    var nextInfo, url;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                auth = false;
-                if (ctx.request.url !== '/createWork' && ctx.request.method === 'GET') {
-                    auth = true;
+        try {
+            nextInfo = ctx.state.nextInfo;
+            url = ctx.request.method + "--" + ctx.request.url;
+            if (nextInfo) {
+                if (nextInfo.type === -1) {
+                    // 错误处理
+                    logger_1.logger.error({
+                        ctx: url,
+                        error: nextInfo.error,
+                    });
+                    ctx.body = {
+                        code: -1,
+                        message: '服务错误',
+                        error: nextInfo.error,
+                    };
                 }
-                if (!(auth || ctx.state.userInfo && ctx.state.userInfo.userType == 2)) return [3 /*break*/, 2];
-                return [4 /*yield*/, next()];
-            case 1:
-                _a.sent();
-                return [3 /*break*/, 3];
-            case 2: return [2 /*return*/, ctx.body = {
-                    code: 401,
-                    message: '无权限',
-                }];
-            case 3: return [2 /*return*/];
+            }
+            return [2 /*return*/];
         }
+        catch (e) {
+            logger_1.logger.error({
+                ctx: ctx,
+                error: e,
+            });
+            ctx.body = {
+                code: -1,
+                message: '服务错误',
+                error: e,
+            };
+        }
+        return [2 /*return*/];
     });
-}); });
-router.get('/createWork', schedule_1.createWorkList); // 增加排班
-router.post('/', schedule_1.addSchedule); // 改
-router.get('/', schedule_1.getSchedule); // 查
-router.get('/getScheduleOfPeriod', schedule_1.getScheduleOfPeriod); // 查近期排班
-router.delete('/', schedule_1.deleteSchedule); // 删
-router.get('/today', schedule_1.getScheduleToday); // 查今日排班
-// 错误处理
-router.use(errorLog_1.logError);
-exports.default = router;
+}); };

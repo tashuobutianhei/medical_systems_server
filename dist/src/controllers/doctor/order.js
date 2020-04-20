@@ -85,12 +85,12 @@ exports.deleteOrder = function (params) { return __awaiter(void 0, void 0, void 
         }
     });
 }); };
-exports.findOrder = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.findOrder = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var params, orderRes, resgisterList, dataResult, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 if (Object.keys(ctx.query).length === 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -111,24 +111,28 @@ exports.findOrder = function (ctx) { return __awaiter(void 0, void 0, void 0, fu
                     code: dataResult ? 0 : -1,
                     data: dataResult,
                 };
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_2 = _a.sent();
                 console.log(e_2);
-                ctx.body = {
-                    code: -1,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_2,
                 };
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
                 return [2 /*return*/, false];
-            case 4: return [2 /*return*/];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
-exports.Order = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.Order = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var params, findRes, requestList, uid, caseId, insertRes, res, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 5, , 6]);
+                _a.trys.push([0, 5, , 7]);
                 params = ctx.request.body;
                 if (ctx.state.userInfo.userType !== 1) {
                     ctx.body = {
@@ -179,19 +183,22 @@ exports.Order = function (ctx) { return __awaiter(void 0, void 0, void 0, functi
                     code: res ? 0 : -1,
                     data: { caseId: caseId },
                 };
-                return [3 /*break*/, 6];
+                return [3 /*break*/, 7];
             case 5:
                 e_3 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    data: e_3,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_3,
                 };
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 6:
+                _a.sent();
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); };
-exports.orderInfo = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.orderInfo = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var params, time, status_1, todo, medicine, attention, hospital, _a, result, describe, res, e_4;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -199,7 +206,7 @@ exports.orderInfo = function (ctx) { return __awaiter(void 0, void 0, void 0, fu
                 params = ctx.request.body;
                 _b.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
+                _b.trys.push([1, 3, , 5]);
                 time = params.time, status_1 = params.status, todo = params.todo, medicine = params.medicine, attention = params.attention, hospital = params.hospital, _a = params.result, result = _a === void 0 ? undefined : _a;
                 describe = '';
                 describe += Boolean(time != 'undefined') ? "\u60A3\u8005\u4E8E[" + time + "]\u5F00\u59CB\u53D1\u75C5\uFF0C" : '';
@@ -220,16 +227,18 @@ exports.orderInfo = function (ctx) { return __awaiter(void 0, void 0, void 0, fu
                 ctx.body = {
                     code: res ? 0 : 1,
                 };
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_4 = _b.sent();
-                ctx.body = {
-                    code: -1,
-                    message: '服务错误',
-                    date: e_4,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_4,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _b.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

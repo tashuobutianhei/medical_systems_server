@@ -59,12 +59,12 @@ exports.getCommonInfoMethod = function () { return __awaiter(void 0, void 0, voi
         }
     });
 }); };
-exports.getCommonInfo = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getCommonInfo = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var info, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 2, , 4]);
                 return [4 /*yield*/, exports.getCommonInfoMethod()];
             case 1:
                 info = _a.sent();
@@ -72,15 +72,18 @@ exports.getCommonInfo = function (ctx) { return __awaiter(void 0, void 0, void 0
                     code: 0,
                     data: info[0],
                 };
-                return [3 /*break*/, 3];
+                return [3 /*break*/, 4];
             case 2:
                 e_2 = _a.sent();
-                ctx.body = {
-                    code: -1,
+                ctx.state.nextInfo = {
+                    type: -1,
                     error: e_2,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 3:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
@@ -150,7 +153,7 @@ exports.update = function (ctx, next) { return __awaiter(void 0, void 0, void 0,
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 10, , 11]);
+                _b.trys.push([0, 10, , 12]);
                 body = ctx.request.body;
                 _a = body.type;
                 switch (_a) {
@@ -183,15 +186,18 @@ exports.update = function (ctx, next) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, next()];
             case 9:
                 _b.sent();
-                return [3 /*break*/, 11];
+                return [3 /*break*/, 12];
             case 10:
                 e_4 = _b.sent();
-                ctx.body = {
-                    code: -1,
+                ctx.state.nextInfo = {
+                    type: -1,
                     error: e_4,
                 };
-                return [3 /*break*/, 11];
-            case 11: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 11:
+                _b.sent();
+                return [3 /*break*/, 12];
+            case 12: return [2 /*return*/];
         }
     });
 }); };

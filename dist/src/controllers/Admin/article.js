@@ -56,12 +56,12 @@ exports.findOfArticleMehtod = function () { return __awaiter(void 0, void 0, voi
         }
     });
 }); };
-exports.findOfArticle = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.findOfArticle = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var val, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 2, , 4]);
                 return [4 /*yield*/, exports.findOfArticleMehtod()];
             case 1:
                 val = _a.sent();
@@ -69,15 +69,18 @@ exports.findOfArticle = function (ctx) { return __awaiter(void 0, void 0, void 0
                     code: 0,
                     data: val,
                 };
-                return [3 /*break*/, 3];
+                return [3 /*break*/, 4];
             case 2:
                 e_2 = _a.sent();
-                ctx.body = {
-                    code: -1,
+                ctx.state.nextInfo = {
+                    type: -1,
                     error: e_2,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 3:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
@@ -86,7 +89,7 @@ exports.insertOfArticle = function (ctx, next) { return __awaiter(void 0, void 0
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 body = ctx.request.body;
                 value = body.value, title = body.title, type = body.type;
                 return [4 /*yield*/, article_1.insert({
@@ -104,15 +107,18 @@ exports.insertOfArticle = function (ctx, next) { return __awaiter(void 0, void 0
                 return [4 /*yield*/, next()];
             case 2:
                 _a.sent();
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_3 = _a.sent();
-                ctx.body = {
-                    code: -1,
+                ctx.state.nextInfo = {
+                    type: -1,
                     error: e_3,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
@@ -121,7 +127,7 @@ exports.updateOfArticle = function (ctx, next) { return __awaiter(void 0, void 0
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 body = ctx.request.body;
                 value = body.value, title = body.title, textId = body.textId;
                 return [4 /*yield*/, article_1.update({
@@ -140,15 +146,18 @@ exports.updateOfArticle = function (ctx, next) { return __awaiter(void 0, void 0
                 return [4 /*yield*/, next()];
             case 2:
                 _a.sent();
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_4 = _a.sent();
-                ctx.body = {
-                    code: -1,
+                ctx.state.nextInfo = {
+                    type: -1,
                     error: e_4,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
@@ -157,7 +166,7 @@ exports.deleteOfArticle = function (ctx, next) { return __awaiter(void 0, void 0
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 body = ctx.request.body;
                 textId = body.textId;
                 return [4 /*yield*/, article_1.destroy({
@@ -172,15 +181,18 @@ exports.deleteOfArticle = function (ctx, next) { return __awaiter(void 0, void 0
                 return [4 /*yield*/, next()];
             case 2:
                 _a.sent();
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_5 = _a.sent();
-                ctx.body = {
-                    code: -1,
+                ctx.state.nextInfo = {
+                    type: -1,
                     error: e_5,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

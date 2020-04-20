@@ -43,6 +43,8 @@ var koa_router_1 = __importDefault(require("koa-router"));
 var user_1 = require("../controllers/user");
 var tool_1 = require("../controllers/tool");
 var index_1 = require("../models/index");
+// import {logger} from '../logger';
+var errorLog_1 = require("../middware/errorLog");
 var router = new koa_router_1.default();
 router.prefix('/users');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
@@ -56,12 +58,14 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
 router.get('/', function (ctx, next) {
     ctx.body = 'this is a users response!';
 });
-router.post('/register', user_1.registerPatient);
-router.post('/login', user_1.login);
-router.get('/getUser', user_1.getUser);
-router.get('/create', index_1.createTable);
-router.put('/', user_1.updateUser);
-router.get('/captcha', tool_1.captcha);
-router.get('/checkUserInfo', tool_1.checkUserInfo);
-router.get('/phone', tool_1.phone);
+router.post('/register', user_1.registerPatient); // 注册
+router.post('/login', user_1.login); // 登陆
+router.get('/getUser', user_1.getUser); // 验证token
+router.put('/', user_1.updateUser); // 更新用户信息
+router.get('/captcha', tool_1.captcha); // 获取图形验证码
+router.get('/checkUserInfo', tool_1.checkUserInfo); // 检查信息是否重复存储
+router.get('/phone', tool_1.phone); // 获取短信验证码
+router.get('/create', index_1.createTable); // 废弃
+// 错误处理
+router.use(errorLog_1.logError);
 exports.default = router;

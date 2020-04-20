@@ -9,6 +9,8 @@ import {
 import {
   getAssayById,
 } from '../controllers/doctor/assay';
+import {logError} from '../middware/errorLog';
+
 
 const router = new Router();
 
@@ -31,16 +33,19 @@ router.use(async (ctx: any, next) => {
   }
 });
 
-router.get('/', getByworkerId); // 查
+router.get('/', getByworkerId); // 根据医生id查找对应病例
 
 router.get('/patient', getByPatient); // 查找患者下的所有病例
 
-router.get('/all', getAll); // 查
+router.get('/all', getAll); // 查所有病例
 
 router.post('/doctor', setPatientCaseModeDoctor); // 诊断模式下病例
 
 router.post('/hospital', setPatientCaseModeHos); // 诊断模式下病例
 
-router.get('/assay', getAssayById); //
+router.get('/assay', getAssayById); // 获取化验结果
+
+// 错误处理
+router.use(logError);
 
 export default router;

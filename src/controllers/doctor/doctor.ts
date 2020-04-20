@@ -1,6 +1,6 @@
 import {findAllByKey} from '../../models/doctor';
 
-export const getDoctors = async (ctx:any) => {
+export const getDoctors = async (ctx:any, next: any) => {
   try {
     // if (Object.keys(ctx.query).length === 0) {
     //   return ctx.body = {
@@ -17,9 +17,10 @@ export const getDoctors = async (ctx:any) => {
       data: doctors,
     };
   } catch (e) {
-    return ctx.body = {
-      code: -3,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };

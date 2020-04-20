@@ -14,7 +14,7 @@ export const findOfArticleMehtod = async () => {
   };
 };
 
-export const findOfArticle = async (ctx:any) => {
+export const findOfArticle = async (ctx:any, next: any) => {
   try {
     const val = await findOfArticleMehtod();
 
@@ -23,10 +23,11 @@ export const findOfArticle = async (ctx:any) => {
       data: val,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
+    ctx.state.nextInfo = {
+      type: -1,
       error: e,
     };
+    await next();
   }
 };
 
@@ -48,10 +49,11 @@ export const insertOfArticle = async (ctx: any, next: any) => {
     };
     await next();
   } catch (e) {
-    ctx.body = {
-      code: -1,
+    ctx.state.nextInfo = {
+      type: -1,
       error: e,
     };
+    await next();
   }
 };
 
@@ -73,10 +75,11 @@ export const updateOfArticle = async (ctx: any, next: any) => {
     };
     await next();
   } catch (e) {
-    ctx.body = {
-      code: -1,
+    ctx.state.nextInfo = {
+      type: -1,
       error: e,
     };
+    await next();
   }
 };
 
@@ -94,10 +97,11 @@ export const deleteOfArticle = async (ctx: any, next: any) => {
     };
     await next();
   } catch (e) {
-    ctx.body = {
-      code: -1,
+    ctx.state.nextInfo = {
+      type: -1,
       error: e,
     };
+    await next();
   }
 };
 

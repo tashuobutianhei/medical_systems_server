@@ -27,6 +27,8 @@ import {
   findOfArticle,
 } from '../controllers/Admin/article';
 import {resetInfoStore} from '../store/info';
+import {logError} from '../middware/errorLog';
+
 
 const router = new Router();
 
@@ -62,16 +64,19 @@ router.delete('/doctors', outDoctor); // 删除医生
 
 router.get('/info', getCommonInfo); // 获取医院信息
 
-router.post('/info', updateCommonInfo);
+router.post('/info', updateCommonInfo); // 更新信息
 
-router.post('/exam', addExamination);
+router.post('/exam', addExamination); // 更新检查项目
 
-router.delete('/exam', deleteExamination);
+router.delete('/exam', deleteExamination); // 删除检查项目
 
 // 文章系统，增删改查
 router.get('/article', findOfArticle);
+
 router.post('/article', insertOfArticle);
+
 router.put('/article', updateOfArticle);
+
 router.delete('/article', deleteOfArticle);
 
 
@@ -81,6 +86,9 @@ router.use(async (ctx, next) => {
   };
   await next();
 });
+
+// 错误处理
+router.use(logError);
 
 // router.post('/admin', addAdmin); // 增加管理员
 

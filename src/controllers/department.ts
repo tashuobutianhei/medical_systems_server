@@ -49,7 +49,7 @@ import {findAllByKey} from '../models/department';
 //   }
 // };
 
-export const getDepartment = async (ctx: any) => {
+export const getDepartment = async (ctx: any, next: any) => {
   try {
     const params = ctx.query;
 
@@ -59,9 +59,10 @@ export const getDepartment = async (ctx: any) => {
       data: department,
     };
   } catch (e) {
-    ctx.body = {
-      code: -3,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };

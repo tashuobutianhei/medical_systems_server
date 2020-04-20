@@ -106,12 +106,12 @@ exports.createWorkList = function (ctx, next) { return __awaiter(void 0, void 0,
         return [2 /*return*/];
     });
 }); };
-exports.deleteSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.deleteSchedule = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var params, findResult, midArray, res, deleteRes, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 if (Object.keys(ctx.request.body).length < 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -146,25 +146,27 @@ exports.deleteSchedule = function (ctx) { return __awaiter(void 0, void 0, void 
                     code: res && deleteRes ? 0 : -1,
                     data: res && deleteRes ? '更新成功' : '更新失败',
                 };
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_1 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    message: '服务错误',
-                    data: e_1,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_1,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
-exports.addSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.addSchedule = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var params, findResult, newDoctors, res, addOrderRes, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 if (Object.keys(ctx.request.body).length < 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -196,26 +198,28 @@ exports.addSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, 
                     code: res && addOrderRes ? 0 : -1,
                     data: res && addOrderRes ? '更新成功' : '更新失败',
                 };
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_2 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    message: '服务错误',
-                    data: e_2,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_2,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
 // 查询某天的排班
-exports.getSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getSchedule = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var departmentId, date, schdelue, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 2, , 4]);
                 if (Object.keys(ctx.query).length === 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -234,26 +238,28 @@ exports.getSchedule = function (ctx) { return __awaiter(void 0, void 0, void 0, 
                     code: schdelue.length ? 0 : -1,
                     data: schdelue,
                 };
-                return [3 /*break*/, 3];
+                return [3 /*break*/, 4];
             case 2:
                 e_3 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    message: '服务错误',
-                    data: e_3,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_3,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 3:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
 // 查询排班周期中的排班
-exports.getScheduleOfPeriod = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getScheduleOfPeriod = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var departmentId_1, listPromise, schdelueLists, e_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 2, , 4]);
                 if (Object.keys(ctx.query).length === 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -288,25 +294,27 @@ exports.getScheduleOfPeriod = function (ctx) { return __awaiter(void 0, void 0, 
                     code: 0,
                     data: schdelueLists,
                 };
-                return [3 /*break*/, 3];
+                return [3 /*break*/, 4];
             case 2:
                 e_4 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    message: '服务错误',
-                    data: e_4,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_4,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 3:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
-exports.getScheduleToday = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getScheduleToday = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var schdelue, e_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 2, , 4]);
                 return [4 /*yield*/, doctorWork_1.findAllByKey({
                         data: moment_1.default(new Date()).format('YYYY-MM-DD') + "T00:00:00.000Z",
                     })];
@@ -316,16 +324,18 @@ exports.getScheduleToday = function (ctx) { return __awaiter(void 0, void 0, voi
                     code: schdelue ? 0 : -1,
                     data: schdelue,
                 };
-                return [3 /*break*/, 3];
+                return [3 /*break*/, 4];
             case 2:
                 e_5 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    message: '服务错误',
-                    data: e_5,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_5,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 3:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };

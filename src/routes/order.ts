@@ -4,6 +4,8 @@ import {
   findOrder,
   orderInfo,
 } from '../controllers/doctor/order';
+import {logError} from '../middware/errorLog';
+
 
 const router = new Router();
 
@@ -25,5 +27,8 @@ router.get('/', findOrder); // 查
 router.post('/', Order); // 挂号
 
 router.post('/info', orderInfo); // 完善信息
+
+// 错误处理
+router.use(logError);
 
 export default router;

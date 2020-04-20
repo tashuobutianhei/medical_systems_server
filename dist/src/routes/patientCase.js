@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var koa_router_1 = __importDefault(require("koa-router"));
 var patientCase_1 = require("../controllers/doctor/patientCase");
 var assay_1 = require("../controllers/doctor/assay");
+var errorLog_1 = require("../middware/errorLog");
 var router = new koa_router_1.default();
 router.prefix('/patientCase');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
@@ -66,10 +67,12 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
         }
     });
 }); });
-router.get('/', patientCase_1.getPatientCase); // 查
+router.get('/', patientCase_1.getPatientCase); // 根据医生id查找对应病例
 router.get('/patient', patientCase_1.getByPatient); // 查找患者下的所有病例
-router.get('/all', patientCase_1.getAll); // 查
+router.get('/all', patientCase_1.getAll); // 查所有病例
 router.post('/doctor', patientCase_1.setPatientCaseModeDoctor); // 诊断模式下病例
 router.post('/hospital', patientCase_1.setPatientCaseModeHos); // 诊断模式下病例
-router.get('/assay', assay_1.getAssayById); //
+router.get('/assay', assay_1.getAssayById); // 获取化验结果
+// 错误处理
+router.use(errorLog_1.logError);
 exports.default = router;

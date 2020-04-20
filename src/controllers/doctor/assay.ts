@@ -1,7 +1,7 @@
 import {findAllByKey} from '../../models/assay';
 
 
-export const getAssayById = async (ctx:any) => {
+export const getAssayById = async (ctx:any, next: any) => {
   try {
     const params = ctx.query;
     if (!(params.assayIds)) {
@@ -29,9 +29,10 @@ export const getAssayById = async (ctx:any) => {
       data: assayList,
     };
   } catch (e) {
-    return ctx.body = {
-      code: -3,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };

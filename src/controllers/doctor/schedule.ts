@@ -60,7 +60,7 @@ export const createWorkList = async (ctx: any, next: any) => {
   };
 };
 
-export const deleteSchedule = async (ctx: any) => {
+export const deleteSchedule = async (ctx: any, next: any) => {
   try {
     if (Object.keys(ctx.request.body).length < 0) {
       return ctx.body = {
@@ -97,15 +97,15 @@ export const deleteSchedule = async (ctx: any) => {
       data: res && deleteRes ? '更新成功' : '更新失败',
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      message: '服务错误',
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
-export const addSchedule = async (ctx: any) => {
+export const addSchedule = async (ctx: any, next: any) => {
   try {
     if (Object.keys(ctx.request.body).length < 0) {
       return ctx.body = {
@@ -139,17 +139,17 @@ export const addSchedule = async (ctx: any) => {
       data: res && addOrderRes ? '更新成功' : '更新失败',
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      message: '服务错误',
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
 
 // 查询某天的排班
-export const getSchedule = async (ctx: any) => {
+export const getSchedule = async (ctx: any, next: any) => {
   try {
     if (Object.keys(ctx.query).length === 0) {
       return ctx.body = {
@@ -168,16 +168,16 @@ export const getSchedule = async (ctx: any) => {
       data: schdelue,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      message: '服务错误',
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
 // 查询排班周期中的排班
-export const getScheduleOfPeriod = async (ctx: any) => {
+export const getScheduleOfPeriod = async (ctx: any, next: any) => {
   try {
     if (Object.keys(ctx.query).length === 0) {
       return ctx.body = {
@@ -204,15 +204,15 @@ export const getScheduleOfPeriod = async (ctx: any) => {
       data: schdelueLists,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      message: '服务错误',
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
-export const getScheduleToday = async (ctx: any) => {
+export const getScheduleToday = async (ctx: any, next: any) => {
   try {
     const schdelue = await findAllByKey({
       data: `${moment(new Date()).format('YYYY-MM-DD')}T00:00:00.000Z`,
@@ -223,11 +223,11 @@ export const getScheduleToday = async (ctx: any) => {
       data: schdelue,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      message: '服务错误',
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 

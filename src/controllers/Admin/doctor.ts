@@ -24,10 +24,11 @@ export const addDoctor= async (ctx: any, next: any) => {
       message: result ? '添加成功' : '添加失败',
     };
   } catch (e) {
-    return ctx.body = {
-      code: -3,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
@@ -52,10 +53,11 @@ export const outDoctor = async (ctx: any, next: any) => {
       message: res ? '删除' : '删除失败',
     };
   } catch (e) {
-    return ctx.body = {
-      code: -3,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 

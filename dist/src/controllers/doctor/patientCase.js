@@ -62,12 +62,12 @@ var patient_1 = require("../../models/patient");
 var assay_1 = require("../../models/assay");
 var hospitalizationInfoList_1 = require("../../models/hospitalizationInfoList");
 var random_string_1 = __importDefault(require("random-string"));
-exports.getAll = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getAll = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var res, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 2, , 4]);
                 return [4 /*yield*/, patientCase_1.findAllByKey({})];
             case 1:
                 res = _a.sent();
@@ -75,19 +75,22 @@ exports.getAll = function (ctx) { return __awaiter(void 0, void 0, void 0, funct
                     code: res ? 0 : -1,
                     data: res,
                 };
-                return [3 /*break*/, 3];
+                return [3 /*break*/, 4];
             case 2:
                 e_1 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    data: e_1,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_1,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 3:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
-exports.getPatientCase = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getPatientCase = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var params, resList, res, resMap, resCasesPromise, resCases, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -100,7 +103,7 @@ exports.getPatientCase = function (ctx) { return __awaiter(void 0, void 0, void 
                 }
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 6, , 7]);
+                _a.trys.push([1, 6, , 8]);
                 params = ctx.query;
                 resList = [];
                 return [4 /*yield*/, patientCase_1.findAllByKey({
@@ -208,24 +211,27 @@ exports.getPatientCase = function (ctx) { return __awaiter(void 0, void 0, void 
                     code: resCases ? 0 : -1,
                     data: resCases,
                 };
-                return [3 /*break*/, 7];
+                return [3 /*break*/, 8];
             case 6:
                 e_2 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    data: e_2,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_2,
                 };
-                return [3 /*break*/, 7];
-            case 7: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 7:
+                _a.sent();
+                return [3 /*break*/, 8];
+            case 8: return [2 /*return*/];
         }
     });
 }); };
-exports.setPatientCaseModeDoctor = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.setPatientCaseModeDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var params, assay, _a, doctorView, _b, result, _c, medicine, _d, Hospitalization, caseId_1, _e, type, assayMap, assayMapRes, assayId, updateRes, e_3;
     return __generator(this, function (_f) {
         switch (_f.label) {
             case 0:
-                _f.trys.push([0, 3, , 4]);
+                _f.trys.push([0, 3, , 5]);
                 if (Object.keys(ctx.request.body).length < 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -280,15 +286,18 @@ exports.setPatientCaseModeDoctor = function (ctx) { return __awaiter(void 0, voi
                     code: updateRes ? 0 : -1,
                     message: '更新成功',
                 };
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_3 = _f.sent();
-                ctx.body = {
-                    code: -1,
-                    message: '服务错误',
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_3,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _f.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
@@ -330,12 +339,12 @@ var insertAssayAndGetId = function (assay, caseId) { return __awaiter(void 0, vo
         }
     });
 }); };
-exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.setPatientCaseModeHos = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var params, hospitalList, caseId_2, type, assayPromise, assayList_1, hosPromise, hosRes, Hospitalization, updateItem, updateHospitalizationId, status_1, updateRes, e_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 5, , 6]);
+                _a.trys.push([0, 5, , 7]);
                 if (Object.keys(ctx.request.body).length < 0) {
                     return [2 /*return*/, ctx.body = {
                             code: -2,
@@ -427,25 +436,27 @@ exports.setPatientCaseModeHos = function (ctx) { return __awaiter(void 0, void 0
                     code: updateRes ? 0 : -1,
                     data: updateRes,
                 };
-                return [3 /*break*/, 6];
+                return [3 /*break*/, 7];
             case 5:
                 e_4 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    message: '服务错误',
-                    data: e_4,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_4,
                 };
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 6:
+                _a.sent();
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); };
-exports.getByPatient = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getByPatient = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var resList, res, resMap, resCasesPromise, resCases, e_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 5, , 6]);
+                _a.trys.push([0, 5, , 7]);
                 resList = [];
                 return [4 /*yield*/, patientCase_1.findAllByKey({
                         uid: ctx.state.userInfo._uid,
@@ -552,15 +563,18 @@ exports.getByPatient = function (ctx) { return __awaiter(void 0, void 0, void 0,
                     code: resCases ? 0 : -1,
                     data: resCases,
                 };
-                return [3 /*break*/, 6];
+                return [3 /*break*/, 7];
             case 5:
                 e_5 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    data: e_5,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_5,
                 };
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 6:
+                _a.sent();
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); };

@@ -14,11 +14,10 @@ import jwt from 'jsonwebtoken';
 import {tokenKey} from '../config';
 import fs from 'fs';
 import path from 'path';
-import {PatientCase} from '../models/patientCase';
 import {
   storeUser,
   getUserStore,
-  patientInfo, adminInfo, doctorInfo} from '../store/user';
+} from '../store/user';
 import {resetInfoStore} from '../store/info';
 
 export const registerPatient = async (ctx: any, next: any) => {
@@ -62,10 +61,11 @@ export const registerPatient = async (ctx: any, next: any) => {
       };
     }
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
@@ -152,11 +152,11 @@ export const login= async (ctx: any, next: any) => {
       };
     }
   } catch (e) {
-    ctx.body = {
-      code: -3,
-      message: '登陆失败',
-      date: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
@@ -179,13 +179,12 @@ export const getUser = async (ctx: any, next: any) => {
               message: '过期',
             };
           }
-
-          ctx.body = {
-            code: 1,
-            message: '服务错误',
+          ctx.state.nextInfo = {
+            type: -1,
+            error: err,
           };
+          await next();
         } else {
-          console.log(1111);
           let userInfo: any = await getUserStore(info._uid); // 使用redis缓存用户信息
 
           if (!userInfo) { // 防止redis出错
@@ -329,10 +328,11 @@ export const updateUser = async (ctx:any, next: any) => {
       message: '修改成功',
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 

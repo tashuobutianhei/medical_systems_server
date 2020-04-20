@@ -15,7 +15,7 @@ export const getCommonInfoMethod = async () => {
   }
 };
 
-export const getCommonInfo = async (ctx: any) => {
+export const getCommonInfo = async (ctx: any, next: any) => {
   try {
     const info = await getCommonInfoMethod();
     ctx.body = {
@@ -23,10 +23,11 @@ export const getCommonInfo = async (ctx: any) => {
       data: info[0],
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
+    ctx.state.nextInfo = {
+      type: -1,
       error: e,
     };
+    await next();
   }
 };
 
@@ -97,9 +98,10 @@ export const update = async (ctx: any, next: any) => {
     };
     await next();
   } catch (e) {
-    ctx.body = {
-      code: -1,
+    ctx.state.nextInfo = {
+      type: -1,
       error: e,
     };
+    await next();
   }
 };

@@ -47,7 +47,7 @@ exports.addDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 doctorInfo = ctx.request.body;
                 if (!(typeof doctorInfo === 'object' && Object.keys(doctorInfo).length > 0)) {
                     return [2 /*return*/, ctx.body = {
@@ -69,11 +69,15 @@ exports.addDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void
                     }];
             case 3:
                 e_1 = _a.sent();
-                return [2 /*return*/, ctx.body = {
-                        code: -3,
-                        message: '服务错误',
-                    }];
-            case 4: return [2 /*return*/];
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_1,
+                };
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
@@ -82,7 +86,7 @@ exports.outDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 doctorInfo = ctx.request.body;
                 if (!doctorInfo.workerId) {
                     return [2 /*return*/, ctx.body = {
@@ -106,11 +110,15 @@ exports.outDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void
                     }];
             case 3:
                 e_2 = _a.sent();
-                return [2 /*return*/, ctx.body = {
-                        code: -3,
-                        message: '服务错误',
-                    }];
-            case 4: return [2 /*return*/];
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_2,
+                };
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

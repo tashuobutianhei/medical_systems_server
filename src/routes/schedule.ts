@@ -7,6 +7,8 @@ import {
   getScheduleOfPeriod,
   getScheduleToday,
 } from '../controllers/doctor/schedule';
+import {logError} from '../middware/errorLog';
+
 
 const router = new Router();
 
@@ -29,16 +31,19 @@ router.use(async (ctx: any, next) => {
   }
 });
 
-router.get('/createWork', createWorkList); // 增
+router.get('/createWork', createWorkList); // 增加排班
 
 router.post('/', addSchedule); // 改
 
 router.get('/', getSchedule); // 查
 
-router.get('/getScheduleOfPeriod', getScheduleOfPeriod); // 查
+router.get('/getScheduleOfPeriod', getScheduleOfPeriod); // 查近期排班
 
 router.delete('/', deleteSchedule); // 删
 
 router.get('/today', getScheduleToday); // 查今日排班
+
+// 错误处理
+router.use(logError);
 
 export default router;

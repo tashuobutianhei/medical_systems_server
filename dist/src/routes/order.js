@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var koa_router_1 = __importDefault(require("koa-router"));
 var order_1 = require("../controllers/doctor/order");
+var errorLog_1 = require("../middware/errorLog");
 var router = new koa_router_1.default();
 router.prefix('/order');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
@@ -63,4 +64,6 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
 router.get('/', order_1.findOrder); // 查
 router.post('/', order_1.Order); // 挂号
 router.post('/info', order_1.orderInfo); // 完善信息
+// 错误处理
+router.use(errorLog_1.logError);
 exports.default = router;

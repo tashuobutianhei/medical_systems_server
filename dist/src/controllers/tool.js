@@ -44,12 +44,12 @@ var axios_1 = __importDefault(require("axios"));
 var bcrypt_1 = require("../utils/bcrypt");
 var urlencode_1 = __importDefault(require("urlencode"));
 var captchapng = require('captchapng');
-exports.phone = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.phone = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var query, code, response, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 2, , 4]);
                 query = ctx.query;
                 code = Math.floor(Math.random() * 9000 + 1000) + '';
                 console.log(code);
@@ -80,46 +80,60 @@ exports.phone = function (ctx) { return __awaiter(void 0, void 0, void 0, functi
                         error: '验证服务错误',
                     };
                 }
-                return [3 /*break*/, 3];
+                return [3 /*break*/, 4];
             case 2:
                 e_1 = _a.sent();
-                ctx.body = {
-                    code: -1,
+                ctx.state.nextInfo = {
+                    type: -1,
                     error: e_1,
                 };
+                return [4 /*yield*/, next()];
+            case 3:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.captcha = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var cap, p, base64, e_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 1, , 3]);
+                cap = Math.floor(Math.random() * 9000 + 1000);
+                p = new captchapng(80, 30, cap);
+                p.color(0, 0, 0, 0);
+                p.color(80, 80, 80, 255);
+                base64 = p.getBase64();
+                ctx.cookies.set('captcha', cap, { maxAge: 360000, httpOnly: true });
+                ctx.status = 200;
+                // ctx.set({'Content-Type' : 'image/png');
+                ctx.body = {
+                    code: 0,
+                    cap: 'data:image/png;base64,' + base64,
+                };
+                return [3 /*break*/, 3];
+            case 1:
+                e_2 = _a.sent();
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_2,
+                };
+                return [4 /*yield*/, next()];
+            case 2:
+                _a.sent();
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-exports.captcha = function (ctx) {
-    try {
-        var cap = Math.floor(Math.random() * 9000 + 1000);
-        var p = new captchapng(80, 30, cap);
-        p.color(0, 0, 0, 0);
-        p.color(80, 80, 80, 255);
-        var base64 = p.getBase64();
-        ctx.cookies.set('captcha', cap, { maxAge: 360000, httpOnly: true });
-        ctx.status = 200;
-        // ctx.set({'Content-Type' : 'image/png');
-        ctx.body = {
-            code: 0,
-            cap: 'data:image/png;base64,' + base64,
-        };
-    }
-    catch (e) {
-        ctx.body = {
-            code: -1,
-            data: e,
-        };
-    }
-};
-exports.checkUserInfo = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
-    var query, info, e_2;
+exports.checkUserInfo = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var query, info, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 2, , 4]);
                 query = ctx.query;
                 return [4 /*yield*/, patient_1.findOneByKey(query.key, query.value, ['username', 'uid', 'name', 'idcard', 'sex', 'age', 'tel', 'address', 'avatar'])];
             case 1:
@@ -128,15 +142,18 @@ exports.checkUserInfo = function (ctx) { return __awaiter(void 0, void 0, void 0
                     code: 0,
                     data: info,
                 };
-                return [3 /*break*/, 3];
+                return [3 /*break*/, 4];
             case 2:
-                e_2 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    error: e_2,
+                e_3 = _a.sent();
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_3,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 3:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };

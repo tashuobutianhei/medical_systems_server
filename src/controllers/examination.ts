@@ -10,7 +10,7 @@ export const getExaminationMethod = async () => {
   return await findAllByKey({});
 };
 
-export const getExamination = async (ctx: any) => {
+export const getExamination = async (ctx: any, next: any) => {
   try {
     const res = await findAllByKey({});
     ctx.body = {
@@ -18,10 +18,11 @@ export const getExamination = async (ctx: any) => {
       data: res,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
@@ -36,10 +37,11 @@ export const addExamination = async (ctx: any, next: any) => {
     };
     await next();
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
@@ -55,9 +57,10 @@ export const deleteExamination = async (ctx: any, next: any) => {
     };
     await next();
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };

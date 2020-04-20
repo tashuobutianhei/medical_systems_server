@@ -60,10 +60,11 @@ export const getDepartmentExpendDoctor = async (ctx: any, next: any) => {
     };
     next();
   } catch (e) {
-    ctx.body = {
-      code: -3,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
@@ -84,10 +85,11 @@ export const addDepartment = async (ctx: any, next: any) => {
     };
     await next();
   } catch (e) {
-    ctx.body = {
-      code: -3,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
@@ -129,10 +131,11 @@ export const deleteDeparment = async (ctx: any, next: any) => {
     };
     await next();
   } catch (e) {
-    ctx.body = {
-      code: -3,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
@@ -155,10 +158,11 @@ export const addAdmin= async (ctx: any, next: any) => {
     };
     await next();
   } catch (e) {
-    ctx.body = {
-      code: -3,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 

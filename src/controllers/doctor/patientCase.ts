@@ -17,7 +17,7 @@ import {
 } from '../../models/hospitalizationInfoList';
 import randomString from 'random-string';
 
-export const getAll = async (ctx: any) => {
+export const getAll = async (ctx: any, next: any) => {
   try {
     const res = await findAllByKey({});
 
@@ -26,14 +26,15 @@ export const getAll = async (ctx: any) => {
       data: res,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
-export const getPatientCase = async (ctx: any) => {
+export const getPatientCase = async (ctx: any, next:any) => {
 
   if (Object.keys(ctx.query).length === 0) {
     return ctx.body = {
@@ -121,14 +122,15 @@ export const getPatientCase = async (ctx: any) => {
       data: resCases,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
-export const setPatientCaseModeDoctor = async (ctx: any) => {
+export const setPatientCaseModeDoctor = async (ctx: any, next: any) => {
   try {
     if (Object.keys(ctx.request.body).length < 0) {
       return ctx.body = {
@@ -174,10 +176,11 @@ export const setPatientCaseModeDoctor = async (ctx: any) => {
       message: '更新成功',
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      message: '服务错误',
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
@@ -205,7 +208,7 @@ const insertAssayAndGetId = async (assay: any[], caseId: any) => {
 };
 
 
-export const setPatientCaseModeHos = async (ctx: any) => {
+export const setPatientCaseModeHos = async (ctx: any, next: any) => {
   try {
     if (Object.keys(ctx.request.body).length < 0) {
       return ctx.body = {
@@ -292,16 +295,16 @@ export const setPatientCaseModeHos = async (ctx: any) => {
       data: updateRes,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      message: '服务错误',
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
 
-export const getByPatient = async (ctx: any) => {
+export const getByPatient = async (ctx: any, next: any) => {
   try {
     let resList:any[] = [];
     const res = await findAllByKey({
@@ -381,9 +384,10 @@ export const getByPatient = async (ctx: any) => {
       data: resCases,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };

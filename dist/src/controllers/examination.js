@@ -45,12 +45,12 @@ exports.getExaminationMethod = function () { return __awaiter(void 0, void 0, vo
         }
     });
 }); };
-exports.getExamination = function (ctx) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getExamination = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     var res, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 2, , 4]);
                 return [4 /*yield*/, examination_1.findAllByKey({})];
             case 1:
                 res = _a.sent();
@@ -58,15 +58,18 @@ exports.getExamination = function (ctx) { return __awaiter(void 0, void 0, void 
                     code: 0,
                     data: res,
                 };
-                return [3 /*break*/, 3];
+                return [3 /*break*/, 4];
             case 2:
                 e_1 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    data: e_1,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_1,
                 };
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 3:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
@@ -75,7 +78,7 @@ exports.addExamination = function (ctx, next) { return __awaiter(void 0, void 0,
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 body = ctx.request.body;
                 console.log(body);
                 return [4 /*yield*/, examination_1.inset(body)];
@@ -88,15 +91,18 @@ exports.addExamination = function (ctx, next) { return __awaiter(void 0, void 0,
                 return [4 /*yield*/, next()];
             case 2:
                 _a.sent();
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_2 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    data: e_2,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_2,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
@@ -105,7 +111,7 @@ exports.deleteExamination = function (ctx, next) { return __awaiter(void 0, void
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 body = ctx.request.body;
                 return [4 /*yield*/, examination_1.destroy({
                         examinationId: body.examinationId,
@@ -119,15 +125,18 @@ exports.deleteExamination = function (ctx, next) { return __awaiter(void 0, void
                 return [4 /*yield*/, next()];
             case 2:
                 _a.sent();
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_3 = _a.sent();
-                ctx.body = {
-                    code: -1,
-                    data: e_3,
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_3,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

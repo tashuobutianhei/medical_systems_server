@@ -5,7 +5,7 @@ import urlencode from 'urlencode';
 
 const captchapng = require('captchapng');
 
-export const phone = async (ctx: any) => {
+export const phone = async (ctx: any, next: any) => {
   try {
     const query:any = ctx.query;
 
@@ -36,15 +36,16 @@ export const phone = async (ctx: any) => {
       };
     }
   } catch (e) {
-    ctx.body = {
-      code: -1,
+    ctx.state.nextInfo = {
+      type: -1,
       error: e,
     };
+    await next();
   }
 };
 
 
-export const captcha = (ctx:any) => {
+export const captcha = async (ctx:any, next: any) => {
   try {
     const cap = Math.floor(Math.random() * 9000+1000);
     const p = new captchapng(80, 30, cap);
@@ -60,14 +61,15 @@ export const captcha = (ctx:any) => {
       cap: 'data:image/png;base64,' + base64,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
-export const checkUserInfo = async (ctx: any) => {
+export const checkUserInfo = async (ctx: any, next: any) => {
   try {
     const query = ctx.query;
     const info = await findOneByKeyPatient(query.key, query.value,
@@ -78,9 +80,10 @@ export const checkUserInfo = async (ctx: any) => {
       data: info,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
+    ctx.state.nextInfo = {
+      type: -1,
       error: e,
     };
+    await next();
   }
 };

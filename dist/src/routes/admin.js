@@ -47,6 +47,7 @@ var info_1 = require("../controllers/Admin/info");
 var examination_1 = require("../controllers/examination");
 var article_1 = require("../controllers/Admin/article");
 var info_2 = require("../store/info");
+var errorLog_1 = require("../middware/errorLog");
 var router = new koa_router_1.default();
 router.prefix('/admin');
 router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
@@ -78,9 +79,9 @@ router.delete('/department', department_1.deleteDeparment); // 删除科室
 router.post('/doctors', doctor_1.addDoctor); // 添加医生
 router.delete('/doctors', doctor_1.outDoctor); // 删除医生
 router.get('/info', info_1.getCommonInfo); // 获取医院信息
-router.post('/info', info_1.update);
-router.post('/exam', examination_1.addExamination);
-router.delete('/exam', examination_1.deleteExamination);
+router.post('/info', info_1.update); // 更新信息
+router.post('/exam', examination_1.addExamination); // 更新检查项目
+router.delete('/exam', examination_1.deleteExamination); // 删除检查项目
 // 文章系统，增删改查
 router.get('/article', article_1.findOfArticle);
 router.post('/article', article_1.insertOfArticle);
@@ -101,5 +102,7 @@ router.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, funct
         }
     });
 }); });
+// 错误处理
+router.use(errorLog_1.logError);
 // router.post('/admin', addAdmin); // 增加管理员
 exports.default = router;

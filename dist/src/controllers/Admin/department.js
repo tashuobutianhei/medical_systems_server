@@ -99,7 +99,7 @@ exports.getDepartmentExpendDoctor = function (ctx, next) { return __awaiter(void
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 return [4 /*yield*/, department_1.findAllByKey({})];
             case 1:
                 departmentList = _a.sent();
@@ -123,15 +123,18 @@ exports.getDepartmentExpendDoctor = function (ctx, next) { return __awaiter(void
                     data: DepartmentExpendDoctor,
                 };
                 next();
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_2 = _a.sent();
-                ctx.body = {
-                    code: -3,
-                    message: '服务错误',
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_2,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
@@ -140,7 +143,7 @@ exports.addDepartment = function (ctx, next) { return __awaiter(void 0, void 0, 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 departmentInfo = ctx.request.body;
                 if (!departmentInfo.departmentName || !departmentInfo.information) {
                     return [2 /*return*/, ctx.body = {
@@ -158,15 +161,18 @@ exports.addDepartment = function (ctx, next) { return __awaiter(void 0, void 0, 
                 return [4 /*yield*/, next()];
             case 2:
                 _a.sent();
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_3 = _a.sent();
-                ctx.body = {
-                    code: -3,
-                    message: '服务错误',
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_3,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
@@ -175,7 +181,7 @@ exports.deleteDeparment = function (ctx, next) { return __awaiter(void 0, void 0
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 5, , 6]);
+                _a.trys.push([0, 5, , 7]);
                 departmentInfo_1 = ctx.request.body;
                 if (!departmentInfo_1.departmentId) {
                     return [2 /*return*/, ctx.body = {
@@ -220,15 +226,18 @@ exports.deleteDeparment = function (ctx, next) { return __awaiter(void 0, void 0
                 return [4 /*yield*/, next()];
             case 4:
                 _a.sent();
-                return [3 /*break*/, 6];
+                return [3 /*break*/, 7];
             case 5:
                 e_4 = _a.sent();
-                ctx.body = {
-                    code: -3,
-                    message: '服务错误',
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_4,
                 };
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 6:
+                _a.sent();
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); };
@@ -237,7 +246,7 @@ exports.addAdmin = function (ctx, next) { return __awaiter(void 0, void 0, void 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 5]);
                 adminInfo = ctx.request.body;
                 if (!adminInfo.username || !adminInfo.password) {
                     return [2 /*return*/, ctx.body = {
@@ -256,15 +265,18 @@ exports.addAdmin = function (ctx, next) { return __awaiter(void 0, void 0, void 
                 return [4 /*yield*/, next()];
             case 2:
                 _a.sent();
-                return [3 /*break*/, 4];
+                return [3 /*break*/, 5];
             case 3:
                 e_5 = _a.sent();
-                ctx.body = {
-                    code: -3,
-                    message: '服务错误',
+                ctx.state.nextInfo = {
+                    type: -1,
+                    error: e_5,
                 };
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [4 /*yield*/, next()];
+            case 4:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

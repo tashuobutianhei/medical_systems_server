@@ -42,7 +42,7 @@ export const deleteOrder = async (params: addOrderParams) => {
 };
 
 
-export const findOrder = async (ctx: any) => {
+export const findOrder = async (ctx: any, next: any) => {
   try {
     if (Object.keys(ctx.query).length === 0) {
       return ctx.body = {
@@ -68,14 +68,16 @@ export const findOrder = async (ctx: any) => {
     };
   } catch (e) {
     console.log(e);
-    ctx.body = {
-      code: -1,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
     return false;
   }
 };
 
-export const Order = async (ctx: any) => {
+export const Order = async (ctx: any, next: any) => {
   try {
     const params = ctx.request.body;
     if (ctx.state.userInfo.userType !== 1) {
@@ -131,14 +133,15 @@ export const Order = async (ctx: any) => {
       data: {caseId},
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      data: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
 
-export const orderInfo = async (ctx: any) => {
+export const orderInfo = async (ctx: any, next: any) => {
   const params = ctx.request.body;
 
   try {
@@ -165,10 +168,10 @@ export const orderInfo = async (ctx: any) => {
       code: res ? 0 : 1,
     };
   } catch (e) {
-    ctx.body = {
-      code: -1,
-      message: '服务错误',
-      date: e,
+    ctx.state.nextInfo = {
+      type: -1,
+      error: e,
     };
+    await next();
   }
 };
