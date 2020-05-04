@@ -46,7 +46,6 @@ var koa_json_1 = __importDefault(require("koa-json"));
 var koa_logger_1 = __importDefault(require("koa-logger"));
 var koa2_cors_1 = __importDefault(require("koa2-cors"));
 var koa_jwt_1 = __importDefault(require("koa-jwt"));
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var path_1 = __importDefault(require("path"));
 // 没有声明文件
 // const { ApolloServer, gql } = require('apollo-server-koa');
@@ -57,6 +56,7 @@ var index_1 = __importDefault(require("./routes/index"));
 var index_2 = require("../src/graphql/index");
 var index_3 = require("./models/index");
 var config_1 = require("./config");
+var userInfo_1 = __importDefault(require("./middware/userInfo"));
 var app = new koa_1.default();
 var koaBody = require('koa-body');
 // 记录访问日志
@@ -126,39 +126,27 @@ app.use(koa_jwt_1.default({
         /\/admin\/article/,
     ],
 }));
-app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var token;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                token = ctx.header.authorization;
-                if (!!token) return [3 /*break*/, 2];
-                ctx.state.userInfo = {};
-                return [4 /*yield*/, next()];
-            case 1: return [2 /*return*/, _a.sent()];
-            case 2: return [4 /*yield*/, jsonwebtoken_1.default.verify(token.split(' ')[1], config_1.tokenKey, function (err, info) { return __awaiter(void 0, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        if (err) {
-                            ctx.body = {
-                                code: 1,
-                                message: '服务错误',
-                            };
-                        }
-                        else {
-                            ctx.state.userInfo = info;
-                        }
-                        return [2 /*return*/];
-                    });
-                }); })];
-            case 3:
-                _a.sent();
-                return [4 /*yield*/, next()];
-            case 4:
-                _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); });
+// 兼容jwt，获取token信息
+app.use(userInfo_1.default);
+// app.use(async (ctx, next) => {
+//   const token = ctx.header.authorization;
+//   if (!token) {
+//     ctx.state.userInfo = {};
+//     return await next();
+//   }
+//   await jwt.verify(token.split(' ')[1], tokenKey,
+//       async (err: any, info: any)=> {
+//         if (err) {
+//           ctx.body = {
+//             code: 1,
+//             message: '服务错误',
+//           };
+//         } else {
+//           ctx.state.userInfo = info;
+//         }
+//       });
+//   await next();
+// });
 // logger
 app.use(function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {

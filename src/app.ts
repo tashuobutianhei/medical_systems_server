@@ -20,6 +20,7 @@ import {graphql} from '../src/graphql/index';
 
 import {connectMysql} from './models/index';
 import {tokenKey} from './config';
+import userInfo from './middware/userInfo';
 
 const app = new Koa();
 const koaBody = require('koa-body');
@@ -85,25 +86,28 @@ app.use(koajwt({
   ],
 }));
 
-app.use(async (ctx, next) => {
-  const token = ctx.header.authorization;
-  if (!token) {
-    ctx.state.userInfo = {};
-    return await next();
-  }
-  await jwt.verify(token.split(' ')[1], tokenKey,
-      async (err: any, info: any)=> {
-        if (err) {
-          ctx.body = {
-            code: 1,
-            message: '服务错误',
-          };
-        } else {
-          ctx.state.userInfo = info;
-        }
-      });
-  await next();
-});
+// 兼容jwt，获取token信息
+app.use(userInfo);
+
+// app.use(async (ctx, next) => {
+//   const token = ctx.header.authorization;
+//   if (!token) {
+//     ctx.state.userInfo = {};
+//     return await next();
+//   }
+//   await jwt.verify(token.split(' ')[1], tokenKey,
+//       async (err: any, info: any)=> {
+//         if (err) {
+//           ctx.body = {
+//             code: 1,
+//             message: '服务错误',
+//           };
+//         } else {
+//           ctx.state.userInfo = info;
+//         }
+//       });
+//   await next();
+// });
 
 // logger
 app.use(async (ctx, next) => {
