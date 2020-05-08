@@ -43,7 +43,7 @@ var random_string_1 = __importDefault(require("random-string"));
 var doctor_1 = require("../../models/doctor");
 var bcrypt_1 = require("../../utils/bcrypt");
 exports.addDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var doctorInfo, result, e_1;
+    var doctorInfo, password, result, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -56,7 +56,8 @@ exports.addDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void
                         }];
                 }
                 doctorInfo.workerId = random_string_1.default({ length: 12, numbers: true });
-                doctorInfo.password = bcrypt_1.encode(random_string_1.default({ length: 6, numbers: true }));
+                password = random_string_1.default({ length: 6, numbers: true });
+                doctorInfo.password = bcrypt_1.encode(password);
                 return [4 /*yield*/, doctor_1.insert(doctorInfo)];
             case 1:
                 result = _a.sent();
@@ -65,6 +66,7 @@ exports.addDoctor = function (ctx, next) { return __awaiter(void 0, void 0, void
                 _a.sent();
                 return [2 /*return*/, ctx.body = {
                         code: result ? 0 : 1,
+                        data: password,
                         message: result ? '添加成功' : '添加失败',
                     }];
             case 3:

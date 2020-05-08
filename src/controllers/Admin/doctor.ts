@@ -16,11 +16,13 @@ export const addDoctor= async (ctx: any, next: any) => {
       };
     }
     doctorInfo.workerId = randomString({length: 12, numbers: true});
-    doctorInfo.password = encode(randomString({length: 6, numbers: true}));
+    const password = randomString({length: 6, numbers: true});
+    doctorInfo.password = encode(password);
     const result = await insertDoctor(doctorInfo);
     await next();
     return ctx.body = {
       code: result ? 0 : 1,
+      data: password,
       message: result ? '添加成功' : '添加失败',
     };
   } catch (e) {
