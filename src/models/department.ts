@@ -37,8 +37,7 @@ type typeDepartment = {
 
 export const inset = async function(department: typeDepartment) {
   const result = await Department.findAndCountAll();
-
-  const departmentId = ++result.count;
+  const departmentId = result.count + 2; // 临时改动;
   return Department.create({...department, departmentId: departmentId}).then((res: { id: any; })=> {
     return true;
   }).catch((e: any) => {

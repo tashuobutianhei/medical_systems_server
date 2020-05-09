@@ -84,7 +84,7 @@ exports.inset = function (department) {
                 case 0: return [4 /*yield*/, exports.Department.findAndCountAll()];
                 case 1:
                     result = _a.sent();
-                    departmentId = ++result.count;
+                    departmentId = result.count + 2;
                     return [2 /*return*/, exports.Department.create(__assign(__assign({}, department), { departmentId: departmentId })).then(function (res) {
                             return true;
                         }).catch(function (e) {

@@ -1,11 +1,16 @@
-[2020-04-20T17:09:00.591] [ERROR] application - undefined
-[2020-04-20T17:09:27.539] [ERROR] application - 111
-[2020-04-20T17:20:12.378] [ERROR] application - { ctx: 'GET--/users/getUser', error: 111 }
-[2020-04-20T17:23:13.008] [ERROR] application - { ctx: 'GET--/users/getUser', error: 111 }
-[2020-04-20T17:24:01.671] [ERROR] application - { ctx: 'GET--/users/getUser', error: 111 }
-[2020-04-20T17:25:10.366] [ERROR] application - { ctx: 'GET--/users/getUser', error: 111 }
-[2020-04-20T17:25:30.935] [ERROR] application - { ctx: 'GET--/users/getUser', error: 111 }
-[2020-04-20T17:25:42.834] [ERROR] application - { ctx: 'GET--/users/getUser', error: 111 }
-[2020-04-20T17:25:51.506] [ERROR] application - { ctx: 'GET--/users/getUser', error: 111 }
-[2020-04-20T17:26:43.341] [ERROR] application - { ctx: 'GET--/users/getUser', error: 111 }
-[2020-04-20T17:27:19.261] [ERROR] application - { ctx: 'GET--/users/getUser', error: 111 }
+[2020-05-09T12:17:58.938] [ERROR] application - { ctx: 'POST--/patientCase/hospital',
+  error:
+   Error: insert error
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:403:43
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:16:58)
+       at process._tickCallback (internal/process/next_tick.js:68:7) }
+[2020-05-09T12:20:05.218] [ERROR] application - { ctx: 'POST--/patientCase/hospital',
+  error:
+   Error: insert error
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:403:43
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:16:58)
+       at process._tickCallback (internal/process/next_tick.js:68:7) }
