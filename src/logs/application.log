@@ -1,16 +1,7 @@
-[2020-05-09T12:17:58.938] [ERROR] application - { ctx: 'POST--/patientCase/hospital',
+[2020-06-10T00:03:08.281] [ERROR] application - { ctx: 'POST--/users/login',
   error:
-   Error: insert error
-       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:403:43
-       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:44:23)
-       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:25:53)
-       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:16:58)
-       at process._tickCallback (internal/process/next_tick.js:68:7) }
-[2020-05-09T12:20:05.218] [ERROR] application - { ctx: 'POST--/patientCase/hospital',
-  error:
-   Error: insert error
-       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:403:43
-       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:44:23)
-       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:25:53)
-       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/doctor/patientCase.js:16:58)
-       at process._tickCallback (internal/process/next_tick.js:68:7) }
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:193:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }

@@ -214,7 +214,7 @@ exports.orderInfo = function (ctx, next) { return __awaiter(void 0, void 0, void
                 describe += Boolean(todo != 'undefined') ? "\u4E2A\u4EBA\u7ECF\u5386\u6709[" + todo + "]," : '';
                 describe += Boolean(medicine != 'undefined') ? "\u66FE\u670D\u7528\u836F\u7269[" + medicine + "]," : '';
                 describe += Boolean(attention != 'undefined') ? "\u6CE8\u610F\u4E8B\u9879\u6709[" + attention + "]\u3002" : '';
-                if (hospital) {
+                if (!!hospital) {
                     describe += "\u66FE\u5C31\u533B\uFF0C\u8BCA\u65AD\u7ED3\u679C\u4E3A" + (Boolean(attention != 'undefined') ? result : '无描述');
                 }
                 return [4 /*yield*/, patientCase_1.update({

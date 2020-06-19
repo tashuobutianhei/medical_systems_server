@@ -1,0 +1,84 @@
+[2020-06-09T23:31:25.521] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:187:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }
+[2020-06-09T23:31:27.657] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:187:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }
+[2020-06-09T23:31:28.287] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:187:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }
+[2020-06-09T23:31:28.559] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:187:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }
+[2020-06-09T23:31:28.789] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:187:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }
+[2020-06-09T23:31:29.053] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:187:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }
+[2020-06-09T23:34:08.117] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:188:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }
+[2020-06-09T23:34:27.851] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:188:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }
+[2020-06-09T23:35:00.853] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:190:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }
+[2020-06-09T23:36:05.080] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:190:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }
+[2020-06-09T23:36:14.751] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:190:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }
+[2020-06-09T23:36:34.742] [ERROR] application - { ctx: 'POST--/users/login',
+  error:
+   TypeError: Cannot read property 'password' of null
+       at /Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:191:80
+       at step (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:44:23)
+       at Object.next (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:25:53)
+       at fulfilled (/Users/lizilong/lzl/medical_systems_server/dist/src/controllers/user.js:16:58) }

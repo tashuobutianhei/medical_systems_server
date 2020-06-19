@@ -178,6 +178,12 @@ exports.login = function (ctx, next) { return __awaiter(void 0, void 0, void 0, 
                 info = _c.sent();
                 return [3 /*break*/, 10];
             case 10:
+                if (!info) {
+                    return [2 /*return*/, ctx.body = {
+                            code: 1,
+                            message: '用户不存在',
+                        }];
+                }
                 comparesResult = false;
                 // 两种登陆方式，电话验证码和密码
                 if (loginType === 1) {

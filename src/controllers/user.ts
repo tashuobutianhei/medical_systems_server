@@ -95,6 +95,7 @@ export const login= async (ctx: any, next: any) => {
         };
       }
     };
+
     switch (userType) {
       case '1':
         if (loginType === 0) {
@@ -115,6 +116,14 @@ export const login= async (ctx: any, next: any) => {
             ['uid', 'password']);
         break;
     }
+
+    if (!info) {
+      return ctx.body = {
+        code: 1,
+        message: '用户不存在',
+      };
+    }
+
     let comparesResult = false;
     // 两种登陆方式，电话验证码和密码
     if (loginType === 1) {

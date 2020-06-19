@@ -154,7 +154,7 @@ export const orderInfo = async (ctx: any, next: any) => {
     describe += Boolean(medicine != 'undefined') ? `曾服用药物[${medicine}],` : '';
     describe += Boolean(attention != 'undefined') ?`注意事项有[${attention}]。` : '';
 
-    if (hospital) {
+    if (!!hospital) {
       describe += `曾就医，诊断结果为${Boolean(attention != 'undefined') ? result : '无描述'}`;
     }
 
